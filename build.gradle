@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+}
+
+group 'com.seomse.jdbc'
+version '1.0-SNAPSHOT'
+
+
+// jar 파일명
+jar.baseName = 'seomse-jdbc'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation fileTree (dir: 'dependencies', include: ['/**/*.jar'])
+}
