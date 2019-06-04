@@ -222,6 +222,7 @@ public class ConnectionPool {
     }
 
     private boolean reconnect(){
+        //noinspection CatchMayIgnoreException
         try{connections[connectionIndex].close(); connections[connectionIndex]= null;}catch(Exception e){}
         try {
             connections[connectionIndex] = newConnection(isAutoCommit);
@@ -262,7 +263,7 @@ public class ConnectionPool {
      */
     public Connection newConnection(boolean isAutoCommit) throws SQLException {
 
-        Connection connection  = ConnectionFactory.newConnection(driver, url, user, password);;
+        Connection connection  = ConnectionFactory.newConnection(driver, url, user, password);
         connection.setAutoCommit(isAutoCommit);
         return connection;
     }
@@ -286,6 +287,7 @@ public class ConnectionPool {
             }
 
             for (int i = 0; i < connections.length; i++) {
+                //noinspection CatchMayIgnoreException
                 try {
                     connections[i].close();
                 } catch (Exception e) {}
@@ -314,7 +316,7 @@ public class ConnectionPool {
     public Connection getCommitConnection() throws SQLException {
         Connection conn = getConnection();
         if(!isAutoCommit){
-            conn.commit();;
+            conn.commit();
         }
 
         return conn;
@@ -323,7 +325,7 @@ public class ConnectionPool {
 
     public void commit(Connection conn) throws SQLException {
         if(!isAutoCommit){
-            conn.commit();;
+            conn.commit();
         }
 
     }

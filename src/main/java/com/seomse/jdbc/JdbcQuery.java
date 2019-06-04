@@ -16,15 +16,15 @@ import java.util.Map;
 /** 
  * <pre>
  *  파 일 명 : JdbcQuery.java
- *  설    명 : jdbc쿼리용 클래스 
+ *  설    명 : jdbc 쿼리용 클래스
  *         
  *  작 성 자 : macle
  *  작 성 일 : 2017.09
- *  버    전 : 1.1
- *  수정이력 : 2019.02
+ *  버    전 : 1.2
+ *  수정이력 : 2019.02, 2019.06
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2017, 2019 by ㈜섬세한사람들. All right reserved.
+ * @atuhor Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class JdbcQuery {
 	private static final Logger logger = LoggerFactory.getLogger(JdbcQuery.class);
@@ -80,7 +80,7 @@ public class JdbcQuery {
 		
 		Statement stmt = null;
 		ResultSet result = null;
-		
+		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
@@ -96,8 +96,7 @@ public class JdbcQuery {
 		}catch(Exception e){
 			throw e;
 		}finally{
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
-			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
 		}
 		
 		return resultTime;
@@ -198,7 +197,7 @@ public class JdbcQuery {
 		
 		Statement stmt = null;
 		ResultSet result = null;
-		
+		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
@@ -215,8 +214,7 @@ public class JdbcQuery {
 		}catch(Exception e){
 			throw e;
 		}finally{
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
-			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
 		}
 		
 		return resultDouble;
@@ -267,7 +265,7 @@ public class JdbcQuery {
 		
 		Statement stmt = null;
 		ResultSet result = null;
-		
+		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
@@ -283,8 +281,7 @@ public class JdbcQuery {
 		}catch(Exception e){
 			throw e;
 		}finally{
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
-			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
 		}
 		
 		return resultLong;
@@ -335,7 +332,7 @@ public class JdbcQuery {
 		
 		Statement stmt = null;
 		ResultSet result = null;
-		
+		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
@@ -351,8 +348,7 @@ public class JdbcQuery {
 		}catch(Exception e){
 			throw e;
 		}finally{
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
-			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
 		}
 		
 		return resultValue;
@@ -380,11 +376,10 @@ public class JdbcQuery {
 	 * @return 결과 리스트
 	 */
 	public static List<String> getStringList(Connection conn, String sql) throws SQLException {
-		List<String> resultList = new ArrayList<String>();
+		List<String> resultList = new ArrayList<>();
 	
 		Statement stmt = null;
 		ResultSet result = null;
-		
 		try{
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
@@ -398,8 +393,7 @@ public class JdbcQuery {
 			resultList = null;
 			throw e;
 		}finally{
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
-			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
 		}
 		
 		return resultList;
@@ -449,14 +443,14 @@ public class JdbcQuery {
 	
 	
 	/**
-	 * 데이터 베이스 결과를 List에 Map형태로 가져온다 키:컬럼명 내용: 벨류
+	 * 데이터 베이스 결과를 List 에 Map 형태로 가져온다 키:컬럼명 내용: 벨류
 	 * @param conn Connection
 	 * @param sql Query
 	 * @return 결과 맵 리스트
 	 */
 	public static List<Map<String, String>> getMapStringList(Connection conn, String sql) throws SQLException {
 		
-		List<Map<String, String>> resultMapList = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> resultMapList = new ArrayList<>();
 		
 		Statement stmt = null;
 		ResultSet result = null;
@@ -471,7 +465,7 @@ public class JdbcQuery {
 			   columnNames[i-1] = metaData.getColumnLabel(i); 
 			}		
 			while(result.next()){
-				Map<String, String> resultMap = new HashMap<String, String>();			
+				Map<String, String> resultMap = new HashMap<>();
 				for (String columnName : columnNames){
 					resultMap.put(columnName, result.getString(columnName));
 				}			
@@ -482,13 +476,14 @@ public class JdbcQuery {
 			resultMapList = null;
 			throw e;
 		}finally{
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
-			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
 		}
 		
 		return resultMapList;
 	}
-	
+
+
+
 	
 	/**
 	 * 단일결과를 Map<String, String>형태로 얻기
@@ -510,7 +505,7 @@ public class JdbcQuery {
 	 * @return
 	 */
 	public static Map<String, String> getMapString(Connection conn, String sql) throws SQLException {
-		Map<String, String> resultMap = new HashMap<String, String>();
+		Map<String, String> resultMap = new HashMap<>();
 		Statement stmt = null;
 		ResultSet result = null;
 		try{
@@ -532,8 +527,8 @@ public class JdbcQuery {
 		}catch(Exception e){
 			throw e;
 		}finally{
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
-			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
+
 		}
 		return resultMap;
 	}
@@ -572,6 +567,7 @@ public class JdbcQuery {
 	public static int execute(Connection conn, String sql) throws SQLException {
 		PreparedStatement pstmt = null;
 		int count = -1;
+		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			pstmt = conn.prepareStatement(sql);			
 			count = pstmt.executeUpdate();
@@ -582,7 +578,11 @@ public class JdbcQuery {
 		}catch(Exception e){
 			throw e;
 		}finally{
-			if(pstmt!= null){try{pstmt.close(); pstmt = null; }catch(Exception e){}}
+
+			if(pstmt!= null){
+				//noinspection CatchMayIgnoreException
+				try{pstmt.close(); pstmt = null; }catch(Exception e){}
+			}
 		}
 	
 		return count;
@@ -621,6 +621,7 @@ public class JdbcQuery {
 	public static int callProcedure(Connection conn, String sql) throws SQLException {
 		PreparedStatement pstmt = null;
 		int count = -1;
+		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			pstmt = conn.prepareCall(sql);
 			pstmt.execute();
@@ -630,7 +631,10 @@ public class JdbcQuery {
 		}catch(Exception e){
 			throw e;
 		}finally{
-			if(pstmt!= null){try{pstmt.close(); pstmt = null; }catch(Exception e){}}
+			if(pstmt!= null){
+				//noinspection CatchMayIgnoreException
+				try{pstmt.close(); pstmt = null; }catch(Exception e){}
+			}
 		}
 		return count;
 	}
@@ -644,11 +648,7 @@ public class JdbcQuery {
 	  */
 	 public static boolean isRowData(Connection conn, String sql) throws SQLException {
 		String result =  getResultOne(conn, sql);
-		if(result == null){
-			return false;
-		}
-		
-		return true;
+		return result != null;
 	 }
 	
 	 /**
@@ -658,11 +658,7 @@ public class JdbcQuery {
 	  */
 	 public static boolean isRowData(String sql){
 		String result =  getResultOne(sql);
-		if(result == null){
-			return false;
-		}
-		
-		return true;
+		return result != null;
 	 }
 
 	 /**
@@ -700,6 +696,4 @@ public class JdbcQuery {
 			 
 		 }	 
 	 }
-	 
-	 
 }

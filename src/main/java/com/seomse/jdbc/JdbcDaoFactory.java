@@ -64,7 +64,8 @@ public class JdbcDaoFactory {
 			}
 		}
 		T t = null ;
-		try{		
+		try{
+			//noinspection deprecation
 			t = (T) makeDaoClass.newInstance();
 		}catch(Exception e){
 			throw new DaoClassNotFoundException(	 "Class Not Found  " 

@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,18 +22,16 @@ import java.util.Map;
  *         
  *  작 성 자 : macle
  *  작 성 일 : 2017.09
- *  버    전 : 1.1
- *  수정이력 : 2019.02
+ *  버    전 : 1.2
+ *  수정이력 : 2019.02, 2016.06
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2017, 2019 by ㈜섬세한사람들. All right reserved.
+ * @atuhor Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class Database {
 
 	private static final Logger logger = LoggerFactory.getLogger(Database.class);
 
-
-	
 	private static final SequenceMaker sequenceMaker = SequenceMakerFactory.make(ApplicationConnectionPool.getInstance().getJdbcType());
 	
 	/**
@@ -65,6 +62,7 @@ public class Database {
 	 */
 	public static String getSysDateQuery(String dbType){
 		dbType = dbType.toLowerCase();
+		//noinspection IfCanBeSwitch
 		if(dbType.equals("oracle") || dbType.equals("tibero")){
 			return "SELECT SYSTIMESTAMP FROM DUAL";
 		}else if(dbType.equals("mssql")){
@@ -84,6 +82,7 @@ public class Database {
 	 */
 	public static String getSysDateName(String dbType){
 		dbType = dbType.toLowerCase();
+		//noinspection IfCanBeSwitch
 		if(dbType.equals("oracle") || dbType.equals("tibero") ){
 			return "SYSDATE";
 		}else if(dbType.equals("mssql")){
@@ -122,7 +121,8 @@ public class Database {
 		
 		Statement stmt = null;
 		ResultSet result = null;
-		
+
+		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
@@ -139,9 +139,7 @@ public class Database {
 		}catch(Exception e){
 			throw e;
 		}finally{
-
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
-			try{if(stmt!=null)stmt.close();stmt=null; }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
 		}
 		
 		return resultValue;
@@ -171,8 +169,11 @@ public class Database {
 		Statement stmt = null;
 		ResultSet result = null;
 		String [] nameArray = null;
+		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			stmt = conn.createStatement();
+
+			//noinspection SqlDialectInspection,SqlNoDataSourceInspection
 			result = stmt.executeQuery("SELECT * FROM " + tableName);
 			ResultSetMetaData metaData = result.getMetaData();
 			int count = metaData.getColumnCount(); //number of column
@@ -185,8 +186,7 @@ public class Database {
 		}catch(Exception e) {
 			throw e;
 		}finally{
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
-			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
 		}
 		return nameArray;
 	}
@@ -208,7 +208,8 @@ public class Database {
 	 */
 	 public static Map<String, Integer> getPrimaryKeyColumnsForTable(Connection conn, String tableName) throws SQLException {
 		 ResultSet pkColumns= null;
-		 Map<String, Integer> pkMap = new HashMap<String, Integer>();
+		 Map<String, Integer> pkMap = new HashMap<>();
+		 //noinspection CaughtExceptionImmediatelyRethrown
 		 try{
 			 pkColumns= conn.getMetaData().getPrimaryKeys(null,null,tableName);
 			
@@ -222,7 +223,8 @@ public class Database {
 		 }catch(Exception e){
 			throw e;
 		 }finally{
-			try{if(pkColumns!=null)pkColumns.close(); pkColumns=null; }catch(Exception e){}
+			 //noinspection CatchMayIgnoreException
+			 try{if(pkColumns!=null)pkColumns.close(); pkColumns=null; }catch(Exception e){}
 		 }
 		 
 		return pkMap;
@@ -300,7 +302,7 @@ public class Database {
 	  */
 	public static Map<Integer, PrepareStatementData> newTimeMap(long dateTime){
 			
-		Map<Integer, PrepareStatementData> prepareStatementDataMap = new HashMap<Integer, PrepareStatementData>();
+		Map<Integer, PrepareStatementData> prepareStatementDataMap = new HashMap<>();
 		PrepareStatementData prepareStatementData = new PrepareStatementData();
 		prepareStatementData.setData(dateTime);
 		prepareStatementData.setType(JdbcDataType.DATE_TIME);
@@ -309,11 +311,5 @@ public class Database {
 		return prepareStatementDataMap;
 			
 	}
-
-
-	public static void main(String[] args) {
-		logger.info("jdbc test db server time: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss" ).format( new Date(getDateTime())) );
-	}
-
 
 }

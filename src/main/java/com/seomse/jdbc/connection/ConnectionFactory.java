@@ -107,29 +107,41 @@ public class ConnectionFactory {
 		Driver driver ;
 		
 		String databaseType = databaseTypeOrDriverClass.toUpperCase().trim();
-				
+
+		//noinspection IfCanBeSwitch
 		if(databaseType.equals("ORACLE")){
-			driver = (Driver)Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();	
+			//noinspection deprecation
+			driver = (Driver)Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
 		}else if(databaseType.equals("MSSQL") || databaseType.equals("MS-SQL")){
-			driver = (Driver)Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();	
+			//noinspection deprecation
+			driver = (Driver)Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
 		}else if(databaseType.equals("DB2")){
+			//noinspection deprecation
 			driver = (Driver)Class.forName("com.ibm.db2.jcc.DB2Driver").newInstance();	
 		}else if(databaseType.equals("UNISQL")){
+			//noinspection deprecation
 			driver = (Driver)Class.forName("unisql.jdbc.driver.UniSQLDriver").newInstance();	
 		}else if(databaseType.equals("MYSQL")){
+			//noinspection deprecation
 			driver = (Driver)Class.forName("com.mysql.jdbc.Driver").newInstance();	
 		}else if(databaseType.equals("SQLITE")){
+			//noinspection deprecation
 			driver = (Driver)Class.forName("org.sqlite.JDBC").newInstance();		
 		}else if(databaseType.equals("TIBERO")){
+			//noinspection deprecation
 			driver = (Driver)Class.forName("com.tmax.tibero.jdbc.TbDriver").newInstance();	
 		}else if(databaseType.equals("DRILL")){
+			//noinspection deprecation
 			driver = (Driver)Class.forName("org.apache.drill.jdbc.Driver").newInstance();	
 		}else if(databaseType.equals("MARIA") || databaseType.equals("MARIADB")){
+			//noinspection deprecation
 			driver = (Driver)Class.forName("org.mariadb.jdbc.Driver").newInstance();	
 		}else if(databaseType.equals("HIVE")){
+			//noinspection deprecation
 			driver = (Driver)Class.forName("org.apache.hive.jdbc.HiveDriver").newInstance();
 		}
 		else{
+			//noinspection deprecation
 			 driver = (Driver)Class.forName(databaseTypeOrDriverClass).newInstance();
 		}		
 		return driver;
