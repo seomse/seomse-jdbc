@@ -34,7 +34,7 @@ public class JdbcQuery {
 	/**
 	 * 단일결과를 DateTime 의 long 값얻기
 	 * Date로 변환방법 new Date(result);
-	 * @return
+	 * @return DateTime
 	 */
 	public static Long getResultDateTime(String sql, Long defaultValue) {
 
@@ -57,7 +57,7 @@ public class JdbcQuery {
 	/**
 	 * 단일결과를 DateTime의 long값얻기
 	 * Date로 변환방법 new Date(result);
-	 * @return
+	 * @return DateTime
 	 */
 	public static Long getResultDateTime(String sql) {
 
@@ -73,7 +73,7 @@ public class JdbcQuery {
 	/**
 	 * 단일결과를 DateTime의 long값얻기
 	 * Date로 변환방법 new Date(result);
-	 * @return
+	 * @return DateTime
 	 */
 	public static Long getResultDateTime(Connection conn, String sql) throws SQLException {
 		Long resultTime = null;
@@ -105,7 +105,7 @@ public class JdbcQuery {
 	
 	/**
 	 * 단일결과를 Integer형태로 옫기
-	 * @return
+	 * @return result(Integer)
 	 */
 	public static Integer getResultInteger(String sql, Integer defaultValue) {
 
@@ -119,7 +119,7 @@ public class JdbcQuery {
 	
 	/**
 	 * 단일결과를 Integer 형태로 얻기
-	 * @return
+	 * @return result(Integer)
 	 */
 	public static Integer getResultInteger(String sql) {
 
@@ -139,9 +139,9 @@ public class JdbcQuery {
 	
 	/**
 	 * 단일결과를 Integer 형태로 얻기
-	 * @param conn
-	 * @param sql
-	 * @return
+	 * @param conn Connection
+	 * @param sql sql
+	 * @return result(Integer)
 	 */
 	public static Integer getResultInteger(Connection conn, String sql) throws SQLException {
 		String result = getResultOne(conn, sql);
@@ -154,9 +154,9 @@ public class JdbcQuery {
 
 	/**
 	 * 단일결과를 double 형태로 얻기
-	 * @param sql
-	 * @param defaultValue
-	 * @return
+	 * @param sql sql
+	 * @param defaultValue defaultValue
+	 * @return result(Double)
 	 */
 	public static Double getResultDouble(String sql, Double defaultValue) {
 		try {
@@ -174,8 +174,8 @@ public class JdbcQuery {
 
 	/**
 	 * 단일결과를 double 형태로 얻기
-	 * @param sql
-	 * @return
+	 * @param sql sql
+	 * @return result(Double)
 	 */
 	public static Double getResultDouble(String sql) {
 		try {
@@ -187,10 +187,9 @@ public class JdbcQuery {
 
 	/**
 	 * 단일결과를 double 형태로 얻기
-	 * @param conn
-	 * @param sql
-	 * @return
-	 * @throws SQLException
+	 * @param conn Connection
+	 * @param sql sql
+	 * @return result(Double)
 	 */
 	public static Double getResultDouble(Connection conn, String sql) throws SQLException {
 		Double resultDouble = null;
@@ -224,9 +223,9 @@ public class JdbcQuery {
 
 	/**
 	 *  단일결과를 Long형태로 얻기
-	 * @param sql
-	 * @param defaultValue
-	 * @return
+	 * @param sql sql
+	 * @param defaultValue defaultValue
+	 * @return result(Long)
 	 */
 	public static Long getResultLong(String sql, Long defaultValue) {
 		try {
@@ -245,8 +244,8 @@ public class JdbcQuery {
 
 	/**
 	 * 단일결과를 Long 형태로 얻기
-	 * @param sql
-	 * @return
+	 * @param sql sql
+	 * @return  result(Long)
 	 */
 	public static Long getResultLong(String sql) {
 		try {
@@ -258,7 +257,7 @@ public class JdbcQuery {
 	
 	/**
 	 * 단일결과를 Long형태로 얻기
-	 * @return
+	 * @return result(Long)
 	 */
 	public static Long getResultLong(Connection conn, String sql) throws SQLException {
 		Long resultLong = null;
@@ -291,9 +290,9 @@ public class JdbcQuery {
 	
 	/**
 	 * 단일결과 얻기
-	 * @param sql Query
+	 * @param sql sql
 	 *  @param defaultValue 기본값
-	 * @return 
+	 * @return 단일결과 값
 	 */
 	public static String getResultOne(String sql, String defaultValue){
 		try {
@@ -311,8 +310,8 @@ public class JdbcQuery {
 	
 	/**
 	 * 단일결과 얻기
-	 * @param sql Query
-	 * @return 
+	 * @param sql sql
+	 * @return  단일결과 값
 	 */
 	public static String getResultOne(String sql){
 		try {
@@ -324,8 +323,8 @@ public class JdbcQuery {
 	/**
 	 * 단일결과 얻기
 	 * @param conn Connection
-	 * @param sql Query
-	 * @return 결과 값
+	 * @param sql sql
+	 * @return 단일결과 값
 	 */
 	public static String getResultOne(Connection conn, String sql) throws SQLException {
 		String resultValue = null;
@@ -356,9 +355,9 @@ public class JdbcQuery {
 	
 	
 	/**
-	 * 단일결과를 String List 형태로 얻기
-	 * @param sql 
-	 * @return 
+	 * 단일컬럼 결과 리스트 얻기
+	 * @param sql sql
+	 * @return 단일컬럼 결과 리스트
 	 */
 	public static List<String> getStringList(String sql){
 		try {
@@ -370,10 +369,10 @@ public class JdbcQuery {
 	
 	
 	/**
-	 * 단일결과를 String List형태로 얻기
+	 * 단일컬럼 결과 리스트
 	 * @param conn Connection
 	 * @param sql Query
-	 * @return 결과 리스트
+	 * @return 단일컬럼 결과 리스트
 	 */
 	public static List<String> getStringList(Connection conn, String sql) throws SQLException {
 		List<String> resultList = new ArrayList<>();
@@ -390,7 +389,6 @@ public class JdbcQuery {
 			}
 		}catch(Exception e){
 			resultList.clear();
-			resultList = null;
 			throw e;
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
@@ -402,8 +400,8 @@ public class JdbcQuery {
 	/**
 	 * 지정 된 테이블의 모든컬럼정보를 String 형태로 얻기
 	 * Map<String, String> 컬럼, 값
-	 * @param tableName
-	 * @return
+	 * @param tableName tableName
+	 * @return MapStringList
 	 */
 	public static List<Map<String, String>> getAllMapStringList(String tableName){
 		try {
@@ -418,9 +416,9 @@ public class JdbcQuery {
 	/**
 	 * 지정 된 테이블의 모든컬럼정보를 String 형태로 얻기
 	 * Map<String, String> 컬럼, 값
-	 * @param conn
-	 * @param tableName
-	 * @return
+	 * @param conn Connection
+	 * @param tableName tableName
+	 * @return MapStringList
 	 */
 	public static List<Map<String, String>> getAllMapStringList(Connection conn, String tableName) throws SQLException {
 		String sql = "SELECT * FROM " + tableName;	
@@ -428,8 +426,8 @@ public class JdbcQuery {
 	}
 	/**
 	 * 데이터 베이스 결과를 List에 Map형태로 가져온다 키:컬럼명 내용: 벨류
-	 * @param sql Query
-	 * @return 결과 맵 리스트
+	 * @param sql sql
+	 * @return MapStringList
 	 */
 	public static List<Map<String, String>> getMapStringList(String sql){
 
@@ -445,8 +443,8 @@ public class JdbcQuery {
 	/**
 	 * 데이터 베이스 결과를 List 에 Map 형태로 가져온다 키:컬럼명 내용: 벨류
 	 * @param conn Connection
-	 * @param sql Query
-	 * @return 결과 맵 리스트
+	 * @param sql sql
+	 * @return MapStringList
 	 */
 	public static List<Map<String, String>> getMapStringList(Connection conn, String sql) throws SQLException {
 		
@@ -458,12 +456,9 @@ public class JdbcQuery {
 		try{
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
-			ResultSetMetaData metaData = result.getMetaData();
-			int count = metaData.getColumnCount(); //number of column
-			String columnNames[] = new String[count];
-			for (int i = 1; i <= count; i++){
-			   columnNames[i-1] = metaData.getColumnLabel(i); 
-			}		
+
+			String [] columnNames = getColumnNames(result);
+
 			while(result.next()){
 				Map<String, String> resultMap = new HashMap<>();
 				for (String columnName : columnNames){
@@ -473,7 +468,6 @@ public class JdbcQuery {
 			}
 		}catch(Exception e){
 			resultMapList.clear();
-			resultMapList = null;
 			throw e;
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
@@ -487,8 +481,8 @@ public class JdbcQuery {
 	
 	/**
 	 * 단일결과를 Map<String, String>형태로 얻기
-	 * @param sql
-	 * @return
+	 * @param sql sql
+	 * @return MapString
 	 */
 	public static Map<String, String> getMapString( String sql){
 		try {
@@ -500,23 +494,19 @@ public class JdbcQuery {
 	
 	/**
 	 * 단일결과를 Map<String, String>형태로 얻기
-	 * @param conn
-	 * @param sql
-	 * @return
+	 * @param conn Connection
+	 * @param sql sql
+	 * @return MapString
 	 */
 	public static Map<String, String> getMapString(Connection conn, String sql) throws SQLException {
 		Map<String, String> resultMap = new HashMap<>();
 		Statement stmt = null;
 		ResultSet result = null;
+		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
-			ResultSetMetaData metaData = result.getMetaData();
-			int count = metaData.getColumnCount(); //number of column
-			String columnNames[] = new String[count];
-			for (int i = 1; i <= count; i++){
-			   columnNames[i-1] = metaData.getColumnLabel(i); 
-			}		
+			String [] columnNames = getColumnNames(result);
 			if(result.next()){		
 				for (String columnName : columnNames){
 					resultMap.put(columnName, result.getString(columnName));
@@ -532,6 +522,19 @@ public class JdbcQuery {
 		}
 		return resultMap;
 	}
+
+
+	public static String [] getColumnNames(ResultSet resultSet) throws SQLException {
+		ResultSetMetaData metaData = resultSet.getMetaData();
+		int count = metaData.getColumnCount(); //number of column
+		String[] columnNames = new String[count];
+		for (int i = 1; i <= count; i++){
+			columnNames[i-1] = metaData.getColumnLabel(i);
+		}
+		return columnNames;
+	}
+
+
 	/**
 	 * 쿼리에 해당하는 내용을 실행한다.
 	 * @param sql 실행쿼리
@@ -566,7 +569,7 @@ public class JdbcQuery {
 	 */
 	public static int execute(Connection conn, String sql) throws SQLException {
 		PreparedStatement pstmt = null;
-		int count = -1;
+		int count ;
 		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			pstmt = conn.prepareStatement(sql);			
@@ -581,7 +584,7 @@ public class JdbcQuery {
 
 			if(pstmt!= null){
 				//noinspection CatchMayIgnoreException
-				try{pstmt.close(); pstmt = null; }catch(Exception e){}
+				try{pstmt.close(); }catch(Exception e){}
 			}
 		}
 	
@@ -620,7 +623,7 @@ public class JdbcQuery {
 	 */
 	public static int callProcedure(Connection conn, String sql) throws SQLException {
 		PreparedStatement pstmt = null;
-		int count = -1;
+		int count ;
 		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			pstmt = conn.prepareCall(sql);
@@ -633,7 +636,7 @@ public class JdbcQuery {
 		}finally{
 			if(pstmt!= null){
 				//noinspection CatchMayIgnoreException
-				try{pstmt.close(); pstmt = null; }catch(Exception e){}
+				try{pstmt.close(); }catch(Exception e){}
 			}
 		}
 		return count;
@@ -642,9 +645,9 @@ public class JdbcQuery {
 	
 	 /**
 	  * RowData 존재여부
-	  * @param conn
-	  * @param sql
-	  * @return
+	  * @param conn Connection
+	  * @param sql sql
+	  * @return isRowData
 	  */
 	 public static boolean isRowData(Connection conn, String sql) throws SQLException {
 		String result =  getResultOne(conn, sql);
@@ -653,8 +656,8 @@ public class JdbcQuery {
 	
 	 /**
 	  * RowData 존재여부
-	  * @param sql
-	  * @return
+	  * @param sql sql
+	  * @return isRowData
 	  */
 	 public static boolean isRowData(String sql){
 		String result =  getResultOne(sql);
