@@ -37,7 +37,7 @@ import java.util.*;
 public class JdbcNaming {
 
 	private static final Logger logger = LoggerFactory.getLogger(JdbcNaming.class);
-	
+
 	
 	/**
 	 * 객체결과 리스트 얻기
@@ -706,9 +706,7 @@ public class JdbcNaming {
 		try {
 			return insert(ApplicationConnectionPool.getInstance().getConnection(), objClassList, "UPSERT", true);
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
-			return -1;
-
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -723,8 +721,7 @@ public class JdbcNaming {
 		try {
 			return insert(ApplicationConnectionPool.getInstance().getConnection(), objClassList, "UPSERT", isClearParameters);
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
-			return -1;
+			throw new RuntimeException(e);
 
 		}
 	}
@@ -751,8 +748,7 @@ public class JdbcNaming {
 		try {
 			return insert(ApplicationConnectionPool.getInstance().getConnection(), objClassList, "INSERT", true);
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
-			return -1;
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -763,12 +759,11 @@ public class JdbcNaming {
 	 * @param isClearParameters ClearParameters 여부
 	 * @return fail -1
 	 */
-	public static <T> int insert( List<T> objClassList,   boolean isClearParameters){
+	public static <T> int insert( List<T> objClassList, boolean isClearParameters){
 		try {
 			return insert(ApplicationConnectionPool.getInstance().getConnection(), objClassList , "INSERT", isClearParameters);
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
-			return -1;
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -813,7 +808,7 @@ public class JdbcNaming {
 			throw new FieldNullException(objClass.getName());
 		}
 		
-		int successCount = -1;
+
 		
 		StringBuilder sqlBuilder = new StringBuilder();
 	
@@ -837,7 +832,9 @@ public class JdbcNaming {
 		
 		
 		PreparedStatement pstmt = null;
-		
+
+
+		int successCount ;
 		try{
 			pstmt = conn.prepareStatement(sqlBuilder.toString());
 			
@@ -907,7 +904,7 @@ public class JdbcNaming {
 			successCount = objClassList.size();
 		}catch(Exception e){
 			logger.error(sqlBuilder.toString());
-			logger.error(ExceptionUtil.getStackTrace(e));
+			throw new RuntimeException(e);
 		}finally{
 
 			//noinspection CatchMayIgnoreException
@@ -916,12 +913,23 @@ public class JdbcNaming {
 				
 		return successCount;
 	}
-	
+
+
+	/**
+	 * insert 계열의 sql 얻기
+	 * @return InsertSql
+	 */
+	public static String getInsertSql(){
+
+		return null;
+	}
+
+
 
 	/**
 	 * 있으면 업데이트 없으면 추가
-	 * @param obj
-	 * @param isNullUpdate null column null update flag
+	 * @param obj jdbcObject
+	 * @param isNullUpdate null column update flag
 	 * @return fail -1
 	 */
 	public static <T> int insertOrUpdate(T obj, boolean isNullUpdate){
@@ -929,8 +937,7 @@ public class JdbcNaming {
 		try{
 			return insertOrUpdate(ApplicationConnectionPool.getInstance().getConnection(), obj, isNullUpdate);
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
-			return -1;
+			throw new RuntimeException(e);
 		}
 
 	}
@@ -938,9 +945,9 @@ public class JdbcNaming {
 	
 	/**
 	 * 있으면 업데이트 없으면 추가
-	 * @param conn
-	 * @param obj
-	 * @param isNullUpdate
+	 * @param conn Connection
+	 * @param obj jdbcObject
+	 * @param isNullUpdate null column update flag
 	 * @return 실패 -1
 	 */
 	public static <T> int insertOrUpdate(Connection conn, Object obj , boolean isNullUpdate ){
@@ -1023,7 +1030,7 @@ public class JdbcNaming {
 			}
 		}
 		catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
+			throw new RuntimeException(e);
 		}
 				
 		return successCount;
@@ -1033,8 +1040,8 @@ public class JdbcNaming {
 	
 	/**
 	 * 객체를이용한 자동 upsert 
-	 * @param conn
-	 * @param obj
+	 * @param conn Connection
+	 * @param obj jdbcObject
 	 * @return fail -1
 	 */
 	public static <T> int upsert(Connection conn, T obj){
@@ -1043,37 +1050,35 @@ public class JdbcNaming {
 
 	/**
 	 * 객체를이용한 자동 upsert 
-	 * @param obj
+	 * @param obj jdbcObject
 	 * @return success 1, fail -1
 	 */
 	public static <T> int upsert(T obj){
 		try {
 			return insert(ApplicationConnectionPool.getInstance().getConnection(), obj, "UPSERT");
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
-			return -1;
+			throw new RuntimeException(e);
 		}
 	}
 
 	
 	/**
 	 * 객체를이용한 자동 insert 
-	 * @param obj
+	 * @param obj jdbcObject
 	 * @return success 1, fail -1
 	 */
 	public static <T> int insert(T obj){
 		try {
 			return insert(ApplicationConnectionPool.getInstance().getConnection(), obj, "INSERT");
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
-			return -1;
+			throw new RuntimeException(e);
 		}
 	}
 	
 	/**
 	 * 객체를이용한 자동 insert 
-	 * @param conn
-	 * @param obj
+	 * @param conn Connection
+	 * @param obj jdbcObject
 	 * @return success 1, fail -1
 	 */
 	public static <T> int insert(Connection conn, T obj){
@@ -1082,8 +1087,8 @@ public class JdbcNaming {
 	
 	/**
 	 * 객체를이용한 자동 insert 
-	 * @param conn
-	 * @param obj
+	 * @param conn Connection
+	 * @param obj jdbcObject
 	 * @return success 1, fail -1
 	 */
 	public static <T> int insert(Connection conn, T obj, String insertQueryValue){
@@ -1189,7 +1194,7 @@ public class JdbcNaming {
 			pstmt.executeBatch();
 			successCount = 1;
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
+			throw new RuntimeException(e);
 		}finally{
 			try{pstmt.close(); pstmt = null; }catch(Exception e){}
 		} 
@@ -1201,9 +1206,9 @@ public class JdbcNaming {
 	
 	/**
 	 * 객체를 이용한 update
-	 * @param conn
-	 * @param obj
-	 * @param isNullUpdate
+	 * @param conn Connection
+	 * @param obj jdbcObject
+	 * @param isNullUpdate null 업데이트 여부
 	 * @return  success 1, fail -1
 	 */
 	public static <T> int update(Connection conn,T obj , boolean isNullUpdate ){
@@ -1382,9 +1387,10 @@ public class JdbcNaming {
 			pstmt.executeBatch();
 			successCount = 1;
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
+			throw new RuntimeException(e);
 		}finally{
-			try{pstmt.close(); pstmt = null; }catch(Exception e){}
+			//noinspection CatchMayIgnoreException
+			try{pstmt.close();}catch(Exception e){}
 		} 
 				
 		return successCount;
@@ -1393,7 +1399,7 @@ public class JdbcNaming {
 	
 	/**
 	 * 클래스 맴버변수 생성
-	 * @param tableName
+	 * @param tableName tableName
 	 * @return 변수생성값
 	 */
 	public static String makeObjectValue( String tableName) throws SQLException {
@@ -1402,8 +1408,8 @@ public class JdbcNaming {
 	
 	/**
 	 * 클래스 맴버변수 생성
-	 * @param conn
-	 * @param tableName
+	 * @param conn Connection
+	 * @param tableName tableName
 	 * @return 변수생성값
 	 */
 	public static String makeObjectValue(Connection conn, String tableName){
@@ -1418,6 +1424,7 @@ public class JdbcNaming {
 			
 			Map<String,String> defaultValueMap = Database.getDefaultValue(tableName);
 			stmt = conn.createStatement();
+			//noinspection SqlDialectInspection,SqlNoDataSourceInspection
 			result = stmt.executeQuery("SELECT * FROM " + tableName);
 			ResultSetMetaData metaData = result.getMetaData();
 			int count = metaData.getColumnCount(); //number of column
@@ -1503,7 +1510,7 @@ public class JdbcNaming {
 			}
 		
 		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
+			throw new RuntimeException(e);
 		}finally{
 			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
 			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
@@ -1513,21 +1520,20 @@ public class JdbcNaming {
 	
 	/**
 	 * 데이터가 없을경우에만 insert
-	 * @param obj
+	 * @param obj jdbcObject
 	 * @return success insert count, fail -1
 	 */
 	public static <T> int insertIfNoData(T obj){
 		try {
 			return insertIfNoData(ApplicationConnectionPool.getInstance().getConnection(), obj);
 		}catch (Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
-			return -1;
+			throw new RuntimeException(e);
 		}
 	}
 	/**
 	 * 데이터가 없을경우에만 insert
-	 * @param conn
-	 * @param obj
+	 * @param conn Connection
+	 * @param obj jdbcObject
 	 * @return success insert count, fail -1
 	 */
 	public static <T> int insertIfNoData(Connection conn,T obj){
@@ -1595,7 +1601,7 @@ public class JdbcNaming {
 			}
 		}
 		catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
+			throw new RuntimeException(e);
 		}
 				
 		return successCount;

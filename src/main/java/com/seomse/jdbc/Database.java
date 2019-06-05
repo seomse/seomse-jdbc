@@ -33,7 +33,8 @@ public class Database {
 	private static final Logger logger = LoggerFactory.getLogger(Database.class);
 
 	private static final SequenceMaker sequenceMaker = SequenceMakerFactory.make(ApplicationConnectionPool.getInstance().getJdbcType());
-	
+
+
 	/**
 	 * 시퀀스 값 얻기
 	 * @param sequenceName 시퀀스 명
