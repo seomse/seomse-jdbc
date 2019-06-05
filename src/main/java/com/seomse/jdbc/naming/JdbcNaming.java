@@ -962,7 +962,7 @@ public class JdbcNaming {
 	public static <T> int insertOrUpdate(Connection conn, Object obj , boolean isNullUpdate ){
 
 
-		int successCount = -1;
+		int successCount ;
 		try{
 
 			Object checkVo = getObj(conn, obj.getClass(), null, getCheckWhere(obj), null, null);
@@ -1043,7 +1043,7 @@ public class JdbcNaming {
 
 		String insertSql = getInsertSql(objClass, fields, insertQueryValue);
 
-		int successCount = -1;
+		int successCount ;
 
 
 		PreparedStatement pstmt = null;
@@ -1159,7 +1159,7 @@ public class JdbcNaming {
 		sqlBuilder.append(fieldBuilder.substring(4));
 		PreparedStatement pstmt = null;
 
-		int successCount = -1;
+		int successCount;
 		//noinspection TryFinallyCanBeTryWithResources
 		try{
 			pstmt = conn.prepareStatement(sqlBuilder.toString());
@@ -1330,9 +1330,9 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}finally{
 			//noinspection CatchMayIgnoreException
-			try{if(result!=null)result.close(); result=null; }catch(Exception e){}
+			try{if(result!=null)result.close();  }catch(Exception e){}
 			//noinspection CatchMayIgnoreException
-			try{if(stmt!=null)stmt.close(); stmt=null; }catch(Exception e){}
+			try{if(stmt!=null)stmt.close();  }catch(Exception e){}
 		}
 		return fieldBuilder.toString();
 	}
