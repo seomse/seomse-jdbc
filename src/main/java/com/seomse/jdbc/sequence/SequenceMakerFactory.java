@@ -14,15 +14,15 @@ import com.seomse.jdbc.exception.NotDbTypeException;
  *  수정이력 : 
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2017 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
  */
 public class SequenceMakerFactory {
 	
 	
 	/**
 	 * SequenceMaker 생성
-	 * @param dbType
-	 * @return
+	 * @param dbType database type (oracle, mysql ...)
+	 * @return SequenceMaker
 	 */
 	public static SequenceMaker make(String dbType){
 		dbType = dbType.toLowerCase();

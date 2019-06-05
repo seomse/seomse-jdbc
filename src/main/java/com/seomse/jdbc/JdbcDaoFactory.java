@@ -48,7 +48,7 @@ public class JdbcDaoFactory {
 						+ daoClass.getSimpleName() +"Impl" + dbType;
 		
 		
-		Class<?> makeDaoClass = null;
+		Class<?> makeDaoClass ;
 		try {
 			makeDaoClass =Class.forName(className);			
 		} catch (ClassNotFoundException e) {
@@ -63,7 +63,7 @@ public class JdbcDaoFactory {
 						+ daoClass.getSimpleName() +"Impl" + dbType + "  OR  "  + className);
 			}
 		}
-		T t = null ;
+		T t ;
 		try{
 			//noinspection deprecation
 			t = (T) makeDaoClass.newInstance();

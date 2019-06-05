@@ -15,7 +15,7 @@ import com.seomse.jdbc.JdbcQuery;
  *  수정이력 : 
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2017 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
  */
 public class OracleSequenceMaker implements SequenceMaker{
 

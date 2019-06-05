@@ -31,7 +31,7 @@ import java.util.*;
  *  수정이력 :  2017.11, 2018.04, 2018.07
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2017, 2018 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017, 2018 by ㈜섬세한사람들. All right reserved.
  */
 public class JdbcNaming {
 

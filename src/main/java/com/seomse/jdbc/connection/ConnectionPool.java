@@ -20,7 +20,7 @@ import java.sql.SQLException;
  *  수정이력 :
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2019 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class ConnectionPool {
 
@@ -41,7 +41,7 @@ public class ConnectionPool {
 
     private String password;
 
-    private int count = 3;
+    private int count;
 
     private boolean isAutoCommit;
 
@@ -53,7 +53,7 @@ public class ConnectionPool {
 
     /**
      * 재연결 시도에 따른 에러로그 여부
-     * @param reconnectionErrorLog
+     * @param reconnectionErrorLog 재연결 시도에 따른 에러로그 출력 여부
      */
     public void setReconnectionErrorLog(boolean reconnectionErrorLog) {
         isReconnectionErrorLog = reconnectionErrorLog;
@@ -107,7 +107,7 @@ public class ConnectionPool {
 
     /**
      * 연결이 될때까지 대기 여부
-     * @return
+     * @return isReconnectionWait
      */
     public boolean isReconnectionWait() {
         return isReconnectionWait;
@@ -154,7 +154,7 @@ public class ConnectionPool {
 
     /**
      * 연결유효 체크시간 설정
-     * @param validTime
+     * @param validTime 연결 유효 체크 시간
      */
     public void setValidTime(int validTime) {
         this.validTime = validTime;
@@ -258,8 +258,7 @@ public class ConnectionPool {
 
     /**
      * connection 생성
-     * @return
-     * @throws SQLException
+     * @return connection
      */
     public Connection newConnection(boolean isAutoCommit) throws SQLException {
 
@@ -270,8 +269,9 @@ public class ConnectionPool {
 
     /**
      * auto commit 여부
-     * @return
+     * @return isAutoCommit
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isAutoCommit(){
         return isAutoCommit;
     }
@@ -310,8 +310,7 @@ public class ConnectionPool {
 
     /**
      * commit 되어 정보가 반영된 connection얻기
-     * @return
-     * @throws SQLException
+     * @return CommitConnection
      */
     public Connection getCommitConnection() throws SQLException {
         Connection conn = getConnection();

@@ -19,29 +19,28 @@ public class PrepareStatementData {
 	private Object data;
 	/**
 	 * 데이터 타입 얻기
-	 * @return
+	 * @return JdbcDataType
 	 */
 	public JdbcDataType getType() {
 		return type;
 	}
 	/**
 	 * 데이터 타입 설정
-	 * @param type
+	 * @param type JdbcDataType
 	 */
 	public void setType(JdbcDataType type) {
 		this.type = type;
 	}
 	/**
 	 * 데이터 얻기
-	 * @return
+	 * @return 데이터 타입에 유효한 데이터
 	 */
 	public Object getData() {
 		return data;
 	}
 	/**
 	 * 데이터 설정
-	 * 
-	 * @param data
+	 * @param data 데이터 타입에 유효한 데이터
 	 */
 	public void setData(Object data) {
 		this.data = data;

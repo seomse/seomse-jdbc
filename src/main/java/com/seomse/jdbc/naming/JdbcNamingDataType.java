@@ -21,7 +21,7 @@ import com.seomse.commons.utils.string.StringArray;
  *  수정이력 : 
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2017 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
  */
 
 public class JdbcNamingDataType {
@@ -33,7 +33,7 @@ public class JdbcNamingDataType {
 	
 	/**
 	 * 싱글턴 인스턴스 얻기
-	 * @return
+	 * @return singleton instance
 	 */
 	public static JdbcNamingDataType getInstance(){
 		return Singleton.instance;
@@ -141,24 +141,12 @@ public class JdbcNamingDataType {
 		String checkValue = value.toLowerCase();
 		int frontIndex = checkValue.indexOf("front");
 		int backIndex = checkValue.indexOf("back");
-		
-		if(frontIndex != -1){
-			isFront = true;
-		}else{
-			isFront = false;
-		}
-		if(backIndex != -1){
-			isBack = true;
-		}else{
-			isBack = false;
-		}
+
+		isFront = frontIndex != -1;
+		isBack = backIndex != -1;
 		
 		if(isFront && isBack){
-			if(frontIndex < backIndex){
-				isFrontPriority = true;
-			}else{
-				isFrontPriority = false;
-			}
+			isFrontPriority = frontIndex < backIndex;
 		}
 	}
 	
@@ -273,9 +261,10 @@ public class JdbcNamingDataType {
 	private JdbcDataType front(String columnName){
 		
 		TypeAndHeader [] sortArray =this.sortArray ;
+		//noinspection ForLoopReplaceableByForEach
 		for(int i=0 ; i<sortArray.length ; i++){
 			String [] headerArray = sortArray[i].headerArray;
-			
+			//noinspection ForLoopReplaceableByForEach
 			for(int j=0 ; j<headerArray.length ; j++){
 				if(columnName.startsWith(headerArray[j]+ "_") ){
 					return sortArray[i].dataType;
@@ -289,9 +278,10 @@ public class JdbcNamingDataType {
 	private JdbcDataType back(String columnName){
 		
 		TypeAndHeader [] sortArray =this.sortArray ;
+		//noinspection ForLoopReplaceableByForEach
 		for(int i=0 ; i<sortArray.length ; i++){
 			String [] headerArray = sortArray[i].headerArray;
-			
+			//noinspection ForLoopReplaceableByForEach
 			for(int j=0 ; j<headerArray.length ; j++){
 				if(columnName.endsWith("_" + headerArray[j]) ){
 					return sortArray[i].dataType;
@@ -301,10 +291,5 @@ public class JdbcNamingDataType {
 		
 		return null;
 	}
-	
-	
-	public static void main(String [] args){
-		
-		System.out.println(JdbcNamingDataType.getInstance().getType("PRC_AA"));
-	}
+
 }

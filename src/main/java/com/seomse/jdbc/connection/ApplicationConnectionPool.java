@@ -22,7 +22,7 @@ import java.sql.SQLException;
  *  수정이력 :
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2019 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class ApplicationConnectionPool {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConnectionPool.class);
@@ -38,9 +38,6 @@ public class ApplicationConnectionPool {
     public static ApplicationConnectionPool getInstance (){
         return Singleton.instance;
     }
-
-
-
 
     /**
      * 생성자
@@ -61,7 +58,6 @@ public class ApplicationConnectionPool {
 
     /**
      * ConnectionPool 을 외부에서 만들어서 설정
-     * @param connectionPool
      */
     public void setConnectionPool(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
@@ -78,7 +74,7 @@ public class ApplicationConnectionPool {
     /**
      * DB접속정보를 seomse_config에서 가져와서 설정
      * isErrorLog는 초기생성자에서 에러를 출력하지않기위한 로그
-     * @param isErrorLog
+     * @param isErrorLog 에러로그 출력 여부
      */
     public void setConfigConnectionInfo(boolean isErrorLog){
         String jdbcType = Config.getConfig("application.jdbc.type");
@@ -191,6 +187,7 @@ public class ApplicationConnectionPool {
      * @param isErrorLog 에러로그 출력여부
      * @return 설정값이 있는지 여부
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isConfig(String value, String keyMessage, boolean isErrorLog){
         if(value == null || "".equals(value.trim())){
             if(isErrorLog){
@@ -205,7 +202,6 @@ public class ApplicationConnectionPool {
     /**
      * connection 얻기
      * @return connection
-     * @throws SQLException
      */
     public Connection getConnection() throws SQLException {
         return connectionPool.getConnection();
@@ -222,7 +218,6 @@ public class ApplicationConnectionPool {
 
     /**
      * connectionPool 얻기
-     * @return
      */
     public ConnectionPool getConnectionPool(){
         return connectionPool;
@@ -231,8 +226,6 @@ public class ApplicationConnectionPool {
 
     /**
      * commit 되어 정보가 반영된 connection얻기
-     * @return
-     * @throws SQLException
      */
     public Connection getCommitConnection() throws SQLException {
         return connectionPool.getCommitConnection();

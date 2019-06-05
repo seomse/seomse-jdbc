@@ -14,7 +14,7 @@ import java.sql.Statement;
  *  수정이력 :
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2019 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class JdbcClose {
 

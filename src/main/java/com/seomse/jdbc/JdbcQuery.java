@@ -24,7 +24,7 @@ import java.util.Map;
  *  수정이력 : 2019.02, 2019.06
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class JdbcQuery {
 	private static final Logger logger = LoggerFactory.getLogger(JdbcQuery.class);

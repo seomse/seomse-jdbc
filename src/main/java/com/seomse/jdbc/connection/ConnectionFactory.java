@@ -16,7 +16,7 @@ import java.sql.SQLException;
  *  수정이력 : 2019.02
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2017, 2019 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class ConnectionFactory {
 
@@ -28,10 +28,6 @@ public class ConnectionFactory {
 	 * @param user user Id
 	 * @param password user password
 	 * @return Connection
-	 * @throws ClassNotFoundException
-	 * @throws SQLException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
 	 */
 	public static Connection newConnection(String databaseTypeOrDriverClass, String url, String user, String password) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException{
 		Driver driver = newDriver(databaseTypeOrDriverClass);
@@ -43,12 +39,11 @@ public class ConnectionFactory {
 
 	/**
 	 * Connection 생성
-	 * @param driver
+	 * @param driver driver
 	 * @param url  url ex)jdbc:oracle:thin:@127.0.0.1:1521:orcl
 	 * @param user user Id
 	 * @param password  user password
 	 * @return Connection
-	 * @throws SQLException
 	 */
 	public static Connection newConnection(Driver driver, String url, String user, String password) throws SQLException {
 		java.util.Properties info = new java.util.Properties();
@@ -68,10 +63,6 @@ public class ConnectionFactory {
 	 * @param databaseTypeOrDriverClass oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
 	 * @param urlText urlText
 	 * @return 연결정보
-	 * @throws SQLException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws ClassNotFoundException
 	 */
 	public  static Connection  newConnection(String databaseTypeOrDriverClass, String urlText) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		Driver driver = newDriver(databaseTypeOrDriverClass);
@@ -82,12 +73,9 @@ public class ConnectionFactory {
 
 	/**
 	 * sqlite Connection 생성
-	 * @param sqliteDbFilePath
-	 * @return
-	 * @throws SQLException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws ClassNotFoundException
+	 * @param sqliteDbFilePath sqlite 파일 경로
+	 * @return sqlite Connection
+
 	 */
 	public synchronized static Connection  newConnectionSqlite(String sqliteDbFilePath) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		return newConnection("SQLITE","jdbc:sqlite:"+ sqliteDbFilePath );
@@ -98,10 +86,7 @@ public class ConnectionFactory {
 	/**
 	 * Driver 생성
 	 * @param databaseTypeOrDriverClass oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
-	 * @return
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws ClassNotFoundException
+	 * @return driver
 	 */
 	public  static Driver newDriver(String databaseTypeOrDriverClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 		Driver driver ;

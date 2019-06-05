@@ -26,7 +26,7 @@ import java.util.Map;
  *  수정이력 : 2019.02, 2016.06
  *  기타사항 :
  * </pre>
- * @atuhor Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class Database {
 
@@ -168,7 +168,7 @@ public class Database {
 	public static String [] getColumnNameArray(Connection conn, String tableName) throws SQLException {
 		Statement stmt = null;
 		ResultSet result = null;
-		String [] nameArray = null;
+		String [] nameArray ;
 		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 			stmt = conn.createStatement();
@@ -193,8 +193,8 @@ public class Database {
 	
 	/**
 	 * 기본키 컬럼정보 얻기
-	 * @param tableName
-	 * @return
+	 * @param tableName tableName
+	 * @return PrimaryKeyColumnsForTable
 	 */
 	public static Map<String, Integer> getPrimaryKeyColumnsForTable( String tableName) throws SQLException {
 		 return getPrimaryKeyColumnsForTable(ApplicationConnectionPool.getInstance().getConnection(), tableName);
@@ -202,14 +202,14 @@ public class Database {
 	
 	/**
 	 * 기본키 컬럼정보 얻기
-	 * @param conn
-	 * @param tableName
-	 * @return
+	 * @param conn Connection
+	 * @param tableName tableName
+	 * @return PrimaryKeyColumnsForTable
 	 */
 	 public static Map<String, Integer> getPrimaryKeyColumnsForTable(Connection conn, String tableName) throws SQLException {
 		 ResultSet pkColumns= null;
 		 Map<String, Integer> pkMap = new HashMap<>();
-		 //noinspection CaughtExceptionImmediatelyRethrown
+		 //noinspection CaughtExceptionImmediatelyRethrown,TryFinallyCanBeTryWithResources
 		 try{
 			 pkColumns= conn.getMetaData().getPrimaryKeys(null,null,tableName);
 			
@@ -217,14 +217,14 @@ public class Database {
 			    String pkColumnName = pkColumns.getString("COLUMN_NAME");
 			    Integer pkPosition = pkColumns.getInt("KEY_SEQ");
 			        
-			   pkMap.put(pkColumnName, pkPosition);
+			    pkMap.put(pkColumnName, pkPosition);
 			 }
 
-		 }catch(Exception e){
+		 }catch(SQLException e){
 			throw e;
 		 }finally{
 			 //noinspection CatchMayIgnoreException
-			 try{if(pkColumns!=null)pkColumns.close(); pkColumns=null; }catch(Exception e){}
+			 try{if(pkColumns!=null)pkColumns.close(); }catch(Exception e){}
 		 }
 		 
 		return pkMap;
@@ -235,8 +235,8 @@ public class Database {
 
 	 /**
 	  * 테이블의 컬럼별 디폴트값을 가져온다.
-	  * @param tableName 테이블명
-	  * @return
+	  * @param tableName tableName
+	  * @return DefaultValue
 	  */
 	 public static Map<String, String> getDefaultValue(String tableName){
 		 //혹시 받는쪽에서 데이터변환코딩을 할 수 있으므로 디폴트값이 없어도 빈객체를 생성해서 돌려준다.
@@ -276,7 +276,7 @@ public class Database {
 	 
 	 /**
 	  * 연결유지 쿼리를 돌려준다.
-	  * @return
+	  * @return ConnectionKeepQuery
 	  */
 	 public static String getConnectionKeepQuery(){
 		String sql  ;
@@ -297,8 +297,8 @@ public class Database {
 	 
 	 /**
 	  * 시간조건이 들어간 조건맵 생성
-	  * @param dateTime
-	  * @return
+	  * @param dateTime dateTime (milli second)
+	  * @return TimeMap
 	  */
 	public static Map<Integer, PrepareStatementData> newTimeMap(long dateTime){
 			
