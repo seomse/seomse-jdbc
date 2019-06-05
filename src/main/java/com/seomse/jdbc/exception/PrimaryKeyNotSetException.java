@@ -20,9 +20,14 @@ public class PrimaryKeyNotSetException  extends RuntimeException{
 	
 	private static final long serialVersionUID = 1450861288962787174L;
 	
-	private static final String message = "pkColunm add @PrimaryKeyColumn(seq = 1)";
-	public PrimaryKeyNotSetException(){
-		super(message);
+	private static final String message = "pkColumn add @PrimaryKeyColumn(seq = 1)";
+
+	/**
+	 * 생성자
+	 * @param msg 메시지
+	 */
+	public PrimaryKeyNotSetException(String msg){
+		super(message+ msg);
 	
 	
 	
