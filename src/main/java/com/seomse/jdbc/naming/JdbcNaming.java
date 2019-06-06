@@ -1329,10 +1329,7 @@ public class JdbcNaming {
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}finally{
-			//noinspection CatchMayIgnoreException
-			try{if(result!=null)result.close();  }catch(Exception e){}
-			//noinspection CatchMayIgnoreException
-			try{if(stmt!=null)stmt.close();  }catch(Exception e){}
+			JdbcClose.statementResultSet(stmt, result);
 		}
 		return fieldBuilder.toString();
 	}
