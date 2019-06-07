@@ -20,16 +20,11 @@ import com.seomse.jdbc.naming.JdbcNaming;
 public class NamingObjectMake {
 
 	public static void main(String [] args){
-		//설정 로드용
-		
-		try{
-		Config.getConfig("");
-		String tableName = "TB_ARA_SIM_DOC";
-		System.out.println("@Table(name=\"" +  tableName+ "\")\n");
-		//다른DB사용시
-//		Connection conn =  ConnectionFactory.newConnection("oracle", "jdbc:oracle:thin:@192.168.0.24:1521:orcl", "yeonie", "xfJieurNUYcA");
-//		System.out.println(JdbcNaming.makeObjectValue(conn, tableName));	
 
+		try{
+
+		String tableName = "TB_STOCK_ITEM";
+		System.out.println("@Table(name=\"" +  tableName+ "\")\n");
 		System.out.println(JdbcNaming.makeObjectValue(tableName));
 		}catch(Exception e){
 			e.printStackTrace();
