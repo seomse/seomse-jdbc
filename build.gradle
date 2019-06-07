@@ -7,7 +7,6 @@ plugins {
 group 'com.seomse.jdbc'
 version '1.0-SNAPSHOT'
 
-
 // jar 파일명
 jar.baseName = 'seomse-jdbc'
 
@@ -29,5 +28,21 @@ repositories {
 }
 
 dependencies {
+
+    //log
+    implementation 'ch.qos.logback:logback-core:1.1.3'
+    implementation 'ch.qos.logback:logback-classic:1.1.3'
+    implementation 'ch.qos.logback:logback-access:1.1.3'
+
+
+
+    //json
+    implementation 'com.google.guava:guava:20.0'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'org.json:json:20131018'
+
+    
+
     implementation fileTree (dir: 'dependencies', include: ['/**/*.jar'])
 }
