@@ -1,8 +1,9 @@
 
-package com.seomse.jdbc.test;
+package com.seomse.jdbc.example;
 
 import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Table;
+
 /**
  * <pre>
  *  파 일 명 : ItemNo.java

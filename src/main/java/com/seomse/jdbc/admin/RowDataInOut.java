@@ -3,6 +3,7 @@
 package com.seomse.jdbc.admin;
 
 import com.seomse.commons.file.FileUtil;
+import com.seomse.commons.packages.classes.ClassJsonUtil;
 import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.JdbcQuery;
@@ -13,7 +14,11 @@ import com.seomse.jdbc.naming.JdbcNamingMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +40,7 @@ public class RowDataInOut {
 
 	private final static Logger logger = LoggerFactory.getLogger(RowDataInOut.class);
 
-	private int maxCommit = 10000;
+	private int maxDataCount = 10000;
 
 	private String fileHome = "tables/";
 
@@ -50,13 +55,12 @@ public class RowDataInOut {
 
 	}
 
-
 	/**
 	 * 최대커믿개수를 설정한다
-	 * @param maxCommit MaxCommit
+	 * @param maxDataCount MaxCommit
 	 */
-	public void setMaxCommit(int maxCommit) {
-		this.maxCommit = maxCommit;
+	public void setMaxDataCount(int maxDataCount) {
+		this.maxDataCount = maxDataCount;
 	}
 
 
@@ -70,6 +74,14 @@ public class RowDataInOut {
 
 	public void setDbType(String dbType) {
 		this.dbType = dbType;
+	}
+
+	/**
+	 * 모든 테이블 데이터를 파일로 추출
+	 */
+	public void dataOut(){
+		List<String> tableList = JdbcQuery.getStringList(Database.getTableListSql(dbType));
+		dataOut(tableList.toArray(new String[0])) ;
 	}
 
 	/**
@@ -89,6 +101,8 @@ public class RowDataInOut {
 			logger.error(ExceptionUtil.getStackTrace(e));
 		}
 	}
+
+	private int dataCount = 0;
 	/**
 	 * 테이블데이터를 파일로 추출한다
 	 * @param tableArray tableArray
@@ -100,47 +114,42 @@ public class RowDataInOut {
 				tableArray = tableList.toArray(new String[0]);
 			}
 
-			StringBuilder outBuilder = new StringBuilder();
+			final StringBuilder outBuilder = new StringBuilder();
 
 			for (String tableName : tableArray) {
 
 				logger.info("OUT Table: " + tableName);
-                String fileName = fileHome + tableName;
+                final String fileName = fileHome + tableName;
+                //파일생성
                 FileUtil.fileOutput("", charSet, fileName, false);
-                int count = 0;
 
                 JdbcMapDataHandler handler = new JdbcMapDataHandler() {
                     @Override
                     public void receive(Map<String, Object> data) {
+						dataCount++;
+						outBuilder.append(ClassJsonUtil.mapDataToJsonString(data)).append("\n");
+						if(dataCount >= maxDataCount){
+							dataCount = 0;
+							FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
+							outBuilder.setLength(0);
+							dataCount = 0;
+						}
+
                     }
                 };
 
                 JdbcNamingMap.receiveData(conn, tableName, null, null, handler);
+				if(dataCount >0){
+					FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
+					outBuilder.setLength(0);
+				}
 
-//				List<Map<String, Object>> dataList = JdbcNamingMap.getDataList(conn, tableName, null, null);
-//				int count = 0;
-//				for (Map<String, Object> data : dataList) {
-//					count++;
-//					outBuilder.append(Config.START_SPLIT + ClassJsonUtil.mapDataToJsonString(data).replace(Config.START_SPLIT, ' ').replace(Config.END_SPLIT, ' ') + Config.END_SPLIT);
-//					if (count >= maxCommit) {
-//						FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
-//						outBuilder.setLength(0);
-//						count = 0;
-//					}
-//				}
-//				if (count > 0) {
-//					FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
-//					outBuilder.setLength(0);
-//				}
-//
-//				dataList.clear();
 			}
 		}catch(Exception e){
 			logger.error(ExceptionUtil.getStackTrace(e));
 		}
 		logger.info("Table Out Complete");
 	}
-
 
 	/**
 	 * 파일로 추출된 데이터를 DB에 추가한다.
@@ -161,65 +170,63 @@ public class RowDataInOut {
 
 	/**
 	 * 파일로 추출된 데이터를 DB에 추가한다.
+	 * mysql 의 경우  Connection setAutoCommit 을 false 로 하는게 좋음
+	 *
 	 * @param tableArray tableArray
 	 */
 	public void dataIn(Connection conn, String [] tableArray){
-//		if(tableArray == null){
-//			List<String> tableList = JdbcQuery.getStringList(Database.getTableListSql(dbType));
-//			tableArray = tableList.toArray(new String[0]);
-//		}
-//		try{conn.setAutoCommit(false);}catch(Exception e){logger.error(ExceptionUtil.getStackTrace(e));}
-//
-//		List<Map<String,Object>> insertList = new ArrayList<>();
-//		for(String tableName : tableArray){
-//
-//			logger.info(tableName);
-//			String fileName =fileHome+tableName;
-//			InputStreamReader reader = null ;
-//
-//			try {
-//				reader = new InputStreamReader(new FileInputStream(new File(fileName)), charSet);
-//				int readData;
-//				StringBuilder messageBuilder = new StringBuilder();
-//				while((readData = reader.read()) != -1){
-//					char message = (char)readData;
-//					switch(message){
-//					case Config.START_SPLIT:
-//						messageBuilder.setLength(0);
-//						break;
-//					case Config.END_SPLIT:
-//
-//						Map<String,Object> dataMap = ClassJsonUtil.makeDataMap(messageBuilder.toString());
-//						insertList.add(dataMap);
-//						if(insertList.size() >= maxCommit){
-//							JdbcNamingMap.insert(conn,insertList);
-//
-//							if(conn.getAutoCommit()){
-//
-//							}
-//
-//							try{conn.commit();}catch(Exception e){logger.error(ExceptionUtil.getStackTrace(e));}
-//							insertList.clear();
-//						}
-//						break;
-//					default:
-//						messageBuilder.append(message);
-//					}
-//				}
-//
-//				if(insertList.size() > 0){
-//					JdbcNamingMap.insert(conn, insertList);
-//					try{conn.commit();}catch(Exception e){logger.error(ExceptionUtil.getStackTrace(e));}
-//					insertList.clear();
-//				}
-//			} catch (Exception e) {
-//				logger.error(ExceptionUtil.getStackTrace(e));
-//			} finally{
-//				//noinspection CatchMayIgnoreException
-//				try{if(reader!= null)reader.close(); }catch(Exception e){}
-//			}
-//		}
+
+		if(tableArray == null){
+			List<String> tableList = JdbcQuery.getStringList(Database.getTableListSql(dbType));
+			tableArray = tableList.toArray(new String[0]);
+		}
+
+		List<Map<String,Object>> insertList = new ArrayList<>();
+		for(String tableName : tableArray){
+
+			logger.info(tableName);
+			String fileName =fileHome+tableName;
+
+			BufferedReader br = null;
+			String line;
+			try {
+				br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), charSet));
+
+				while ((line = br.readLine()) != null) {
+					if("".equals(line.trim())){
+						continue;
+					}
+					Map<String,Object> dataMap = ClassJsonUtil.makeDataMap(line);
+					insertList.add(dataMap);
+					if(insertList.size() >= maxDataCount){
+						dataInsert(conn, insertList);
+					}
+				}
+			}catch(Exception e){
+				logger.error(ExceptionUtil.getStackTrace(e));
+			}
+
+			if(insertList.size() > 0){
+				dataInsert(conn, insertList);
+			}
+
+
+		}
 	}
+
+	private void dataInsert(Connection conn, List<Map<String,Object>> insertList ){
+		try {
+			JdbcNamingMap.insert(conn, insertList);
+
+			if (!conn.getAutoCommit()) {
+				conn.commit();
+			}
+		}catch(SQLException e){
+			logger.error(ExceptionUtil.getStackTrace(e));
+		}
+		insertList.clear();
+	}
+
 
 
 	/**
@@ -311,7 +318,7 @@ public class RowDataInOut {
 			@Override
 			public void receive(Map<String, Object> data) {
 				dataList.add(data);
-				if(maxCommit <= dataList.size()){
+				if(maxDataCount <= dataList.size()){
                     insert(insertConn, dataList);
 				}
 			}
@@ -333,6 +340,4 @@ public class RowDataInOut {
         }
         dataList.clear();
     }
-
-	
 }

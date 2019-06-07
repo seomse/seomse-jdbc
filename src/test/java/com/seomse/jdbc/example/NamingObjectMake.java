@@ -1,8 +1,9 @@
 
-package com.seomse.jdbc.test;
+package com.seomse.jdbc.example;
 
 import com.seomse.commons.config.Config;
 import com.seomse.jdbc.naming.JdbcNaming;
+
 /**
  * <pre>
  *  파 일 명 : NamingObjectMaker.java

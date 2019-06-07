@@ -1,8 +1,9 @@
 
 
-package com.seomse.jdbc.test;
+package com.seomse.jdbc.example;
 
 import com.seomse.jdbc.naming.JdbcNaming;
+
 /**
  * <pre>
  *  설    명 : 간단한 insert 설명

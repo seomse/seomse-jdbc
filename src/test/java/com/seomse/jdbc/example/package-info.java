@@ -10,4 +10,4 @@
  * </pre>
  * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
  */
-package com.seomse.jdbc.test;
+package com.seomse.jdbc.example;
