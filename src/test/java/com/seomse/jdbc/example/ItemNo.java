@@ -9,7 +9,7 @@ import com.seomse.jdbc.annotation.Table;
  *  파 일 명 : ItemNo.java
  *  설    명 : 사용법 설명용객체
  *
- *  작 성 자 : macle(김용수)
+ *  작 성 자 : macle
  *  작 성 일 : 2017.10
  *  버    전 : 1.0
  *  수정이력 :

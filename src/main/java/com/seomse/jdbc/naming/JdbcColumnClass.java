@@ -6,7 +6,7 @@ package com.seomse.jdbc.naming;
  *  파 일 명 : JdbcColumnClass.java
  *  설    명 : 컬럼이 사용하는 자바 클래스를 보관
  *
- *  작 성 자 : macle(김용수)
+ *  작 성 자 : macle
  *  작 성 일 : 2019.06.06
  *  버    전 : 1.0
  *  수정이력 :

@@ -9,7 +9,7 @@ import com.seomse.jdbc.naming.JdbcNaming;
  *  파 일 명 : NamingObjectMaker.java
  *  설    명 : NamingObject 생성
  *
- *  작 성 자 : macle(김용수)
+ *  작 성 자 : macle
  *  작 성 일 : 2017.10
  *  버    전 : 1.0
  *  수정이력 :

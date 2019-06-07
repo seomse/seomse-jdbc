@@ -28,7 +28,7 @@ import java.util.Map;
  *  파 일 명 : RowDataInOut.java
  *  설    명 : 다른 DB 계정관의 데이터이관 기능
  *
- *  작 성 자 : macle(김용수)
+ *  작 성 자 : macle
  *  작 성 일 : 2019.06.07
  *  버    전 : 1.0
  *  수정이력 :

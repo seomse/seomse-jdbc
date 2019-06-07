@@ -7,7 +7,7 @@ import com.seomse.jdbc.admin.RowDataInOut;
  *  파 일 명 : RowDataOut.java
  *  설    명 : data out example
  *
- *  작 성 자 : macle(김용수)
+ *  작 성 자 : macle
  *  작 성 일 : 2019.06.07
  *  버    전 : 1.0
  *  수정이력 :
