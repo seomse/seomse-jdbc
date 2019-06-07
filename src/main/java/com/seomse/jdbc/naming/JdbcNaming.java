@@ -12,6 +12,7 @@ import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Sequence;
 import com.seomse.jdbc.annotation.Table;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
+import com.seomse.jdbc.connection.ConnectionPool;
 import com.seomse.jdbc.exception.FieldNullException;
 import com.seomse.jdbc.exception.PrimaryKeyNotSetException;
 import com.seomse.jdbc.exception.TableNameEmptyException;
@@ -46,7 +47,6 @@ public class JdbcNaming {
 	 * @return jdbc객체리스트
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass ) throws IllegalAccessException, SQLException, InstantiationException {
-
 		return getObjList(conn, objClass, null, null, null, -1, null);
 
 	}
@@ -95,7 +95,7 @@ public class JdbcNaming {
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass ){
 		try {
-			return getObjList(ApplicationConnectionPool.getInstance().getConnection(), objClass, null, null, null, -1, null);
+			return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, null, null, -1, null);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -109,7 +109,7 @@ public class JdbcNaming {
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue){
 		try {
-			return getObjList(ApplicationConnectionPool.getInstance().getConnection(), objClass, null, whereValue, null, -1, null);
+			return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, null, -1, null);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -124,7 +124,7 @@ public class JdbcNaming {
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, int size){
 		try {
-			return getObjList(ApplicationConnectionPool.getInstance().getConnection(),  objClass, null, whereValue, null, size, null);
+			return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, null, whereValue, null, size, null);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -139,7 +139,7 @@ public class JdbcNaming {
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue){
 		try {
-			return getObjList(ApplicationConnectionPool.getInstance().getConnection(),  objClass, null, whereValue, orderByValue, -1, null);
+			return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, null, whereValue, orderByValue, -1, null);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -155,7 +155,7 @@ public class JdbcNaming {
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue, int size){
 		try {
-			return getObjList(ApplicationConnectionPool.getInstance().getConnection(),  objClass, null, whereValue, orderByValue, size, null);
+			return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, null, whereValue, orderByValue, size, null);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -171,7 +171,7 @@ public class JdbcNaming {
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try {
-			return getObjList(ApplicationConnectionPool.getInstance().getConnection(),  objClass, null, whereValue, null, -1, prepareStatementDataMap);
+			return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, null, whereValue, null, -1, prepareStatementDataMap);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -187,7 +187,7 @@ public class JdbcNaming {
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try {
-			return getObjList(ApplicationConnectionPool.getInstance().getConnection(),  objClass, sql, whereValue, null, -1, prepareStatementDataMap);
+			return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, sql, whereValue, null, -1, prepareStatementDataMap);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -201,7 +201,7 @@ public class JdbcNaming {
 	 */
 	public static <T> List<T> getSqlObjList(Class<T> objClass , String sql){
 		try {
-			return getObjList(ApplicationConnectionPool.getInstance().getConnection(),  objClass, sql, null, null, -1, null);
+			return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, sql, null, null, -1, null);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -421,7 +421,7 @@ public class JdbcNaming {
 	 */
 	public static <T> T getObj(Class<T> objClass ){
 		try {
-			return getObj(ApplicationConnectionPool.getInstance().getConnection(), objClass, null, null, null, null);
+			return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, null, null, null);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -435,7 +435,7 @@ public class JdbcNaming {
 	 */
 	public static <T> T getObj(Class<T> objClass , String whereValue){
 		try {
-			return getObj(ApplicationConnectionPool.getInstance().getConnection(), objClass, null, whereValue, null, null);
+			return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, null, null);
 		}catch (Exception e){
 			throw new RuntimeException(e);
 		}
@@ -450,7 +450,7 @@ public class JdbcNaming {
 	 */
 	public static <T> T getObj(Class<T> objClass , String whereValue, String orderByValue){
 		try {
-			return getObj(ApplicationConnectionPool.getInstance().getConnection(), objClass, null, whereValue, orderByValue, null);
+			return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, orderByValue, null);
 		}catch (Exception e){
 			throw new RuntimeException(e);
 		}
@@ -466,7 +466,7 @@ public class JdbcNaming {
 	 */
 	public static <T> T getObj(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try {
-			return getObj(ApplicationConnectionPool.getInstance().getConnection(), objClass, null, whereValue, null, prepareStatementDataMap);
+			return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, null, prepareStatementDataMap);
 		}catch (Exception e){
 			throw new RuntimeException(e);
 		}
@@ -482,7 +482,7 @@ public class JdbcNaming {
 	 */
 	public static <T> T getObj(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try {
-			return getObj(ApplicationConnectionPool.getInstance().getConnection(), objClass, sql, whereValue, null, prepareStatementDataMap);
+			return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, sql, whereValue, null, prepareStatementDataMap);
 		}catch (Exception e){
 			throw new RuntimeException(e);
 		}
@@ -496,7 +496,7 @@ public class JdbcNaming {
 	 */
 	public static <T> T getSqlObj(Class<T> objClass , String sql){
 		try {
-			return getObj(ApplicationConnectionPool.getInstance().getConnection(),  objClass, sql, null, null, null);
+			return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, sql, null, null, null);
 		}catch (Exception e){
 			throw new RuntimeException(e);
 		}
@@ -704,7 +704,11 @@ public class JdbcNaming {
 	 */
 	public static <T> int upsert( List<T> objClassList){
 		try {
-			return insert(ApplicationConnectionPool.getInstance().getConnection(), objClassList, "UPSERT", true);
+			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+			Connection conn = connectionPool.getConnection();
+			int result = insert(conn, objClassList, "UPSERT", true);
+			connectionPool.commit(conn);
+			return result;
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -718,16 +722,18 @@ public class JdbcNaming {
 	 * @return fail -1
 	 */
 	public static <T> int upsert( List<T> objClassList,   boolean isClearParameters){
-		try {
-			return insert(ApplicationConnectionPool.getInstance().getConnection(), objClassList, "UPSERT", isClearParameters);
+		try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+			Connection conn = connectionPool.getConnection();
+			int result =  insert(conn, objClassList, "UPSERT", isClearParameters);
+			connectionPool.commit(conn);
+			return result;
 		}catch(Exception e){
 			throw new RuntimeException(e);
 
 		}
 	}
 	
-	
-	
+
 	/**
 	 * obj를 이용한 데이터 upsert
 	 * @param conn 연결 컨넥션
@@ -746,7 +752,11 @@ public class JdbcNaming {
 	 */
 	public static <T> int insert( List<T> objClassList){
 		try {
-			return insert(ApplicationConnectionPool.getInstance().getConnection(), objClassList, "INSERT", true);
+			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+			Connection conn = connectionPool.getConnection();
+			int result =  insert(conn, objClassList, "INSERT", true);
+			connectionPool.commit(conn);
+			return result;
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -761,7 +771,13 @@ public class JdbcNaming {
 	 */
 	public static <T> int insert( List<T> objClassList, boolean isClearParameters){
 		try {
-			return insert(ApplicationConnectionPool.getInstance().getConnection(), objClassList , "INSERT", isClearParameters);
+			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+			Connection conn = connectionPool.getConnection();
+			int result =  insert(conn, objClassList , "INSERT", isClearParameters);
+
+			connectionPool.commit(conn);
+			return result;
+
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -944,7 +960,11 @@ public class JdbcNaming {
 	public static <T> int insertOrUpdate(T obj, boolean isNullUpdate){
 
 		try{
-			return insertOrUpdate(ApplicationConnectionPool.getInstance().getConnection(), obj, isNullUpdate);
+			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+			Connection conn = connectionPool.getCommitConnection();
+			int result = insertOrUpdate(conn, obj, isNullUpdate);
+			connectionPool.commit(conn);
+			return result;
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -1000,7 +1020,12 @@ public class JdbcNaming {
 	 */
 	public static <T> int upsert(T obj){
 		try {
-			return insert(ApplicationConnectionPool.getInstance().getConnection(), obj, "UPSERT");
+			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+			Connection conn = connectionPool.getConnection();
+
+			int result =  insert(conn, obj, "UPSERT");
+			connectionPool.commit(conn);
+			return result;
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -1013,9 +1038,14 @@ public class JdbcNaming {
 	 * @return success 1, fail -1
 	 */
 	public static <T> int insert(T obj){
-		try {
-			return insert(ApplicationConnectionPool.getInstance().getConnection(), obj, "INSERT");
+		try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+			Connection conn = connectionPool.getConnection();
+			int result =   insert(conn, obj, "INSERT");
+			connectionPool.commit(conn);
+			return result;
+
 		}catch(Exception e){
+
 			throw new RuntimeException(e);
 		}
 	}
@@ -1220,7 +1250,7 @@ public class JdbcNaming {
 	 * @return 변수생성값
 	 */
 	public static String makeObjectValue( String tableName) throws SQLException {
-		return makeObjectValue(ApplicationConnectionPool.getInstance().getConnection(), tableName);
+		return makeObjectValue(ApplicationConnectionPool.getInstance().getCommitConnection(), tableName);
 	}
 	
 	/**
@@ -1341,7 +1371,13 @@ public class JdbcNaming {
 	 */
 	public static <T> int insertIfNoData(T obj){
 		try {
-			return insertIfNoData(ApplicationConnectionPool.getInstance().getConnection(), obj);
+			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+			Connection conn = connectionPool.getCommitConnection();
+
+
+			int result =  insertIfNoData(conn, obj);
+			connectionPool.commit(conn);
+			return result;
 		}catch (Exception e){
 			throw new RuntimeException(e);
 		}
@@ -1370,14 +1406,12 @@ public class JdbcNaming {
 		return successCount;
 	}
 
-
 	private final static Comparator<Field> PK_SORT_ASC =  new Comparator<Field>() {
 		@Override
 		public int compare(Field f1, Field f2 ) {
 			return Integer.compare(f1.getAnnotation(PrimaryKey.class).seq(), f2.getAnnotation(PrimaryKey.class).seq());
 		}
 	};
-
 
 
 	private static <T> String getCheckWhere(T obj) throws IllegalAccessException {

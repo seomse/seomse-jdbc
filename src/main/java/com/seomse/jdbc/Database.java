@@ -83,18 +83,37 @@ public class Database {
 	 */
 	public static String getSysDateName(String dbType){
 		dbType = dbType.toLowerCase();
-		//noinspection IfCanBeSwitch
+		//noinspection
 		if(dbType.equals("oracle") || dbType.equals("tibero") ){
 			return "SYSDATE";
-		}else if(dbType.equals("mssql")){
-			return "GETDATE()";
-		}else if(dbType.equals("mysql")){
+		}else if(dbType.equals("mysql") || dbType.startsWith("maria")){
 			return "now()";
+		}else if(dbType.equals("mssql") ){
+			return "GETDATE()";
 		}
 		
 		throw new NotDbTypeException(dbType);
 	}
-	
+
+	/**
+	 * 테이블 리스트를 조회하는 sql 얻기
+	 * @param dbType dbType db 유형
+	 * @return sql
+	 */
+	public static String getTableListSql(String dbType){
+
+		//noinspection
+		if(dbType.equals("oracle") || dbType.equals("tibero") ){
+			return "SELECT TABLE_NAME FROM USER_TABLES";
+		}else if(dbType.equals("mysql")|| dbType.startsWith("maria")){
+			return "SHOW TABLES";
+		}else if(dbType.equals("mssql") ){
+			return "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
+		}
+
+		throw new NotDbTypeException(dbType);
+	}
+
 	
 
 	/**
