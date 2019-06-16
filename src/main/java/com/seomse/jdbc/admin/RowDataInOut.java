@@ -187,7 +187,7 @@ public class RowDataInOut {
 			logger.info(tableName);
 			String fileName =fileHome+tableName;
 
-			BufferedReader br = null;
+			BufferedReader br ;
 			String line;
 			try {
 				br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), charSet));
