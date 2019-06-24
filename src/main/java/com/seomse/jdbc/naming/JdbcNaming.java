@@ -1111,15 +1111,34 @@ public class JdbcNaming {
 	}
 
 
-	
-	
 	/**
 	 * 객체를 이용한 update
-	 * @param conn Connection
 	 * @param obj jdbcObject
 	 * @param isNullUpdate null 업데이트 여부
 	 * @return  success 1, fail -1
 	 */
+	public static <T> int update(T obj , boolean isNullUpdate ) {
+		try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+			Connection conn = connectionPool.getConnection();
+			int result =   update(obj, isNullUpdate);
+			connectionPool.commit(conn);
+			return result;
+
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+	}
+
+
+
+
+	/**
+    * 객체를 이용한 update
+    * @param conn Connection
+    * @param obj jdbcObject
+    * @param isNullUpdate null 업데이트 여부
+    * @return  success 1, fail -1
+    */
 	public static <T> int update(Connection conn,T obj , boolean isNullUpdate ){
 			
 		Class<?> objClass = obj.getClass();
