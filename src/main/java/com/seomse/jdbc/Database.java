@@ -68,7 +68,7 @@ public class Database {
 			return "SELECT SYSTIMESTAMP FROM DUAL";
 		}else if(dbType.equals("mssql")){
 			return "SELECT GETDATE()";
-		}else if(dbType.equals("mysql")){
+		}else if(dbType.equals("mysql") || dbType.equals("maria")){
 			return "SELECT now()";
 		}
 		
