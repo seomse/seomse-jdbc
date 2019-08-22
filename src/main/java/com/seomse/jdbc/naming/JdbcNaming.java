@@ -1120,7 +1120,7 @@ public class JdbcNaming {
 	public static <T> int update(T obj , boolean isNullUpdate ) {
 		try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
 			Connection conn = connectionPool.getConnection();
-			int result =   update(obj, isNullUpdate);
+			int result =   update(conn, obj, isNullUpdate);
 			connectionPool.commit(conn);
 			return result;
 
@@ -1234,8 +1234,8 @@ public class JdbcNaming {
 				if(object == null){
 					pstmt.setNull(index+1,  java.sql.Types.NULL);
 				}else{
-					setPstmt(fields[i],object,pstmt,i);
-				}	
+					setPstmt(fields[i],object,pstmt,index);
+				}
 				index++;
 						
 			}
@@ -1243,7 +1243,7 @@ public class JdbcNaming {
 			for(int i= 0 ; i < seqArray.length ; i++){
 				Field field = pkColumnList.get(i);
 				Object object = field.get(obj);
-				setPstmt(fields[i],object,pstmt,i);
+				setPstmt(fields[i],object,pstmt,index);
 				index++;
 			}
 			

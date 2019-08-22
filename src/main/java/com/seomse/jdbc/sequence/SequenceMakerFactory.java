@@ -2,8 +2,10 @@
 
 package com.seomse.jdbc.sequence;
 
-import com.seomse.jdbc.exception.NotDbTypeException;
-/** 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
  * <pre>
  *  파 일 명 : SequenceMakerFactory.java
  *  설    명 : SequenceMaker 팩토리
@@ -17,8 +19,9 @@ import com.seomse.jdbc.exception.NotDbTypeException;
  * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
  */
 public class SequenceMakerFactory {
-	
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(SequenceMakerFactory.class);
+
 	/**
 	 * SequenceMaker 생성
 	 * @param dbType database type (oracle, mysql ...)
@@ -31,7 +34,10 @@ public class SequenceMakerFactory {
 //		}else if(dbType.equals("mssql")){
 //			return new MssqlSequenceMaker();
 		}else{
-			throw new NotDbTypeException(dbType);
+//			throw new NotDbTypeException(dbType);
+
+			logger.error("Not supported SequenceMaker DB type.");
+			return new EmptySquenceMaker();
 		}
 		
 		
