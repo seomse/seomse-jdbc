@@ -908,7 +908,7 @@ public class JdbcNaming {
 				}else{
 
 					String nextVal = Database.nextVal(sequence.name());
-					nextVal =  sequence.preFix() + nextVal;
+					nextVal =  sequence.prefix() + nextVal;
 
 					fields[i].set(obj, nextVal);
 					pstmt.setString(i+1, nextVal);

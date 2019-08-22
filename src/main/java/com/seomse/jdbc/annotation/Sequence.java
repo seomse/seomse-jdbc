@@ -33,7 +33,7 @@ public @interface Sequence {
 	 * 앞쪽에 붙는 문자열 
 	 * @return 시퀀스 앞 문자
 	 */
-	String preFix() default "";
+	String prefix() default "";
 	
 	 
 }
