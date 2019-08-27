@@ -93,35 +93,34 @@ public class ConnectionFactory {
 		
 		String databaseType = databaseTypeOrDriverClass.toUpperCase().trim();
 
-		//noinspection IfCanBeSwitch
 		if(databaseType.equals("ORACLE")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
-		}else if(databaseType.equals("MSSQL") || databaseType.equals("MS-SQL")){
+		}else if(databaseType.startsWith("MSSQL") || databaseType.startsWith("MS-SQL")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
-		}else if(databaseType.equals("DB2")){
+		}else if(databaseType.startsWith("DB2")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("com.ibm.db2.jcc.DB2Driver").newInstance();	
-		}else if(databaseType.equals("UNISQL")){
+		}else if(databaseType.startsWith("UNISQL")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("unisql.jdbc.driver.UniSQLDriver").newInstance();	
-		}else if(databaseType.equals("MYSQL")){
+		}else if(databaseType.startsWith("MYSQL")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("com.mysql.jdbc.Driver").newInstance();	
-		}else if(databaseType.equals("SQLITE")){
+		}else if(databaseType.startsWith("SQLITE")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("org.sqlite.JDBC").newInstance();		
-		}else if(databaseType.equals("TIBERO")){
+		}else if(databaseType.startsWith("TIBERO")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("com.tmax.tibero.jdbc.TbDriver").newInstance();	
-		}else if(databaseType.equals("DRILL")){
+		}else if(databaseType.startsWith("DRILL")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("org.apache.drill.jdbc.Driver").newInstance();	
-		}else if(databaseType.equals("MARIA") || databaseType.equals("MARIADB")){
+		}else if(databaseType.startsWith("MARIA")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("org.mariadb.jdbc.Driver").newInstance();	
-		}else if(databaseType.equals("HIVE")){
+		}else if(databaseType.startsWith("HIVE")){
 			//noinspection deprecation
 			driver = (Driver)Class.forName("org.apache.hive.jdbc.HiveDriver").newInstance();
 		}
