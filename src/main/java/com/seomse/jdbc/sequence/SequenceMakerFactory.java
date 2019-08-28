@@ -37,7 +37,7 @@ public class SequenceMakerFactory {
 //			throw new NotDbTypeException(dbType);
 
 			logger.error("Not supported SequenceMaker DB type.");
-			return new EmptySquenceMaker();
+			return new EmptySequenceMaker();
 		}
 		
 		

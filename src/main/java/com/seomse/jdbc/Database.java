@@ -64,11 +64,11 @@ public class Database {
 	public static String getSysDateQuery(String dbType){
 		dbType = dbType.toLowerCase();
 		//noinspection IfCanBeSwitch
-		if(dbType.equals("oracle") || dbType.equals("tibero")){
+		if(dbType.startsWith("oracle") || dbType.startsWith("tibero")){
 			return "SELECT SYSTIMESTAMP FROM DUAL";
-		}else if(dbType.equals("mssql")){
+		}else if(dbType.startsWith("mssql") || dbType.startsWith("ms-sql")){
 			return "SELECT GETDATE()";
-		}else if(dbType.equals("mysql") || dbType.equals("maria")){
+		}else if(dbType.startsWith("mysql") || dbType.startsWith("maria")){
 			return "SELECT now()";
 		}
 		
@@ -84,11 +84,11 @@ public class Database {
 	public static String getSysDateName(String dbType){
 		dbType = dbType.toLowerCase();
 		//noinspection
-		if(dbType.equals("oracle") || dbType.equals("tibero") ){
+		if(dbType.startsWith("oracle") || dbType.startsWith("tibero") ){
 			return "SYSDATE";
-		}else if(dbType.equals("mysql") || dbType.startsWith("maria")){
+		}else if(dbType.startsWith("mysql") || dbType.startsWith("maria")){
 			return "now()";
-		}else if(dbType.equals("mssql") ){
+		}else if(dbType.startsWith("mssql")  || dbType.startsWith("ms-sql")){
 			return "GETDATE()";
 		}
 		
@@ -103,11 +103,11 @@ public class Database {
 	public static String getTableListSql(String dbType){
 
 		//noinspection
-		if(dbType.equals("oracle") || dbType.equals("tibero") ){
+		if(dbType.startsWith("oracle") || dbType.startsWith("tibero") ){
 			return "SELECT TABLE_NAME FROM USER_TABLES";
-		}else if(dbType.equals("mysql")|| dbType.startsWith("maria")){
+		}else if(dbType.startsWith("mysql")|| dbType.startsWith("maria")){
 			return "SHOW TABLES";
-		}else if(dbType.equals("mssql") ){
+		}else if(dbType.startsWith("mssql") || dbType.startsWith("ms-sql")){
 			return "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
 		}
 
