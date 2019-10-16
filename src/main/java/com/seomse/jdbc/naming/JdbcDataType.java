@@ -18,7 +18,6 @@ public enum JdbcDataType {
 	UNDEFINED //정의되지않음
 	, DATE_TIME
 	, STRING
-	, FLOAT
 	, DOUBLE
 	, INTEGER
 	, LONG
