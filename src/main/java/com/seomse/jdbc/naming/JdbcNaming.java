@@ -822,7 +822,7 @@ public class JdbcNaming {
 		PreparedStatement pstmt = null;
 
 		int successCount ;
-		//noinspection TryFinallyCanBeTryWithResources
+
 		try{
 			pstmt = conn.prepareStatement(insertSql);
 
@@ -840,7 +840,6 @@ public class JdbcNaming {
 			}
 			successCount = objClassList.size();
 		}catch(Exception e){
-			logger.error(insertSql);
 			throw new RuntimeException(e);
 		}finally{
 			//noinspection CatchMayIgnoreException
@@ -1209,11 +1208,11 @@ public class JdbcNaming {
 		PreparedStatement pstmt = null;
 
 		int successCount;
-		//noinspection TryFinallyCanBeTryWithResources
 		try{
 			pstmt = conn.prepareStatement(sqlBuilder.toString());
 				
 			int index = 0;
+			//noinspection ForLoopReplaceableByForEach
 			for(int i=0 ; i<fields.length ; i++){
 				
 				PrimaryKey  pk = fields[i].getAnnotation(PrimaryKey.class);

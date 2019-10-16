@@ -176,6 +176,18 @@ public class JdbcNamingMap {
 			Class<?> classes ;
 			Object obj = firstData.get(columnName);
 
+			if(obj == null){
+
+				for (int j = 1; j <dataList.size() ; j++) {
+					Map<String, Object> data = dataList.get(j);
+					obj = data.get(columnName);
+					if(obj != null){
+						break;
+					}
+
+				}
+			}
+
             JdbcDataType dataType = jdbcNamingDataType.getType(columnName);
 
 			if( obj != null){
