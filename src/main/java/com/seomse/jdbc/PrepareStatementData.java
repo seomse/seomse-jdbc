@@ -1,7 +1,10 @@
 
 
-package com.seomse.jdbc.naming;
-/** 
+package com.seomse.jdbc;
+
+import com.seomse.jdbc.naming.JdbcDataType;
+
+/**
  * <pre>
  *  파 일 명 : PrepareStatementData.java
  *  설    명 : JDBC에서 사용하는 데이터 타입
@@ -45,6 +48,8 @@ public class PrepareStatementData {
 	public void setData(Object data) {
 		this.data = data;
 	}
-	
-	
+
+
+
+
 }

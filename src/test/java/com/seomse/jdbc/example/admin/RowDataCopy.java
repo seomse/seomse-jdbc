@@ -1,4 +1,4 @@
-package com.seomse.jdbc.example;
+package com.seomse.jdbc.example.admin;
 
 import com.seomse.jdbc.admin.RowDataInOut;
 import com.seomse.jdbc.connection.ConnectionFactory;

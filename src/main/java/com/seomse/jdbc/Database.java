@@ -5,7 +5,6 @@ import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.exception.NotDbTypeException;
 import com.seomse.jdbc.naming.JdbcDataType;
-import com.seomse.jdbc.naming.PrepareStatementData;
 import com.seomse.jdbc.sequence.SequenceMaker;
 import com.seomse.jdbc.sequence.SequenceMakerFactory;
 import org.slf4j.Logger;
@@ -22,8 +21,8 @@ import java.util.Map;
  *         
  *  작 성 자 : macle
  *  작 성 일 : 2017.09
- *  버    전 : 1.2
- *  수정이력 : 2019.02, 2016.06
+ *  버    전 : 1.3
+ *  수정이력 : 2019.02, 2019.06, 2019.11
  *  기타사항 :
  * </pre>
  * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
@@ -63,7 +62,6 @@ public class Database {
 	 */
 	public static String getSysDateQuery(String dbType){
 		dbType = dbType.toLowerCase();
-		//noinspection IfCanBeSwitch
 		if(dbType.startsWith("oracle") || dbType.startsWith("tibero")){
 			return "SELECT SYSTIMESTAMP FROM DUAL";
 		}else if(dbType.startsWith("mssql") || dbType.startsWith("ms-sql")){
@@ -229,7 +227,7 @@ public class Database {
 	 public static Map<String, Integer> getPrimaryKeyColumnsForTable(Connection conn, String tableName) throws SQLException {
 		 ResultSet pkColumns= null;
 		 Map<String, Integer> pkMap = new HashMap<>();
-		 //noinspection CaughtExceptionImmediatelyRethrown,TryFinallyCanBeTryWithResources
+		 //noinspection CaughtExceptionImmediatelyRethrown
 		 try{
 			 pkColumns= conn.getMetaData().getPrimaryKeys(null,null,tableName);
 			

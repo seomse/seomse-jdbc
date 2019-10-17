@@ -2,6 +2,8 @@ package com.seomse.jdbc.naming;
 
 import com.seomse.jdbc.JdbcClose;
 import com.seomse.jdbc.JdbcQuery;
+import com.seomse.jdbc.PrepareStatementData;
+import com.seomse.jdbc.common.StmtResultSetUtil;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.connection.ConnectionPool;
 import org.slf4j.Logger;
@@ -19,8 +21,8 @@ import java.util.*;
 
  *  작 성 자 : macle
  *  작 성 일 : 2019.06.06
- *  버    전 : 1.0
- *  수정이력 :
+ *  버    전 : 1.1
+ *  수정이력 : 2019.10.17
  *  기타사항 :
  * </pre>
  * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
@@ -350,7 +352,7 @@ public class JdbcNamingMap {
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				stmt = pstmt;
 
-				JdbcNaming.setStmt(pstmt, prepareStatementDataMap);
+				StmtResultSetUtil.setStmt(pstmt, prepareStatementDataMap);
 
 				result = pstmt.executeQuery();
 			}else{

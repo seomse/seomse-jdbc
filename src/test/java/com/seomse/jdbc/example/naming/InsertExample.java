@@ -1,6 +1,6 @@
 
 
-package com.seomse.jdbc.example;
+package com.seomse.jdbc.example.naming;
 
 import com.seomse.jdbc.naming.JdbcNaming;
 
@@ -16,14 +16,11 @@ import com.seomse.jdbc.naming.JdbcNaming;
  * </pre>
  * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
  */
-public class Main {
+public class InsertExample {
 	public static void main(String [] args){
 		ItemNo itemNo= new ItemNo();
 		itemNo.setCD_ITEM("test");
 		JdbcNaming.insert(itemNo);
-		
-
-		
 		
 	}
 }

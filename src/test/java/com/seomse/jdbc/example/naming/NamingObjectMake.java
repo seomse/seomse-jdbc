@@ -1,13 +1,12 @@
 
-package com.seomse.jdbc.example;
+package com.seomse.jdbc.example.naming;
 
-import com.seomse.commons.config.Config;
 import com.seomse.jdbc.naming.JdbcNaming;
 
 /**
  * <pre>
- *  파 일 명 : NamingObjectMaker.java
- *  설    명 : NamingObject 생성
+ *  파 일 명 : NamingObjectMake.java
+ *  설    명 : NamingObject 생성 예제
  *
  *  작 성 자 : macle
  *  작 성 일 : 2017.10
@@ -20,15 +19,10 @@ import com.seomse.jdbc.naming.JdbcNaming;
 public class NamingObjectMake {
 
 	public static void main(String [] args){
-
-		try{
-
 		String tableName = "TB_STOCK_ITEM";
 		System.out.println("@Table(name=\"" +  tableName+ "\")\n");
 		System.out.println(JdbcNaming.makeObjectValue(tableName));
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+
 	}
 	
 }

@@ -17,11 +17,11 @@ import com.seomse.commons.utils.string.StringArray;
  *         
  *  작 성 자 : macle
  *  작 성 일 : 2017.09
- *  버    전 : 1.0
- *  수정이력 : 
+ *  버    전 : 1.1
+ *  수정이력 : 2019.10.17
  *  기타사항 :
  * </pre>
- * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
  */
 
 public class JdbcNamingDataType {
@@ -41,7 +41,7 @@ public class JdbcNamingDataType {
 	
 	/**
 	 * 앞 우선순위여부 
-	 * false일경우 뒤 우선순위
+	 * false 일경우 뒤 우선순위
 	 * 우선순위는 앞, 뒤 헤더조건을 모두 사용할 경우 
 	 */
 	private boolean isFrontPriority = true;

@@ -7,15 +7,17 @@ import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.commons.utils.sort.QuickSortList;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.JdbcClose;
-import com.seomse.jdbc.annotation.DateTime;
-import com.seomse.jdbc.annotation.PrimaryKey;
-import com.seomse.jdbc.annotation.Sequence;
-import com.seomse.jdbc.annotation.Table;
+import com.seomse.jdbc.PrepareStatementData;
+import com.seomse.jdbc.annotation.*;
+import com.seomse.jdbc.common.JdbcField;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.connection.ConnectionPool;
 import com.seomse.jdbc.exception.FieldNullException;
 import com.seomse.jdbc.exception.PrimaryKeyNotSetException;
 import com.seomse.jdbc.exception.TableNameEmptyException;
+import com.seomse.jdbc.common.StmtResultSet;
+import com.seomse.jdbc.common.StmtResultSetUtil;
+import com.seomse.jdbc.common.TableSql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -261,16 +263,10 @@ public class JdbcNaming {
 
 		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
-			if(isPrepareStatement){
-				PreparedStatement pstmt = conn.prepareStatement(selectSql);
-				stmt = pstmt;
 
-				setStmt(pstmt,prepareStatementDataMap);
-				result = pstmt.executeQuery();
-			}else{
-				stmt = conn.createStatement();	
-				result = stmt.executeQuery(selectSql);
-			}
+			StmtResultSet stmtResultSet = StmtResultSetUtil.makeStmtResultSet(conn, selectSql, prepareStatementDataMap);
+			stmt = stmtResultSet.getStmt();
+			result = stmtResultSet.getResultSet();
 			
 			int fetchSize = table.fetchSize(); 
 			if(fetchSize > 0){
@@ -281,8 +277,10 @@ public class JdbcNaming {
 				while(result.next()){
 					//noinspection deprecation
 					T resultObj = objClass.newInstance();
-				
-					setFieldsValue(result, fields, resultObj);
+
+					for(Field field : fields){
+						JdbcField.setFieldObject(result, field, field.getName(), resultObj);
+					}
 					
 					resultList.add(resultObj);
 				}	
@@ -292,9 +290,11 @@ public class JdbcNaming {
 
 					//noinspection deprecation
 					T resultObj = objClass.newInstance();
-				
 
-					setFieldsValue(result, fields, resultObj);
+
+					for(Field field : fields){
+						JdbcField.setFieldObject(result, field, field.getName(), resultObj);
+					}
 						
 						
 					
@@ -316,28 +316,7 @@ public class JdbcNaming {
 		
 	}
 
-	/**
-	 * prepareStatementDataMap을 이용한 stmt 설정
-	 * @param prepareStatementDataMap prepareStatementDataMap
-	 */
-	public static void setStmt(PreparedStatement pstmt, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws SQLException {
-		Set<Integer> indexSet = prepareStatementDataMap.keySet();
-		for(Integer index : indexSet){
-			PrepareStatementData prepareStatementData = prepareStatementDataMap.get(index);
-			if(prepareStatementData.getType() == JdbcDataType.DATE_TIME){
-				Timestamp timestamp = new Timestamp((Long)prepareStatementData.getData());
-				pstmt.setTimestamp(index, timestamp);
-			}else if(prepareStatementData.getType() == JdbcDataType.STRING){
-				pstmt.setString(index, (String) prepareStatementData.getData());
-			}else if(prepareStatementData.getType() == JdbcDataType.INTEGER){
-				pstmt.setInt(index, (Integer)prepareStatementData.getData());
-			}else if(prepareStatementData.getType() == JdbcDataType.DOUBLE){
-				pstmt.setDouble(index, (Double)prepareStatementData.getData());
-			}else if(prepareStatementData.getType() == JdbcDataType.LONG){
-				pstmt.setLong(index, (Long)prepareStatementData.getData());
-			}
-		}
-	}
+
 
 	/**
 	 * sql 얻기
@@ -371,23 +350,7 @@ public class JdbcNaming {
 			sqlBuilder.append(tableSql);
 		}
 
-		if( whereValue != null){
-			sqlBuilder.append(" WHERE ").append(whereValue);
-		}else{
-			String where = table.where();
-			if(!where.equals(Table.EMPTY)){
-				sqlBuilder.append(" WHERE ").append(where);
-			}
-		}
-
-		if(orderByValue != null) {
-			sqlBuilder.append(" ORDER BY ").append(orderByValue);
-		}else {
-			String orderBy = table.orderBy();
-			if(!orderBy.equals(Table.EMPTY)){
-				sqlBuilder.append(" ORDER BY ").append(orderBy);
-			}
-		}
+		sqlBuilder.append(TableSql.getWhereOrderBySql(table, whereValue, orderByValue));
 		return sqlBuilder.toString();
 	}
 
@@ -544,23 +507,18 @@ public class JdbcNaming {
 
 		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
-			
-			if(prepareStatementDataMap != null){
-				PreparedStatement pstmt = conn.prepareStatement(makeSql);
-				stmt = pstmt;
 
-				setStmt(pstmt,prepareStatementDataMap);
-				result = pstmt.executeQuery();				
-			}else{
-				stmt = conn.createStatement();	
-				result = stmt.executeQuery(makeSql);
-			}
+			StmtResultSet stmtResultSet = StmtResultSetUtil.makeStmtResultSet(conn, makeSql, prepareStatementDataMap);
+			stmt = stmtResultSet.getStmt();
+			result = stmtResultSet.getResultSet();
 			result.setFetchSize(2);
 			if(result.next()){
 				//noinspection deprecation
 				resultObj = objClass.newInstance();
 
-				setFieldsValue(result, fields, resultObj);
+				for(Field field : fields){
+					JdbcField.setFieldObject(result, field, field.getName(), resultObj);
+				}
 			}	
 		}catch(Exception e){
 			throw e;
@@ -571,132 +529,7 @@ public class JdbcNaming {
 		return resultObj;	
 	}
 	
-	
-	/**
-	 * 필드에 값 설정
-	 * @param result ResultSet
-	 * @param fields Field []
-	 * @param resultObj Object
-	 */
-	private static void setFieldsValue(ResultSet result, Field [] fields, Object resultObj ) throws IllegalArgumentException, IllegalAccessException, SQLException{
-		
-		for(Field field : fields){
-			field.setAccessible(true);
-		
-			
-			DateTime dateTime =  field.getAnnotation(DateTime.class);
-			if(dateTime == null){
-				Class<?> classType  = field.getType();
-				if(classType == String.class){
-					field.set(resultObj, result.getString(field.getName()));
-				}else if(classType == Long.class){	
-					try{
-						long value =  result.getLong(field.getName());
-						if(result.wasNull()){
-							field.set(resultObj, null);
-						}else{
-							field.set(resultObj, value);
-						}
-						
-					}catch(Exception e){
-						String value =  result.getString(field.getName());
-						if(result.wasNull()){
-							field.set(resultObj, null);
-						}else{
-							field.set(resultObj, Long.parseLong(value));
-						}
-					}
-				
-				}else if(classType == Integer.class){	
-				
-					try{
-						int value =  result.getInt(field.getName());
-						if(result.wasNull()){
-							field.set(resultObj, null);
-						}else{
-							field.set(resultObj, value);
-						}
-						
-					}catch(Exception e){
-						String value =  result.getString(field.getName());
-						if(result.wasNull()){
-							field.set(resultObj, null);
-						}else{
-							field.set(resultObj, Integer.parseInt(value));
-						}
-					}
-						
-					
-				}else if(classType == Float.class){
-					
-					try{
-						float value =  result.getFloat(field.getName());
-						if(result.wasNull()){
-							field.set(resultObj, null);
-						}else{
-							field.set(resultObj, value);
-						}
-						
-					}catch(Exception e){
-						String value =  result.getString(field.getName());
-						if(result.wasNull()){
-							field.set(resultObj, null);
-						}else{
-							field.set(resultObj, Float.parseFloat(value));
-						}
-					}
-					
-				}else if(classType == Double.class){				
-					
-					try{
-						double value =  result.getDouble(field.getName());
-						if(result.wasNull()){
-							field.set(resultObj, null);
-						}else{
-							field.set(resultObj, value);
-						}
-						
-					}catch(Exception e){
-						String value =  result.getString(field.getName());
-						if(result.wasNull()){
-							field.set(resultObj, null);
-						}else{
-							field.set(resultObj, Double.parseDouble(value));
-						}
-					}
-				}
-			}else{
-				
-				try{
-					Timestamp timeStamp = result.getTimestamp(field.getName());
-					if(timeStamp == null){
-						field.set(resultObj, null);
-					}else{
-						field.set(resultObj, timeStamp.getTime());						
-					}
-				}catch(Exception e){
-					Object value = result.getObject(field.getName());
-					if( value == null){
-						field.set(resultObj, null);
-					}else{
-						if(value.getClass() == Long.class){
-							field.set(resultObj, value);			
-						}else{
-							field.set(resultObj, Long.parseLong(value.toString()));
-						}
-						
-					}
-					
-					
-				}
-			}
-			
-		}
-			
 
-	}
-	
-	
 	/**
 	 * obj를 이용한 데이터 upsert
 	 * @param objClassList 객체리시트
@@ -1264,15 +1097,6 @@ public class JdbcNaming {
 	
 	/**
 	 * 클래스 맴버변수 생성
-	 * @param tableName tableName
-	 * @return 변수생성값
-	 */
-	public static String makeObjectValue( String tableName) throws SQLException {
-		return makeObjectValue(ApplicationConnectionPool.getInstance().getCommitConnection(), tableName);
-	}
-	
-	/**
-	 * 클래스 맴버변수 생성
 	 * @param conn Connection
 	 * @param tableName tableName
 	 * @return 변수생성값
@@ -1281,69 +1105,69 @@ public class JdbcNaming {
 		Statement stmt = null;
 		ResultSet result = null;
 		StringBuilder fieldBuilder = new StringBuilder();
-		
+
 		JdbcNamingDataType jdbcNamingDataType = JdbcNamingDataType.getInstance();
-		
+
 		try{
 			Map<String, Integer> pkMap = Database.getPrimaryKeyColumnsForTable(conn, tableName);
-			
+
 			Map<String,String> defaultValueMap = Database.getDefaultValue(tableName);
 			stmt = conn.createStatement();
 			//noinspection SqlDialectInspection,SqlNoDataSourceInspection
 			result = stmt.executeQuery("SELECT * FROM " + tableName);
 			ResultSetMetaData metaData = result.getMetaData();
 			int count = metaData.getColumnCount(); //number of column
-		
+
 			for (int i = 1; i <= count; i++){
-		
+
 				String columnName = metaData.getColumnLabel(i);
-				
+
 				Integer pkSeq = pkMap.get(columnName);
 				if(pkSeq != null){
 					fieldBuilder.append("@PrimaryKey(seq = ").append(pkSeq).append(")\n");
 				}
-				
-				
+
+
 				JdbcDataType dataType = jdbcNamingDataType.getType(columnName);
-				
+
 				if(dataType == JdbcDataType.STRING){
-					
-					
+
+
 					fieldBuilder.append("private String ").append(columnName);
-				
+
 					String defaultValue = defaultValueMap.get(columnName);
 					if(defaultValue != null){
 						fieldBuilder.append(" = ").append(defaultValue.replace("'", "\""));
 					}
-					fieldBuilder.append(";\n"); 	
-					
-					
+					fieldBuilder.append(";\n");
+
+
 				}else if(dataType == JdbcDataType.DATE_TIME ){
 					fieldBuilder.append("@DateTime\nprivate Long ").append(columnName);
-					
-					
+
+
 					String defaultValue = defaultValueMap.get(columnName);
 					if(defaultValue != null){
 						if(defaultValue.replace("'", "").toUpperCase().trim().equals("SYSDATE")){
 							fieldBuilder.append( " = System.currentTimeMillis()" );
 						}
 					}
-					fieldBuilder.append(";\n"); 	
-					
+					fieldBuilder.append(";\n");
+
 				}else if(dataType == JdbcDataType.LONG ){
 					fieldBuilder.append("private Long ").append(columnName);
-					
+
 					String defaultValue = defaultValueMap.get(columnName);
 					if(defaultValue != null){
 						defaultValue = defaultValue.replace("'", "").trim();
 						fieldBuilder.append(" = ").append(defaultValue).append("L");
-						
+
 					}
-					fieldBuilder.append(";\n"); 	
-					
-				}else if(dataType == JdbcDataType.DOUBLE ){					
+					fieldBuilder.append(";\n");
+
+				}else if(dataType == JdbcDataType.DOUBLE ){
 					fieldBuilder.append("private Double ").append(columnName);
-					
+
 					String defaultValue = defaultValueMap.get(columnName);
 					if(defaultValue != null){
 						defaultValue = defaultValue.replace("'", "").trim();
@@ -1351,29 +1175,29 @@ public class JdbcNaming {
 						if(!defaultValue.contains(".")){
 							fieldBuilder.append(".0");
 						}
-						
-						
+
+
 					}
-					fieldBuilder.append(";\n"); 	
-					
-				}else if(dataType == JdbcDataType.INTEGER 
+					fieldBuilder.append(";\n");
+
+				}else if(dataType == JdbcDataType.INTEGER
 						){
 					fieldBuilder.append("private Integer ").append(columnName);
-					
+
 					String defaultValue = defaultValueMap.get(columnName);
 					if(defaultValue != null){
 						defaultValue = defaultValue.replace("'", "").trim();
 						fieldBuilder.append(" = ").append(defaultValue);
-						
-					}
-					fieldBuilder.append(";\n"); 	
-					
-				}
-				
 
-			
+					}
+					fieldBuilder.append(";\n");
+
+				}
+
+
+
 			}
-		
+
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}finally{
@@ -1381,7 +1205,20 @@ public class JdbcNaming {
 		}
 		return fieldBuilder.toString();
 	}
-	
+
+	/**
+	 * 클래스 맴버변수 생성
+	 * @param tableName tableName
+	 * @return 변수생성값
+	 */
+	public static String makeObjectValue( String tableName){
+		try {
+			return makeObjectValue(ApplicationConnectionPool.getInstance().getCommitConnection(), tableName);
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+	}
+
 	/**
 	 * 데이터가 없을경우에만 insert
 	 * @param obj jdbcObject

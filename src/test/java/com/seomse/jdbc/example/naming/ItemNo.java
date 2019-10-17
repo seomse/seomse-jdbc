@@ -1,5 +1,5 @@
 
-package com.seomse.jdbc.example;
+package com.seomse.jdbc.example.naming;
 
 import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Table;

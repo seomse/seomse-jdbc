@@ -1,4 +1,4 @@
-package com.seomse.jdbc.example;
+package com.seomse.jdbc.example.admin;
 
 import com.seomse.jdbc.admin.RowDataInOut;
 
@@ -8,7 +8,7 @@ import com.seomse.jdbc.admin.RowDataInOut;
  *  설    명 : data out example
  *
  *  작 성 자 : macle
- *  작 성 일 : 2019.06.07
+ *  작 성 일 : 2019.10.17
  *  버    전 : 1.0
  *  수정이력 :
  *  기타사항 :
