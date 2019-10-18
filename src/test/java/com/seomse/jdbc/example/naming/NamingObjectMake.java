@@ -19,7 +19,7 @@ import com.seomse.jdbc.naming.JdbcNaming;
 public class NamingObjectMake {
 
 	public static void main(String [] args){
-		String tableName = "TB_STOCK_ITEM";
+		String tableName = "COPY_TEMP";
 		System.out.println("@Table(name=\"" +  tableName+ "\")\n");
 		System.out.println(JdbcNaming.makeObjectValue(tableName));
 

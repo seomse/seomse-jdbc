@@ -6,24 +6,24 @@ import com.seomse.jdbc.annotation.Table;
 
 /**
  * <pre>
- *  파 일 명 : RowDataCopy.java
- *  설    명 : data copy example
+ *  파 일 명 : ExampleItem.java
+ *  설    명 : 예제성 객체
  *
  *  작 성 자 : macle
- *  작 성 일 : 2019.06.07
+ *  작 성 일 : 2019.10.18
  *  버    전 : 1.0
  *  수정이력 :
  *  기타사항 :
  * </pre>
  * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
  */
-@Table(name="TB_STOCK_ITEM")
+@Table(name="COPY_TEMP")
 public class ExampleItem {
     @PrimaryKey(seq = 1)
-    @Column(name = "CD_ITEM")
+    @Column(name = "ITEM_CD")
     private String code;
 
-    @Column(name = "NM_ITEM")
+    @Column(name = "ITEM_NM")
     private String name;
 
 

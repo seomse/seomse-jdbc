@@ -24,7 +24,7 @@ public class SelectExample {
 
 
         for(ItemNo itemNo : itemNoList){
-            System.out.println(itemNo.getCD_ITEM() + ", " + itemNo.getNM_ITEM());
+            System.out.println(itemNo.getITEM_CD() + ", " + itemNo.getITEM_NM());
         }
 
 

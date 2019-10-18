@@ -1,15 +1,19 @@
 package com.seomse.jdbc.common;
 
+import com.seomse.commons.packages.classes.field.FieldUtil;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.annotation.DateTime;
+import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Sequence;
+import com.seomse.jdbc.annotation.Table;
+import com.seomse.jdbc.exception.FieldNullException;
+import com.seomse.jdbc.exception.PrimaryKeyNotSetException;
 import com.seomse.jdbc.naming.JdbcDataType;
 
 import java.lang.reflect.Field;
 import java.sql.*;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <pre>
@@ -24,7 +28,7 @@ import java.util.Set;
  * </pre>
  * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
  */
-public class StmtResultSetUtil {
+public class JdbcCommon {
 
 
 
@@ -71,6 +75,7 @@ public class StmtResultSetUtil {
 
     public static <T> void addBatch(T obj, Field [] fields, PreparedStatement pstmt ) throws IllegalAccessException, SQLException {
         for(int i=0 ; i<fields.length ; i++){
+
             fields[i].setAccessible(true);
             Object object = fields[i].get(obj);
 
@@ -118,6 +123,14 @@ public class StmtResultSetUtil {
             pstmt.setTimestamp(i+1, timeStamp);
         }
     }
+
+
+    public final static Comparator<Field> PK_SORT_ASC =  new Comparator<Field>() {
+        @Override
+        public int compare(Field f1, Field f2 ) {
+            return Integer.compare(f1.getAnnotation(PrimaryKey.class).seq(), f2.getAnnotation(PrimaryKey.class).seq());
+        }
+    };
 
 
     public static void main(String[] args) {

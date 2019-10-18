@@ -1,18 +1,22 @@
 package com.seomse.jdbc.objects;
 
 import com.seomse.commons.packages.classes.field.FieldUtil;
+import com.seomse.commons.utils.ExceptionUtil;
+import com.seomse.commons.utils.sort.QuickSortList;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.JdbcClose;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.annotation.Column;
-import com.seomse.jdbc.annotation.Sequence;
+import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Table;
 import com.seomse.jdbc.common.JdbcField;
 import com.seomse.jdbc.common.StmtResultSet;
-import com.seomse.jdbc.common.StmtResultSetUtil;
+import com.seomse.jdbc.common.JdbcCommon;
 import com.seomse.jdbc.common.TableSql;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
+import com.seomse.jdbc.connection.ConnectionPool;
 import com.seomse.jdbc.exception.FieldNullException;
+import com.seomse.jdbc.exception.PrimaryKeyNotSetException;
 import com.seomse.jdbc.exception.TableNameEmptyException;
 import com.seomse.jdbc.naming.JdbcDataType;
 import com.seomse.jdbc.naming.JdbcNamingDataType;
@@ -27,7 +31,7 @@ import java.util.*;
  * <pre>
  *  파 일 명 : JdbcObjects.java
  *  설    명 : Jdbc 자바형객체를 활용한 이벤트 처리
- *
+ *            우선은 JdbcNaming 과 중복된 형태로 만들고 하나더 만들일이 생기면 소스 합치는 작업 실행
  *  작 성 자 : macle
  *  작 성 일 : 2019.10.18
  *  버    전 : 1.0
@@ -256,7 +260,7 @@ public class JdbcObjects {
 
         //noinspection CaughtExceptionImmediatelyRethrown
         try{
-            StmtResultSet stmtResultSet = StmtResultSetUtil.makeStmtResultSet(conn, selectSql, prepareStatementDataMap);
+            StmtResultSet stmtResultSet = JdbcCommon.makeStmtResultSet(conn, selectSql, prepareStatementDataMap);
             stmt = stmtResultSet.getStmt();
             result = stmtResultSet.getResultSet();
 
@@ -523,7 +527,7 @@ public class JdbcObjects {
         //noinspection CaughtExceptionImmediatelyRethrown
         try{
 
-            StmtResultSet stmtResultSet = StmtResultSetUtil.makeStmtResultSet(conn, selectSql, prepareStatementDataMap);
+            StmtResultSet stmtResultSet = JdbcCommon.makeStmtResultSet(conn, selectSql, prepareStatementDataMap);
             stmt = stmtResultSet.getStmt();
             result = stmtResultSet.getResultSet();
             result.setFetchSize(2);
@@ -542,7 +546,113 @@ public class JdbcObjects {
         return resultObj;
     }
 
+    /**
+     * obj를 이용한 데이터 upsert
+     * @param objClassList 객체리시트
+     * @return fail -1
+     */
+    public static <T> int upsert( List<T> objClassList){
+        try {
+            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            Connection conn = connectionPool.getConnection();
+            int result = insert(conn, objClassList, "UPSERT", true);
+            connectionPool.commit(conn);
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
 
+
+    /**
+     * obj를 이용한 데이터 upsert
+     * @param objClassList 객체리시트
+     * @param isClearParameters ClearParameters 여부
+     * @return fail -1
+     */
+    public static <T> int upsert( List<T> objClassList,   boolean isClearParameters){
+        try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            Connection conn = connectionPool.getConnection();
+            int result =  insert(conn, objClassList, "UPSERT", isClearParameters);
+            connectionPool.commit(conn);
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+
+        }
+    }
+
+
+    /**
+     * obj를 이용한 데이터 upsert
+     * @param conn 연결 컨넥션
+     * @param objClassList 객체리시트
+     * @param isClearParameters ClearParameters 여부
+     * @return fail -1
+     */
+    public static <T> int upsert(Connection conn, List<T> objClassList,   boolean isClearParameters){
+        return insert(conn, objClassList , "UPSERT", isClearParameters);
+    }
+
+    /**
+     * obj를 이용한 데이터 insert
+     * @param objClassList 객체리시트
+     * @return fail -1
+     */
+    public static <T> int insert( List<T> objClassList){
+        try {
+            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            Connection conn = connectionPool.getConnection();
+            int result =  insert(conn, objClassList, "INSERT", true);
+            connectionPool.commit(conn);
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * obj를 이용한 데이터 insert
+     * @param objClassList 객체리시트
+     * @param isClearParameters ClearParameters 여부
+     * @return fail -1
+     */
+    public static <T> int insert( List<T> objClassList, boolean isClearParameters){
+        try {
+            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            Connection conn = connectionPool.getConnection();
+            int result =  insert(conn, objClassList , "INSERT", isClearParameters);
+
+            connectionPool.commit(conn);
+            return result;
+
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * obj를 이용한 데이터 insert
+     * @param conn 연결 컨넥션
+     * @param objClassList 객체리시트
+     * @param isClearParameters ClearParameters 여부
+     * @return fail -1
+     */
+    public static <T> int insert(Connection conn, List<T> objClassList,   boolean isClearParameters){
+        return insert(conn, objClassList , "INSERT", isClearParameters);
+    }
+
+
+    /**
+     * obj를 이용한 데이터 insert
+     * @param conn 연결 컨넥션
+     * @param objClassList 객체리시트
+     * @param insertQueryValue insert ot upsert
+     * @param isClearParameters ClearParameters 여부
+     * @return fail -1
+     */
     public static <T> int insert(Connection conn, List<T> objClassList, String insertQueryValue,  boolean isClearParameters){
         if(objClassList == null || objClassList.size() ==0){
             return 0;
@@ -557,7 +667,7 @@ public class JdbcObjects {
         //순서정보를 위한 세팅
         Field [] fields = new Field[columnNames.length];
         for (int i = 0; i <columnNames.length ; i++) {
-            fields[i] = columnFieldMap.get(i);
+            fields[i] = columnFieldMap.get(columnNames[i]);
         }
 
         int successCount ;
@@ -565,7 +675,7 @@ public class JdbcObjects {
             pstmt = conn.prepareStatement(insertSql);
 
             for(T obj : objClassList){
-                StmtResultSetUtil.addBatch(obj, fields, pstmt);
+                JdbcCommon.addBatch(obj, fields, pstmt);
                 if(isClearParameters){
                     pstmt.clearParameters();
                 }else{
@@ -586,6 +696,197 @@ public class JdbcObjects {
 
         return successCount;
 
+    }
+
+    /**
+     * 있으면 업데이트 없으면 추가
+     * @param obj jdbcObject
+     * @param isNullUpdate null column update flag
+     * @return fail -1
+     */
+    public static <T> int insertOrUpdate(T obj, boolean isNullUpdate){
+
+        try{
+            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            Connection conn = connectionPool.getCommitConnection();
+            int result = insertOrUpdate(conn, obj, isNullUpdate);
+            connectionPool.commit(conn);
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /**
+     * 있으면 업데이트 없으면 추가
+     * @param conn Connection
+     * @param obj jdbcObject
+     * @param isNullUpdate null column update flag
+     * @return 실패 -1
+     */
+    public static <T> int insertOrUpdate(Connection conn, Object obj , boolean isNullUpdate ){
+
+
+        int successCount ;
+        try{
+
+            Object checkObj = getObj(conn, obj.getClass(), null, getCheckWhere(obj), null, null);
+            if(checkObj == null){
+                successCount =insert(conn, obj);
+            }else{
+                successCount = update(conn, obj, isNullUpdate);
+            }
+        }
+        catch(Exception e){
+            throw new RuntimeException(e);
+        }
+
+        return successCount;
+
+    }
+
+    public static <T> String getCheckWhere(T obj) throws IllegalAccessException {
+        Class<?> objClass = obj.getClass();
+        String tableName = TableSql.getTableName(objClass.getAnnotation(Table.class), objClass.getName());
+
+        Map<String, Field> columnFieldMap = makeColumnFieldMap(objClass);
+        String [] columnNames = columnFieldMap.keySet().toArray(new String[0]);
+        //순서정보를 위한 세팅
+        Field [] fields = new Field[columnNames.length];
+        for (int i = 0; i <columnNames.length ; i++) {
+            fields[i] = columnFieldMap.get(columnNames[i]);
+        }
+
+        Map<Field,String> columnNameMap = new HashMap<>();
+
+
+        List<Field> pkColumnList = new LinkedList<>();
+
+        for(int i=0 ; i<fields.length ; i++){
+            fields[i].setAccessible(true);
+            PrimaryKey pk  = fields[i].getAnnotation(PrimaryKey.class);
+            if(pk != null){
+                pkColumnList.add(fields[i]);
+                columnNameMap.put(fields[i], columnNames[i]);
+            }
+        }
+
+        if(pkColumnList.size() ==0){
+            throw new PrimaryKeyNotSetException(objClass.getName());
+        }
+
+        Collections.sort(pkColumnList, JdbcCommon.PK_SORT_ASC);
+
+        StringBuilder whereBuilder = new StringBuilder();
+        //noinspection ForLoopReplaceableByForEach
+        for(int i= 0 ; i < pkColumnList.size() ; i++){
+            Field field = pkColumnList.get(i);
+            field.setAccessible(true);
+            whereBuilder.append(" AND ").append(columnNameMap.get(field)).append("='").append(field.get(obj)).append("'");
+        }
+
+        return whereBuilder.substring(4);
+    }
+
+
+    /**
+     * 객체를이용한 자동 upsert
+     * @param conn Connection
+     * @param obj jdbcObject
+     * @return fail -1
+     */
+    public static <T> int upsert(Connection conn, T obj){
+        return insert(conn, obj, "UPSERT");
+    }
+
+    /**
+     * 객체를이용한 자동 upsert
+     * @param obj jdbcObject
+     * @return success 1, fail -1
+     */
+    public static <T> int upsert(T obj){
+        try {
+            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            Connection conn = connectionPool.getConnection();
+
+            int result =  insert(conn, obj, "UPSERT");
+            connectionPool.commit(conn);
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * 객체를이용한 자동 insert
+     * @param obj jdbcObject
+     * @return success 1, fail -1
+     */
+    public static <T> int insert(T obj){
+        try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            Connection conn = connectionPool.getConnection();
+            int result =   insert(conn, obj, "INSERT");
+            connectionPool.commit(conn);
+            return result;
+
+        }catch(Exception e){
+
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 객체를이용한 자동 insert
+     * @param conn Connection
+     * @param obj jdbcObject
+     * @return success 1, fail -1
+     */
+    public static <T> int insert(Connection conn, T obj){
+        return insert(conn, obj, "INSERT");
+    }
+
+    /**
+     * 객체를이용한 자동 insert
+     * @param conn Connection
+     * @param obj jdbcObject
+     * @return success 1, fail -1
+     */
+    public static <T> int insert(Connection conn, T obj, String insertQueryValue){
+
+        Class<?> objClass = obj.getClass();
+        Map<String, Field> columnFieldMap = makeColumnFieldMap(objClass);
+        String [] columnNames = columnFieldMap.keySet().toArray(new String[0]);
+        String insertSql = getInsertSql(objClass, columnNames, insertQueryValue);
+        //순서정보를 위한 세팅
+        Field [] fields = new Field[columnNames.length];
+        for (int i = 0; i <columnNames.length ; i++) {
+            fields[i] = columnFieldMap.get(columnNames[i]);
+        }
+
+        int successCount ;
+
+
+        PreparedStatement pstmt = null;
+
+        //noinspection TryFinallyCanBeTryWithResources
+        try{
+            pstmt = conn.prepareStatement(insertSql);
+
+            JdbcCommon.addBatch(obj, fields, pstmt);
+            pstmt.clearParameters();
+
+            pstmt.executeBatch();
+            successCount = 1;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }finally{
+            //noinspection CatchMayIgnoreException
+            try{if(pstmt!=null)pstmt.close();  }catch(Exception e){}
+        }
+
+        return successCount;
     }
 
 
@@ -621,6 +922,197 @@ public class JdbcObjects {
         sqlBuilder.append(" )");
 
         return sqlBuilder.toString();
+    }
+
+
+    /**
+     * 객체를 이용한 update
+     * @param obj jdbcObject
+     * @param isNullUpdate null 업데이트 여부
+     * @return  success 1, fail -1
+     */
+    public static <T> int update(T obj , boolean isNullUpdate ) {
+        try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            Connection conn = connectionPool.getConnection();
+            int result =   update(conn, obj, isNullUpdate);
+            connectionPool.commit(conn);
+            return result;
+
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * 객체를 이용한 update
+     * @param conn Connection
+     * @param obj jdbcObject
+     * @param isNullUpdate null 업데이트 여부
+     * @return  success 1, fail -1
+     */
+    public static <T> int update(Connection conn,T obj , boolean isNullUpdate ){
+
+        Class<?> objClass = obj.getClass();
+        String tableName = TableSql.getTableName(objClass.getAnnotation(Table.class), objClass.getName());
+
+        Map<String, Field> columnFieldMap = makeColumnFieldMap(objClass);
+        String [] columnNames = columnFieldMap.keySet().toArray(new String[0]);
+
+        Field [] fields = new Field[columnNames.length];
+        for (int i = 0; i <columnNames.length ; i++) {
+            fields[i] = columnFieldMap.get(columnNames[i]);
+        }
+
+        Map<Field,String> columnNameMap = new HashMap<>();
+
+        StringBuilder sqlBuilder = new StringBuilder();
+
+        sqlBuilder.append("UPDATE ").append(tableName).append(" SET ");
+
+        StringBuilder fieldBuilder = new StringBuilder();
+        List<Field> pkColumnList = new LinkedList<>();
+
+        for(int i=0 ; i<fields.length ; i++){
+            fields[i].setAccessible(true);
+            PrimaryKey pk = fields[i].getAnnotation(PrimaryKey.class);
+            if(pk != null){
+                pkColumnList.add(fields[i]);
+                columnNameMap.put(fields[i], columnNames[i]);
+                continue;
+            }
+
+            if(!isNullUpdate){
+                try{
+                    Object object = fields[i].get(obj);
+                    if(object == null){
+                        continue;
+                    }
+                }catch(Exception e){
+                    logger.error(ExceptionUtil.getStackTrace(e));
+                }
+            }
+
+            fieldBuilder.append(", ").append(columnNames[i]).append("=?");
+        }
+
+        if(pkColumnList.size() ==0){
+            throw new PrimaryKeyNotSetException(objClass.getName());
+        }
+
+        Collections.sort(pkColumnList, JdbcCommon.PK_SORT_ASC);
+
+
+
+        sqlBuilder.append(fieldBuilder.toString().substring(1));
+        sqlBuilder.append(" WHERE ");
+
+        fieldBuilder.setLength(0);
+
+
+        for(int i= 0 ; i < pkColumnList.size() ; i++){
+            Field field = pkColumnList.get(i);
+            fieldBuilder.append(" AND ").append(columnNameMap.get(field)).append("=?");
+        }
+        sqlBuilder.append(fieldBuilder.substring(4));
+        PreparedStatement pstmt = null;
+
+        int successCount;
+        try{
+            pstmt = conn.prepareStatement(sqlBuilder.toString());
+
+            int index = 0;
+            //noinspection ForLoopReplaceableByForEach
+            for(int i=0 ; i<fields.length ; i++){
+
+                PrimaryKey  pk = fields[i].getAnnotation(PrimaryKey.class);
+                if(pk != null){
+                    continue;
+                }
+                fields[i].setAccessible(true);
+                Object object = fields[i].get(obj);
+                if(!isNullUpdate){
+
+                    if(object == null){
+                        continue;
+                    }
+                }
+
+
+
+                if(object == null){
+                    pstmt.setNull(index+1,  java.sql.Types.NULL);
+                }else{
+                    JdbcCommon.setPstmt(obj, fields[i], pstmt, index);
+                }
+                index++;
+
+            }
+
+            for(int i= 0 ; i < pkColumnList.size() ; i++){
+                Field field = pkColumnList.get(i);
+                Object object = field.get(obj);
+                JdbcCommon.setPstmt(obj, fields[i], pstmt, index);
+                index++;
+            }
+
+            pstmt.addBatch();
+            pstmt.clearParameters();
+
+            pstmt.executeBatch();
+            successCount = 1;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }finally{
+            //noinspection CatchMayIgnoreException
+            try{if(pstmt != null) pstmt.close();}catch(Exception e){}
+        }
+
+        return successCount;
+    }
+
+
+
+    /**
+     * 데이터가 없을경우에만 insert
+     * @param obj jdbcObject
+     * @return success insert count, fail -1
+     */
+    public static <T> int insertIfNoData(T obj){
+        try {
+            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            Connection conn = connectionPool.getCommitConnection();
+
+
+            int result =  insertIfNoData(conn, obj);
+            connectionPool.commit(conn);
+            return result;
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * 데이터가 없을경우에만 insert
+     * @param conn Connection
+     * @param obj jdbcObject
+     * @return success insert count, fail -1
+     */
+    public static <T> int insertIfNoData(Connection conn,T obj){
+
+        int successCount = -1;
+
+        try{
+
+            Object checkObj = getObj(conn, obj.getClass(), getCheckWhere(obj));
+            if(checkObj == null){
+                successCount =insert(conn, obj);
+            }
+        }
+        catch(Exception e){
+            throw new RuntimeException(e);
+        }
+
+        return successCount;
     }
 
     /**
@@ -689,7 +1181,4 @@ public class JdbcObjects {
         }
         return sb.toString();
     }
-
-
-
 }
