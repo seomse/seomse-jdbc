@@ -292,4 +292,16 @@ public class JdbcNamingDataType {
 		return null;
 	}
 
+
+	public boolean isFront() {
+		return isFront;
+	}
+
+	public boolean isBack() {
+		return isBack;
+	}
+
+	public boolean isFrontPriority() {
+		return isFrontPriority;
+	}
 }

@@ -1,6 +1,7 @@
 package com.seomse.jdbc.common;
 
 import com.seomse.jdbc.annotation.DateTime;
+import com.seomse.jdbc.annotation.FlagBoolean;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -31,8 +32,36 @@ public class JdbcField {
      */
     public static void setFieldObject(ResultSet result, Field field, String columnName, Object resultObj ) throws IllegalArgumentException, IllegalAccessException, SQLException{
         field.setAccessible(true);
-        DateTime dateTime =  field.getAnnotation(DateTime.class);
 
+
+        if(field.getType().isEnum()){
+            field.set(resultObj, Enum.valueOf((Class<Enum>)field.getType(), result.getString(columnName)));
+            return;
+        }
+
+
+        FlagBoolean flagBoolean = field.getAnnotation(FlagBoolean.class);
+
+        if(flagBoolean != null && (field.getType() == Boolean.TYPE || field.getType() == Boolean.class)){
+            String value = result.getString(columnName).trim();
+
+            if(value.length() == 0){
+                field.set(resultObj, false);
+            }else{
+                char ch = value.charAt(0);
+                ch = Character.toUpperCase(ch);
+                if(ch == 'Y'){
+                    field.set(resultObj, true);
+                }else{
+                    field.set(resultObj, false);
+                }
+            }
+
+            return;
+        }
+
+
+        DateTime dateTime =  field.getAnnotation(DateTime.class);
 
         if(dateTime == null){
             Class<?> classType  = field.getType();

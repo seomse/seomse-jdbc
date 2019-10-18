@@ -1164,6 +1164,22 @@ public class JdbcObjects {
                 JdbcDataType dataType = jdbcNamingDataType.getType(columnName);
                 if(dataType == JdbcDataType.DATE_TIME ){
                     sb.append("@DateTime\n");
+                }else {
+                    if(jdbcNamingDataType.isFrontPriority()){
+                        //앞먼저 검사
+                        if(jdbcNamingDataType.isFront() && columnName.startsWith("FG_")){
+                            sb.append("@FlagBoolean\n");
+                        }else if(jdbcNamingDataType.isBack() && columnName.endsWith("_FG")){
+                            sb.append("@FlagBoolean\n");
+                        }
+
+                    }else{
+                        if(jdbcNamingDataType.isBack() && columnName.endsWith("_FG")){
+                            sb.append("@FlagBoolean\n");
+                        }else if(jdbcNamingDataType.isFront() && columnName.startsWith("FG_")){
+                            sb.append("@FlagBoolean\n");
+                        }
+                    }
                 }
 
                 sb.append("@Column(name = \"").append(columnName).append("\")");

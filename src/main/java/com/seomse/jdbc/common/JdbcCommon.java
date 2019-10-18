@@ -3,6 +3,7 @@ package com.seomse.jdbc.common;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.annotation.DateTime;
+import com.seomse.jdbc.annotation.FlagBoolean;
 import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Sequence;
 import com.seomse.jdbc.naming.JdbcDataType;
@@ -104,6 +105,26 @@ public class JdbcCommon {
     }
 
     public static <T> void setPstmt(T obj, Field field, PreparedStatement pstmt, int i) throws SQLException, IllegalAccessException {
+
+        if(field.getType().isEnum()){
+            pstmt.setString(i+1, field.get(obj).toString());
+            return;
+        }
+
+
+        FlagBoolean flagBoolean = field.getAnnotation(FlagBoolean.class);
+
+        if(flagBoolean != null && (field.getType() == Boolean.TYPE || field.getType() == Boolean.class)){
+            boolean isObj = field.getBoolean(obj);
+            if(isObj){
+                pstmt.setString(i+1, "Y");
+            }else{
+                pstmt.setString(i+1, "N");
+            }
+
+            return;
+        }
+
 
         DateTime dateColumn =  field.getAnnotation(DateTime.class);
 
