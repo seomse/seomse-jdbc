@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * <pre>
- *  파 일 명 : EnumField.java
- *  설    명 : Enum 형태의 변수 DB와 동기화
+ *  파 일 명 : FlagBoolean.java
+ *  설    명 : boolean char(1) 형태의 flag 값일때 활용
  *
  *  작 성 자 : macle
  *  작 성 일 : 2019.10.18

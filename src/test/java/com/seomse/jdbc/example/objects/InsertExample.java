@@ -22,13 +22,16 @@ import java.util.List;
 public class InsertExample {
 	public static void main(String [] args){
 
+
+
 		List<ExampleItem> itemList =new ArrayList<>();
 
-		ExampleItem exampleItem= new ExampleItem();
-		exampleItem.setCode("test5");
-		exampleItem.setName("테스트5");
+		StockItem stockItem= new StockItem();
+		stockItem.setCode("test1");
+		stockItem.setName("테스트1");
+		stockItem.setLastUpdateTime(System.currentTimeMillis());
 //		itemList.add(exampleItem);
-		JdbcObjects.insert(exampleItem);
+		JdbcObjects.insert(stockItem);
 		
 	}
 }

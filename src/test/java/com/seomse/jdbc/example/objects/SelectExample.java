@@ -20,16 +20,16 @@ public class SelectExample {
 
     public static void main(String[] args) {
 
-//        List<ExampleItem> exampleList = JdbcObjects.getObjList(ExampleItem.class);
-//
-//
-//        for(ExampleItem example : exampleList){
-//            System.out.println(example.getCode() + ", " + example.getName());
-//        }
+        List<StockItem> exampleList = JdbcObjects.getObjList(StockItem.class);
 
 
-        ExampleItem exampleItem = JdbcObjects.getObj(ExampleItem.class);
-        System.out.println(exampleItem.getCode() + ", " + exampleItem.getName());
+        for(StockItem example : exampleList){
+            System.out.println(example.getCode() + ", " + example.getName() + ", " + example.isTrade() + "," + example.getMarketType().toString());
+        }
+
+
+//        ExampleItem exampleItem = JdbcObjects.getObj(ExampleItem.class);
+//        System.out.println(exampleItem.getCode() + ", " + exampleItem.getName());
 
     }
 
