@@ -3,6 +3,7 @@
 package com.seomse.jdbc;
 
 import com.seomse.commons.utils.ExceptionUtil;
+import com.seomse.jdbc.common.JdbcClose;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.connection.ConnectionPool;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package com.seomse.jdbc;
+package com.seomse.jdbc.common;
 
 import java.sql.ResultSet;
 import java.sql.Statement;

@@ -1,8 +1,8 @@
 package com.seomse.jdbc.naming;
 
-import com.seomse.jdbc.JdbcClose;
 import com.seomse.jdbc.JdbcQuery;
 import com.seomse.jdbc.PrepareStatementData;
+import com.seomse.jdbc.common.JdbcClose;
 import com.seomse.jdbc.common.JdbcCommon;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.connection.ConnectionPool;
