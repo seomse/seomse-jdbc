@@ -13,7 +13,7 @@ import java.sql.Timestamp;
  *  설    명 : jdbc를 활용한 field 처리
  *
  *  작 성 자 : macle
- *  작 성 일 : 2019.10.17
+ *  작 성 일 : 2019.10.18
  *  버    전 : 1.0
  *  수정이력 :
  *  기타사항 :
@@ -24,21 +24,20 @@ public class JdbcField {
 
     /**
      * 필드를 활용한 Object 세팅
-     * @param result
-     * @param field
-     * @param columnName
-     * @param resultObj
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws SQLException
+     * @param result result
+     * @param field field
+     * @param columnName columnName
+     * @param resultObj resultObj
      */
     public static void setFieldObject(ResultSet result, Field field, String columnName, Object resultObj ) throws IllegalArgumentException, IllegalAccessException, SQLException{
         field.setAccessible(true);
         DateTime dateTime =  field.getAnnotation(DateTime.class);
+
+
         if(dateTime == null){
             Class<?> classType  = field.getType();
             if(classType == String.class){
-                field.set(resultObj, result.getString(field.getName()));
+                field.set(resultObj, result.getString(columnName));
             }else if(classType == Long.class || classType == Long.TYPE){
                 try{
                     long value =  result.getLong(field.getName());
@@ -49,7 +48,7 @@ public class JdbcField {
                     }
 
                 }catch(Exception e){
-                    String value =  result.getString(field.getName());
+                    String value =  result.getString(columnName);
                     if(result.wasNull()){
                         field.set(resultObj, null);
                     }else{
@@ -60,7 +59,7 @@ public class JdbcField {
             }else if(classType == Integer.class || classType == Integer.TYPE){
 
                 try{
-                    int value =  result.getInt(field.getName());
+                    int value =  result.getInt(columnName);
                     if(result.wasNull()){
                         field.set(resultObj, null);
                     }else{
@@ -68,7 +67,7 @@ public class JdbcField {
                     }
 
                 }catch(Exception e){
-                    String value =  result.getString(field.getName());
+                    String value =  result.getString(columnName);
                     if(result.wasNull()){
                         field.set(resultObj, null);
                     }else{
@@ -80,7 +79,7 @@ public class JdbcField {
             }else if(classType == Float.class || classType == Float.TYPE){
 
                 try{
-                    float value =  result.getFloat(field.getName());
+                    float value =  result.getFloat(columnName);
                     if(result.wasNull()){
                         field.set(resultObj, null);
                     }else{
@@ -88,7 +87,7 @@ public class JdbcField {
                     }
 
                 }catch(Exception e){
-                    String value =  result.getString(field.getName());
+                    String value =  result.getString(columnName);
                     if(result.wasNull()){
                         field.set(resultObj, null);
                     }else{
@@ -99,7 +98,7 @@ public class JdbcField {
             }else if(classType == Double.class || classType == Double.TYPE){
 
                 try{
-                    double value =  result.getDouble(field.getName());
+                    double value =  result.getDouble(columnName);
                     if(result.wasNull()){
                         field.set(resultObj, null);
                     }else{
@@ -107,7 +106,7 @@ public class JdbcField {
                     }
 
                 }catch(Exception e){
-                    String value =  result.getString(field.getName());
+                    String value =  result.getString(columnName);
                     if(result.wasNull()){
                         field.set(resultObj, null);
                     }else{
@@ -118,14 +117,14 @@ public class JdbcField {
         }else{
 
             try{
-                Timestamp timeStamp = result.getTimestamp(field.getName());
+                Timestamp timeStamp = result.getTimestamp(columnName);
                 if(timeStamp == null){
                     field.set(resultObj, null);
                 }else{
                     field.set(resultObj, timeStamp.getTime());
                 }
             }catch(Exception e){
-                Object value = result.getObject(field.getName());
+                Object value = result.getObject(columnName);
                 if( value == null){
                     field.set(resultObj, null);
                 }else{

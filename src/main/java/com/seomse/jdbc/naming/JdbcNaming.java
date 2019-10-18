@@ -31,11 +31,11 @@ import java.util.*;
  *         
  *  작 성 자 : macle
  *  작 성 일 : 2017.09
- *  버    전 : 1.3
- *  수정이력 :  2017.11, 2018.04, 2018.07
+ *  버    전 : 1.4
+ *  수정이력 :  2017.11, 2018.04, 2018.07, 2019.10
  *  기타사항 :
  * </pre>
- * @author Copyrights 2017 ~ 2018 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class JdbcNaming {
 
@@ -246,13 +246,7 @@ public class JdbcNaming {
 		}else{
 			selectSql = sql;
 		}
-		
-		boolean isPrepareStatement = false;
 
-		if(prepareStatementDataMap != null){
-			isPrepareStatement = true;					
-		}
-	
 		Statement stmt = null;
 		ResultSet result = null;
 		
@@ -650,7 +644,6 @@ public class JdbcNaming {
 
 		String insertSql = getInsertSql(objClass, fields, insertQueryValue);
 
-		Table table = objClass.getAnnotation(Table.class);
 
 		PreparedStatement pstmt = null;
 
@@ -691,7 +684,7 @@ public class JdbcNaming {
 
 		Table table = objClass.getAnnotation(Table.class);
 
-		String tableName = getTableName(table, objClass.getName());
+		String tableName = TableSql.getTableName(table, objClass.getName());
 
 		StringBuilder sqlBuilder = new StringBuilder();
 
@@ -717,13 +710,7 @@ public class JdbcNaming {
 		return sqlBuilder.toString();
 	}
 
-	private static String getTableName(Table table, String objClassName){
-		String tableName = table.name();
-		if(tableName.equals(Table.EMPTY)){
-			throw new TableNameEmptyException(objClassName);
-		}
-		return tableName;
-	}
+
 
 
 
@@ -974,7 +961,7 @@ public class JdbcNaming {
 	public static <T> int update(Connection conn,T obj , boolean isNullUpdate ){
 			
 		Class<?> objClass = obj.getClass();
-		String tableName = getTableName(objClass.getAnnotation(Table.class), objClass.getName());
+		String tableName = TableSql.getTableName(objClass.getAnnotation(Table.class), objClass.getName());
 		
 		Field [] fields = getFields(objClass);
 
@@ -1271,7 +1258,7 @@ public class JdbcNaming {
 
 	private static <T> String getCheckWhere(T obj) throws IllegalAccessException {
 		Class<?> objClass = obj.getClass();
-		String tableName = getTableName(objClass.getAnnotation(Table.class), objClass.getName());
+		String tableName = TableSql.getTableName(objClass.getAnnotation(Table.class), objClass.getName());
 
 		Field [] fields = getFields(objClass);
 

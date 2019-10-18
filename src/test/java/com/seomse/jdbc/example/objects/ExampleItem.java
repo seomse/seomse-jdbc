@@ -1,4 +1,9 @@
 package com.seomse.jdbc.example.objects;
+
+import com.seomse.jdbc.annotation.Column;
+import com.seomse.jdbc.annotation.PrimaryKey;
+import com.seomse.jdbc.annotation.Table;
+
 /**
  * <pre>
  *  파 일 명 : RowDataCopy.java
@@ -12,8 +17,29 @@ package com.seomse.jdbc.example.objects;
  * </pre>
  * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
  */
+@Table(name="TB_STOCK_ITEM")
 public class ExampleItem {
-    private String itemCode;
+    @PrimaryKey(seq = 1)
+    @Column(name = "CD_ITEM")
+    private String code;
+
+    @Column(name = "NM_ITEM")
+    private String name;
 
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

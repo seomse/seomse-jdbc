@@ -5,6 +5,7 @@ import com.seomse.jdbc.Database;
 import com.seomse.jdbc.JdbcClose;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.annotation.Column;
+import com.seomse.jdbc.annotation.Sequence;
 import com.seomse.jdbc.annotation.Table;
 import com.seomse.jdbc.common.JdbcField;
 import com.seomse.jdbc.common.StmtResultSet;
@@ -25,10 +26,10 @@ import java.util.*;
 /**
  * <pre>
  *  파 일 명 : JdbcObjects.java
- *  설    명 : Jdbc 자바형객체
+ *  설    명 : Jdbc 자바형객체를 활용한 이벤트 처리
  *
  *  작 성 자 : macle
- *  작 성 일 : 2019.10.17
+ *  작 성 일 : 2019.10.18
  *  버    전 : 1.0
  *  수정이력 :
  *  기타사항 :
@@ -237,24 +238,7 @@ public class JdbcObjects {
 
 
         Table table = objClass.getAnnotation(Table.class);
-
-        Field[] fields = FieldUtil.getFieldArrayToParents(objClass);
-
-
-        Map<String, Field> columnFieldMap = new HashMap<>();
-
-        for(Field field: fields){
-            Column column = field.getAnnotation(Column.class);
-
-            if(column != null){
-                String name = column.name();
-                if("".equals(name)){
-                    columnFieldMap.put(field.getName(), field);
-                }else{
-                    columnFieldMap.put(name, field);
-                }
-            }
-        }
+        Map<String, Field> columnFieldMap = makeColumnFieldMap(objClass);
 
         String selectSql;
         if(sql == null) {
@@ -315,6 +299,26 @@ public class JdbcObjects {
         return resultList;
     }
 
+
+    private static <T>  Map<String, Field> makeColumnFieldMap(Class<T> objClass){
+        Field[] fields = FieldUtil.getFieldArrayToParents(objClass);
+        Map<String, Field> columnFieldMap = new HashMap<>();
+        for(Field field: fields){
+            Column column = field.getAnnotation(Column.class);
+
+            if(column != null){
+                String name = column.name();
+                if("".equals(name)){
+                    columnFieldMap.put(field.getName(), field);
+                }else{
+                    columnFieldMap.put(name, field);
+                }
+            }
+        }
+
+        return columnFieldMap;
+    }
+
     /**
      * 필드에 값 설정
      * @param result ResultSet
@@ -365,9 +369,259 @@ public class JdbcObjects {
     }
 
 
+    /**
+     * 객체결과 얻기
+     * @param conn 연결 컨넥션
+     * @param objClass 객체 클래스
+     * @return jdbc객체
+     */
+    public static <T> T getObj(Connection conn, Class<T> objClass ) throws IllegalAccessException, SQLException, InstantiationException {
+        return getObj(conn,  objClass, null, null, null, null);
+    }
+
+    /**
+     * 객체결과 얻기
+     * @param conn 연결 컨넥션
+     * @param objClass 객체 클래스
+     * @param whereValue 조건문
+     * @return jdbc객체
+     */
+    public static <T> T getObj(Connection conn, Class<T> objClass , String whereValue) throws IllegalAccessException, SQLException, InstantiationException {
+        return getObj(conn,  objClass, null, whereValue, null, null);
+    }
+
+
+    /**
+     * 객체결과 얻기
+     * @param objClass 객체 클래스
+     * @return jdbc객체
+     */
+    public static <T> T getObj(Class<T> objClass ){
+        try {
+            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, null, null, null);
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 객체결과 얻기
+     * @param objClass 객체 클래스
+     * @param whereValue 조건문
+     * @return jdbc객체
+     */
+    public static <T> T getObj(Class<T> objClass , String whereValue){
+        try {
+            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, null, null);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 객체결과 얻기
+     * @param objClass 객체 클래스
+     * @param whereValue 조건문
+     * @param orderByValue 정렬문
+     * @return jdbc객체
+     */
+    public static <T> T getObj(Class<T> objClass , String whereValue, String orderByValue){
+        try {
+            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, orderByValue, null);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * 객체결과 얻기
+     * @param objClass 객체 클래스
+     * @param whereValue 조건문
+     * @param prepareStatementDataMap 조건데이터
+     * @return jdbc객체
+     */
+    public static <T> T getObj(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
+        try {
+            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, null, prepareStatementDataMap);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 객체결과 얻기
+     * @param objClass 객체 클래스
+     * @param sql 쿼리
+     * @param whereValue 조건문
+     * @param prepareStatementDataMap 조건데이터
+     * @return jdbc객체
+     */
+    public static <T> T getObj(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
+        try {
+            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, sql, whereValue, null, prepareStatementDataMap);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 쿼리를이용한 객체결과 얻기
+     * @param objClass 객체 클래스
+     * @param sql 쿼리
+     * @return jdbc객체
+     */
+    public static <T> T getSqlObj(Class<T> objClass , String sql){
+        try {
+            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, sql, null, null, null);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * 객체결과 얻기
+     * @param conn 연결 컨넥션
+     * @param objClass 객체 클래스
+     * @param sql 쿼리
+     * @param whereValue 조건문
+     * @param prepareStatementDataMap 조건데이터
+     * @return 객체
+     */
+    public static <T> T getObj(Connection conn, Class<T> objClass, String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
+        return getObj(conn, objClass, sql, whereValue, null, prepareStatementDataMap);
+    }
+    /**
+     * 객체결과 얻기
+     * @param conn 연결 컨넥션
+     * @param objClass 객체 클래스
+     * @param sql 쿼리
+     * @param whereValue 조건문
+     * @param orderByValue 정렬문
+     * @param prepareStatementDataMap 조건데이터
+     * @return jdbc객체
+     */
+    public static <T> T getObj(Connection conn, Class<T> objClass, String sql, String whereValue, String orderByValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
+
+
+        Table table = objClass.getAnnotation(Table.class);
+
+        Map<String, Field> columnFieldMap = makeColumnFieldMap(objClass);
+
+        String selectSql;
+        if(sql == null) {
+            selectSql = getSql(objClass, table, columnFieldMap.keySet(), whereValue, orderByValue);
+        }else{
+            selectSql = sql;
+        }
+
+        Statement stmt = null;
+        ResultSet result = null;
+        T resultObj = null;
+
+        //noinspection CaughtExceptionImmediatelyRethrown
+        try{
+
+            StmtResultSet stmtResultSet = StmtResultSetUtil.makeStmtResultSet(conn, selectSql, prepareStatementDataMap);
+            stmt = stmtResultSet.getStmt();
+            result = stmtResultSet.getResultSet();
+            result.setFetchSize(2);
+            if(result.next()){
+                //noinspection deprecation
+                resultObj = objClass.newInstance();
+                setFieldsValue(result, columnFieldMap, resultObj);
+
+            }
+        }catch(Exception e){
+            throw e;
+        }finally{
+            JdbcClose.statementResultSet(stmt, result);
+        }
+
+        return resultObj;
+    }
+
+
+    public static <T> int insert(Connection conn, List<T> objClassList, String insertQueryValue,  boolean isClearParameters){
+        if(objClassList == null || objClassList.size() ==0){
+            return 0;
+        }
+        Class<?> objClass = objClassList.get(0).getClass();
+
+        Map<String, Field> columnFieldMap = makeColumnFieldMap(objClass);
+        String [] columnNames = columnFieldMap.keySet().toArray(new String[0]);
+        String insertSql = getInsertSql(objClass, columnNames, insertQueryValue);
+
+        PreparedStatement pstmt = null;
+        //순서정보를 위한 세팅
+        Field [] fields = new Field[columnNames.length];
+        for (int i = 0; i <columnNames.length ; i++) {
+            fields[i] = columnFieldMap.get(i);
+        }
+
+        int successCount ;
+        try{
+            pstmt = conn.prepareStatement(insertSql);
+
+            for(T obj : objClassList){
+                StmtResultSetUtil.addBatch(obj, fields, pstmt);
+                if(isClearParameters){
+                    pstmt.clearParameters();
+                }else{
+                    pstmt.executeBatch();
+                }
+
+            }
+            if(isClearParameters){
+                pstmt.executeBatch();
+            }
+            successCount = objClassList.size();
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }finally{
+            //noinspection CatchMayIgnoreException
+            try{if(pstmt != null)pstmt.close(); }catch(Exception e){}
+        }
+
+        return successCount;
+
+    }
 
 
 
+    /**
+     * insert 계열의 sql 얻기
+     * @return InsertSql
+     */
+    public static String getInsertSql(Class<?> objClass, String [] columnNames, String insertQueryValue){
+        Table table = objClass.getAnnotation(Table.class);
+
+        String tableName = TableSql.getTableName(table, objClass.getName());
+
+        StringBuilder sqlBuilder = new StringBuilder();
+
+        sqlBuilder.append(insertQueryValue).append(" INTO ").append(tableName).append(" (");
+
+        StringBuilder fieldBuilder = new StringBuilder();
+
+        //noinspection ForLoopReplaceableByForEach
+        for(int i=0 ; i<columnNames.length ; i++){
+            fieldBuilder.append(", ").append(columnNames[i]);
+        }
+        sqlBuilder.append(fieldBuilder.toString().substring(1));
+        sqlBuilder.append(") VALUES (");
+
+
+        fieldBuilder.setLength(0);
+        for(int i=0 ; i<columnNames.length ; i++){
+            fieldBuilder.append(", ?");
+        }
+        sqlBuilder.append(fieldBuilder.toString().substring(1));
+        sqlBuilder.append(" )");
+
+        return sqlBuilder.toString();
+    }
 
     /**
      * 클래스 어노테이션 생성
@@ -395,7 +649,8 @@ public class JdbcObjects {
     public static String makeObjectValue(Connection conn, String tableName){
         Statement stmt = null;
         ResultSet result = null;
-        StringBuilder fieldBuilder = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        sb.append("@Table(name=\"").append(tableName).append("\")");
 
         JdbcNamingDataType jdbcNamingDataType = JdbcNamingDataType.getInstance();
         try{
@@ -410,20 +665,21 @@ public class JdbcObjects {
 
             for (int i = 1; i <= count; i++){
 
+                sb.append("\n\n");
                 String columnName = metaData.getColumnLabel(i);
 
                 Integer pkSeq = pkMap.get(columnName);
                 if(pkSeq != null){
-                    fieldBuilder.append("@PrimaryKey(seq = ").append(pkSeq).append(")\n");
+                    sb.append("@PrimaryKey(seq = ").append(pkSeq).append(")\n");
                 }
 
 
                 JdbcDataType dataType = jdbcNamingDataType.getType(columnName);
                 if(dataType == JdbcDataType.DATE_TIME ){
-                    fieldBuilder.append("@DateTime\n");
+                    sb.append("@DateTime\n");
                 }
 
-                fieldBuilder.append("@Column(name = \"").append(columnName).append("\")\n\n");
+                sb.append("@Column(name = \"").append(columnName).append("\")");
             }
 
         }catch(Exception e){
@@ -431,7 +687,7 @@ public class JdbcObjects {
         }finally{
             JdbcClose.statementResultSet(stmt, result);
         }
-        return fieldBuilder.toString();
+        return sb.toString();
     }
 
 

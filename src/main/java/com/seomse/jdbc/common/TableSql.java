@@ -1,6 +1,7 @@
 package com.seomse.jdbc.common;
 
 import com.seomse.jdbc.annotation.Table;
+import com.seomse.jdbc.exception.TableNameEmptyException;
 
 /**
  * <pre>
@@ -8,7 +9,7 @@ import com.seomse.jdbc.annotation.Table;
  *  설    명 : annotation Table 관련 유틸성 클래스
  *
  *  작 성 자 : macle
- *  작 성 일 : 2019.10.17
+ *  작 성 일 : 2019.10.18
  *  버    전 : 1.0
  *  수정이력 :
  *  기타사항 :
@@ -39,6 +40,14 @@ public class TableSql {
             }
         }
         return sqlBuilder.toString();
+    }
+
+    public static String getTableName(Table table, String objClassName){
+        String tableName = table.name();
+        if(tableName.equals(Table.EMPTY)){
+            throw new TableNameEmptyException(objClassName);
+        }
+        return tableName;
     }
 
 }
