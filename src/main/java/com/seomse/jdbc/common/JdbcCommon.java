@@ -1,23 +1,24 @@
 package com.seomse.jdbc.common;
 
-import com.seomse.commons.packages.classes.field.FieldUtil;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.annotation.DateTime;
 import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Sequence;
-import com.seomse.jdbc.annotation.Table;
-import com.seomse.jdbc.exception.FieldNullException;
-import com.seomse.jdbc.exception.PrimaryKeyNotSetException;
 import com.seomse.jdbc.naming.JdbcDataType;
 
 import java.lang.reflect.Field;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <pre>
- *  파 일 명 : StmtResultSetUtil.java
+ *  파 일 명 : JdbcCommon.java
  *  설    명 : stmt 와 ResultSet 관련 처리
  *
  *  작 성 자 : macle
