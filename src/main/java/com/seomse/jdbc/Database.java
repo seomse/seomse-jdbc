@@ -5,7 +5,6 @@ import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.jdbc.common.JdbcClose;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.exception.NotDbTypeException;
-import com.seomse.jdbc.naming.JdbcDataType;
 import com.seomse.jdbc.sequence.SequenceMaker;
 import com.seomse.jdbc.sequence.SequenceMakerFactory;
 import org.slf4j.Logger;
@@ -313,22 +312,6 @@ public class Database {
 		return sql;
 	 }
 	 
-	 
-	 /**
-	  * 시간조건이 들어간 조건맵 생성
-	  * @param dateTime dateTime (milli second)
-	  * @return TimeMap
-	  */
-	public static Map<Integer, PrepareStatementData> newTimeMap(long dateTime){
-			
-		Map<Integer, PrepareStatementData> prepareStatementDataMap = new HashMap<>();
-		PrepareStatementData prepareStatementData = new PrepareStatementData();
-		prepareStatementData.setData(dateTime);
-		prepareStatementData.setType(JdbcDataType.DATE_TIME);
-		prepareStatementDataMap.put(1, prepareStatementData);
-			
-		return prepareStatementDataMap;
-			
-	}
+
 
 }
