@@ -94,7 +94,7 @@ public class JdbcCommon {
                 }
 
             }else{
-                setPstmt(obj,fields[i], pstmt, i);
+                setPstmt(obj,object, fields[i], pstmt, i);
 
 
             }
@@ -104,7 +104,7 @@ public class JdbcCommon {
         pstmt.addBatch();
     }
 
-    public static <T> void setPstmt(T obj, Field field, PreparedStatement pstmt, int i) throws SQLException, IllegalAccessException {
+    public static <T> void setPstmt(T obj, Object object,Field field, PreparedStatement pstmt, int i) throws SQLException, IllegalAccessException {
 
         if(field.getType().isEnum()){
             pstmt.setString(i+1, field.get(obj).toString());
@@ -132,16 +132,16 @@ public class JdbcCommon {
             if(field.getType() == String.class){
                 pstmt.setString(i+1, (String)field.get(obj));
             }else if(field.getType() == Long.TYPE || field.getType() == Long.class){
-                pstmt.setLong(i+1, field.getLong(obj));
+                pstmt.setLong(i+1, (Long)object);
             }else if(field.getType() == Integer.TYPE || field.getType() == Integer.class){
-                pstmt.setInt(i+1, field.getInt(obj));
+                pstmt.setInt(i+1, (Integer)object);
             }else if(field.getType() == Float.TYPE || field.getType() == Float.class){
-                pstmt.setFloat(i+1, field.getFloat(obj));
+                pstmt.setFloat(i+1, (Float)object);
             }else if(field.getType() == Double.TYPE ||field.getType() == Double.class){
-                pstmt.setDouble(i+1, field.getDouble(obj));
+                pstmt.setDouble(i+1, (Double)object);
             }
         }else{
-            Timestamp timeStamp = new Timestamp(field.getLong(obj));
+            Timestamp timeStamp = new Timestamp((Long)object);
             pstmt.setTimestamp(i+1, timeStamp);
         }
     }

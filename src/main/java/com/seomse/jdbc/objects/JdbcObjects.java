@@ -1038,7 +1038,7 @@ public class JdbcObjects {
                 if(object == null){
                     pstmt.setNull(index+1,  java.sql.Types.NULL);
                 }else{
-                    JdbcCommon.setPstmt(obj, fields[i], pstmt, index);
+                    JdbcCommon.setPstmt(obj, object, fields[i], pstmt, index);
                 }
                 index++;
 
@@ -1047,7 +1047,7 @@ public class JdbcObjects {
             for(int i= 0 ; i < pkColumnList.size() ; i++){
                 Field field = pkColumnList.get(i);
                 Object object = field.get(obj);
-                JdbcCommon.setPstmt(obj, fields[i], pstmt, index);
+                JdbcCommon.setPstmt(obj, object, fields[i], pstmt, index);
                 index++;
             }
 
