@@ -37,8 +37,9 @@ public class StockItem {
     @Column(name = "TRADE_FG")
     private boolean isTrade = false;
 
+
     @DateTime
-    @Column(name = "UPT_LAST_DT")
+    @Column(name = "LAST_UPT_DT")
     private long lastUpdateTime;
 
 

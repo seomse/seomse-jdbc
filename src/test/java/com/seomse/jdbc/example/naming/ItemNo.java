@@ -18,7 +18,7 @@ import com.seomse.jdbc.annotation.Table;
  * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
  */
 
-@Table(name="COPY_TEMP")
+@Table(name="TB_STOCK_ITEM")
 public class ItemNo {
 	@PrimaryKey(seq = 1)
 	private String ITEM_CD;
