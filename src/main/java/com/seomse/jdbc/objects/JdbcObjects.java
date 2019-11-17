@@ -1047,7 +1047,8 @@ public class JdbcObjects {
             for(int i= 0 ; i < pkColumnList.size() ; i++){
                 Field field = pkColumnList.get(i);
                 Object object = field.get(obj);
-                JdbcCommon.setPstmt(obj, object, fields[i], pstmt, index);
+
+                JdbcCommon.setPstmt(obj, object, field, pstmt, index);
                 index++;
             }
 

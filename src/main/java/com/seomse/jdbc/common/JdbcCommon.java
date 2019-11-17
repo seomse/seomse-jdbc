@@ -127,21 +127,20 @@ public class JdbcCommon {
 
 
         DateTime dateColumn =  field.getAnnotation(DateTime.class);
-
         if(dateColumn == null){
             if(field.getType() == String.class){
-                pstmt.setString(i+1, (String)field.get(obj));
+                pstmt.setString(i+1, (String)object);
             }else if(field.getType() == Long.TYPE || field.getType() == Long.class){
-                pstmt.setLong(i+1, (Long)object);
+                pstmt.setLong(i+1, (long)object);
             }else if(field.getType() == Integer.TYPE || field.getType() == Integer.class){
-                pstmt.setInt(i+1, (Integer)object);
+                pstmt.setInt(i+1, (int)object);
             }else if(field.getType() == Float.TYPE || field.getType() == Float.class){
-                pstmt.setFloat(i+1, (Float)object);
+                pstmt.setFloat(i+1, (float)object);
             }else if(field.getType() == Double.TYPE ||field.getType() == Double.class){
-                pstmt.setDouble(i+1, (Double)object);
+                pstmt.setDouble(i+1, (double)object);
             }
         }else{
-            Timestamp timeStamp = new Timestamp((Long)object);
+            Timestamp timeStamp = new Timestamp((long)object);
             pstmt.setTimestamp(i+1, timeStamp);
         }
     }
