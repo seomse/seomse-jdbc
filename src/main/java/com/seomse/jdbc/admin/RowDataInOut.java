@@ -132,7 +132,6 @@ public class RowDataInOut {
 							dataCount = 0;
 							FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
 							outBuilder.setLength(0);
-							dataCount = 0;
 						}
 
                     }
