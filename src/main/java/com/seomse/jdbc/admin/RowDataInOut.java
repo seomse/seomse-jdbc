@@ -56,7 +56,7 @@ public class RowDataInOut {
 	}
 
 	/**
-	 * 최대커믿개수를 설정한다
+	 * 최대 메모리 저장 개수 설정
 	 * @param maxDataCount MaxCommit
 	 */
 	public void setMaxDataCount(int maxDataCount) {
@@ -65,7 +65,7 @@ public class RowDataInOut {
 
 
 	/**
-	 * 테이블파일 홈경로를 설정한다.
+	 * 테이블파일 홈경로를 설정
 	 * @param fileHome FileHome
 	 */
 	public void setFileHome(String fileHome) {
