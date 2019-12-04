@@ -118,7 +118,7 @@ public class RowDataInOut {
 
 			for (String tableName : tableArray) {
 				dataCount = 0;
-				logger.info("OUT Table: " + tableName);
+				logger.info("out table: " + tableName);
                 final String fileName = fileHome + tableName;
                 //파일생성
                 FileUtil.fileOutput("", charSet, fileName, false);
@@ -147,7 +147,7 @@ public class RowDataInOut {
 		}catch(Exception e){
 			logger.error(ExceptionUtil.getStackTrace(e));
 		}
-		logger.info("Table Out Complete");
+		logger.info("table out complete");
 	}
 
 	/**
