@@ -117,7 +117,7 @@ public class RowDataInOut {
 			final StringBuilder outBuilder = new StringBuilder();
 
 			for (String tableName : tableArray) {
-
+				dataCount = 0;
 				logger.info("OUT Table: " + tableName);
                 final String fileName = fileHome + tableName;
                 //파일생성
