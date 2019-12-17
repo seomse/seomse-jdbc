@@ -166,7 +166,7 @@ public class ConnectionPool {
 
     private int connectionIndex = -1;
 
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection(){
 
         synchronized (lock){
             connectionIndex++;
@@ -175,49 +175,37 @@ public class ConnectionPool {
             }
 
             if(isReconnection){
-                try{
-                    if(connections[connectionIndex].isValid(validTime)){
-                        return  connections[connectionIndex];
-                    }
 
-
-                    if(isReconnectionWait){
-                        //연결대기
-                        for(;;){
-
+                if(isReconnectionWait){
+                    //연결대기
+                    for(;;){
+                        try{
+                            if(connections[connectionIndex].isValid(validTime)){
+                                return  connections[connectionIndex];
+                            }
                             logger.debug("reconnection try");
                             if(reconnect()){
                                 return  connections[connectionIndex];
                             }
 
-                            try{
-                                Thread.sleep(reconnectionTryTime);
-                            }catch(Exception e){
-                                if(isReconnectionErrorLog){
-                                    logger.error(ExceptionUtil.getStackTrace(e));
-                                }
 
+                            Thread.sleep(reconnectionTryTime);
+                        }catch(SQLException | InterruptedException e){
+                            if(isReconnectionErrorLog){
+                                logger.error(ExceptionUtil.getStackTrace(e));
                             }
-                        }
 
-                    }else{
-                        reconnect();
-                        return  connections[connectionIndex];
+                        }
                     }
 
-
-
-                }catch(java.sql.SQLRecoverableException se){
+                }else{
                     reconnect();
                     return  connections[connectionIndex];
                 }
 
-
             }else{
                 return connections[connectionIndex];
             }
-
-
         }
     }
 
