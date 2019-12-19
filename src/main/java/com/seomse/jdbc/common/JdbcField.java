@@ -35,6 +35,7 @@ public class JdbcField {
 
 
         if(field.getType().isEnum()){
+            //noinspection unchecked,rawtypes
             field.set(resultObj, Enum.valueOf((Class<Enum>)field.getType(), result.getString(columnName)));
             return;
         }

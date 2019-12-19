@@ -119,8 +119,9 @@ public class Database {
 	 * @param sql 시간 select 쿼리
 	 */
 	public static Long getDateTime(String sql){
-		try{
-			return getDateTime(ApplicationConnectionPool.getInstance().getConnection(), sql);
+
+		try(Connection conn =  ApplicationConnectionPool.getInstance().getCommitConnection()){
+			return getDateTime(conn, sql);
 		}catch(Exception e){
 			logger.error(ExceptionUtil.getStackTrace(e));
 			return System.currentTimeMillis();
@@ -170,8 +171,9 @@ public class Database {
 	 * @return 컬럼명 배열
 	 */
 	public static String [] getColumnNameArray(String tableName){
-		try {
-			return getColumnNameArray(ApplicationConnectionPool.getInstance().getConnection(), tableName);
+
+		try(Connection conn =  ApplicationConnectionPool.getInstance().getCommitConnection()) {
+			return getColumnNameArray(conn, tableName);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -214,10 +216,15 @@ public class Database {
 	 * @param tableName tableName
 	 * @return PrimaryKeyColumnsForTable
 	 */
-	public static Map<String, Integer> getPrimaryKeyColumnsForTable( String tableName) throws SQLException {
-		 return getPrimaryKeyColumnsForTable(ApplicationConnectionPool.getInstance().getConnection(), tableName);
+	public static Map<String, Integer> getPrimaryKeyColumnsForTable( String tableName) {
+		try(Connection conn =  ApplicationConnectionPool.getInstance().getCommitConnection()) {
+			return getPrimaryKeyColumnsForTable(conn, tableName);
+		}catch(SQLException e){
+			logger.error(ExceptionUtil.getStackTrace(e));
+			throw new RuntimeException(e);
+		}
 	}
-	
+
 	/**
 	 * 기본키 컬럼정보 얻기
 	 * @param conn Connection
@@ -230,11 +237,11 @@ public class Database {
 		 //noinspection CaughtExceptionImmediatelyRethrown
 		 try{
 			 pkColumns= conn.getMetaData().getPrimaryKeys(null,null,tableName);
-			
+
 			 while(pkColumns.next()) {
 			    String pkColumnName = pkColumns.getString("COLUMN_NAME");
 			    Integer pkPosition = pkColumns.getInt("KEY_SEQ");
-			        
+
 			    pkMap.put(pkColumnName, pkPosition);
 			 }
 
@@ -244,11 +251,11 @@ public class Database {
 			 //noinspection CatchMayIgnoreException
 			 try{if(pkColumns!=null)pkColumns.close(); }catch(Exception e){}
 		 }
-		 
+
 		return pkMap;
-		 	
+
 	 }
-	
+
 	 
 
 	 /**
@@ -264,8 +271,7 @@ public class Database {
 		 Map<String,String> defaultMap = new HashMap<>();
 		
 		if(dbType.equals("oracle") || dbType.equals("tibero") ){
-			 
-			
+
 			List<Map<String,String>> dataList =JdbcQuery.getMapStringList("SELECT COLUMN_NAME, DATA_DEFAULT FROM USER_TAB_COLS  WHERE TABLE_NAME = '" + tableName +"'");
 			for(Map<String,String> data : dataList){
 				String value = data.get("DATA_DEFAULT");
@@ -285,13 +291,10 @@ public class Database {
 		}else{
 			throw new NotDbTypeException(dbType);
 		}
-		 
-		 
+
 		return defaultMap;
 	 }
-	 
-	 
-	 
+
 	 /**
 	  * 연결유지 쿼리를 돌려준다.
 	  * @return ConnectionKeepQuery

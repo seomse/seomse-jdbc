@@ -5,9 +5,12 @@ import com.seomse.commons.config.Config;
 import com.seomse.commons.security.login.LoginInfo;
 import com.seomse.commons.security.login.LoginSecurity;
 import com.seomse.commons.utils.ExceptionUtil;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -18,13 +21,14 @@ import java.sql.SQLException;
  *            seomse 설정 활용
  *  작 성 자 : macle
  *  작 성 일 : 2019.02
- *  버    전 : 1.0
- *  수정이력 :
+ *  버    전 : 1.1
+ *  수정이력 : 2019.12.19
  *  기타사항 :
  * </pre>
  * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class ApplicationConnectionPool {
+
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConnectionPool.class);
 
     private static class Singleton {
@@ -46,7 +50,6 @@ public class ApplicationConnectionPool {
     private ApplicationConnectionPool(){
 
         try{
-
             setConfigConnectionInfo(false);
         }catch(Exception e){
             logger.error(ExceptionUtil.getStackTrace(e));
@@ -54,15 +57,16 @@ public class ApplicationConnectionPool {
 
     }
 
-    private ConnectionPool connectionPool = null;
+    private boolean isConnectionWait = false;
 
-    /**
-     * ConnectionPool 을 외부에서 만들어서 설정
-     */
-    public void setConnectionPool(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
-    }
+    private long connectionWaitTryTime = 10000L;
 
+    private DataSource datasource;
+
+
+    private String jdbcType;
+
+    private boolean isAutoCommit = false;
 
     /**
      * 설정정보대로 connection pool 설정
@@ -77,7 +81,7 @@ public class ApplicationConnectionPool {
      * @param isErrorLog 에러로그 출력 여부
      */
     public void setConfigConnectionInfo(boolean isErrorLog){
-        String jdbcType = Config.getConfig("application.jdbc.type");
+        jdbcType = Config.getConfig("application.jdbc.type");
         String driverClass = Config.getConfig("application.jdbc.driver.class");
 
         String databaseTypeOrFullPackage = driverClass;
@@ -146,11 +150,7 @@ public class ApplicationConnectionPool {
             return ;
         }
 
-
-
-
         url = url.trim();
-
 
         encryptFlag = encryptFlag.trim();
         userId = userId.trim();
@@ -163,14 +163,31 @@ public class ApplicationConnectionPool {
             userPassword = loginInfo.getPassword();
         }
 
+        isConnectionWait = Config.getBoolean("application.jdbc.connection.wait.flag", false);
+        connectionWaitTryTime = Config.getLong("application.jdbc.connection.wait.try.time", 10000L);
 
+
+        isAutoCommit = Config.getBoolean("application.jdbc.connection.auto.commit.flag" , true);
 
         try {
-            connectionPool = new ConnectionPool(jdbcType, driverClass, url, userId, userPassword, connectionPoolCount, Config.getBoolean("application.jdbc.connection.auto.commit.flag" , false));
-            connectionPool.setValidTime(Config.getInteger("application.jdbc.connection.valid.time", 3000));
-            connectionPool.setReconnection(Config.getBoolean("application.jdbc.reconnection.flag", true));
-            connectionPool.setReconnectionTryTime(Config.getLong("application.jdbc.reconnection.try.time", 60000L));
-            connectionPool.setReconnectionErrorLog(Config.getBoolean("application.jdbc.reconnection.error.log.flag", true));
+            HikariConfig config = new HikariConfig();
+
+            config.setJdbcUrl(url);
+            config.setUsername(userId);
+            config.setPassword(userPassword);
+            config.setAutoCommit(isAutoCommit);
+            config.setConnectionTimeout(Config.getLong("application.jdbc.connection.time.out", 30000L));
+            config.setValidationTimeout(Config.getLong("application.jdbc.connection.valid.time.out", 5000L));
+            config.setMaximumPoolSize(connectionPoolCount);
+            datasource =  new HikariDataSource(config);
+
+
+
+//            connectionPool = new ConnectionPool(jdbcType, driverClass, url, userId, userPassword, connectionPoolCount, Config.getBoolean("application.jdbc.connection.auto.commit.flag" , false));
+//            connectionPool.setValidTime(Config.getInteger("application.jdbc.connection.valid.time", 3000));
+//            connectionPool.setReconnection(Config.getBoolean("application.jdbc.reconnection.flag", true));
+//            connectionPool.setReconnectionTryTime(Config.getLong("application.jdbc.reconnection.try.time", 60000L));
+//            connectionPool.setReconnectionErrorLog(Config.getBoolean("application.jdbc.reconnection.error.log.flag", true));
         }catch(Exception e ){
             //섬세 설정을 사용하지않을경우 에러를 처리하지않기위한 초기 변수
             if(isErrorLog){
@@ -204,7 +221,28 @@ public class ApplicationConnectionPool {
      * @return connection
      */
     public Connection getConnection() throws SQLException {
-        return connectionPool.getConnection();
+
+        if(isConnectionWait){
+            for(;;){
+                try{
+                    Connection conn = datasource.getConnection();
+                    if(conn != null){
+                        return conn;
+                    }
+                }catch(SQLException e){
+                    logger.trace(ExceptionUtil.getStackTrace(e));
+                }
+
+                try {
+                    Thread.sleep(connectionWaitTryTime);
+                } catch (InterruptedException e) {
+                    logger.error(ExceptionUtil.getStackTrace(e));
+                }
+            }
+        }else{
+            return datasource.getConnection();
+        }
+
     }
 
     /**
@@ -213,23 +251,20 @@ public class ApplicationConnectionPool {
      * @return jdbc oracle mysql 등
      */
     public String getJdbcType(){
-        return connectionPool.getJdbcType();
-    }
-
-    /**
-     * connectionPool 얻기
-     */
-    public ConnectionPool getConnectionPool(){
-        return connectionPool;
+        return jdbcType;
     }
 
 
-    /**
-     * commit 되어 정보가 반영된 connection얻기
-     */
     public Connection getCommitConnection() throws SQLException {
-        return connectionPool.getCommitConnection();
-
+        Connection connection = getConnection();
+        if(!isAutoCommit){
+            connection.commit();
+        }
+        return connection;
     }
 
+
+    public boolean isAutoCommit() {
+        return isAutoCommit;
+    }
 }

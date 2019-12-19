@@ -8,7 +8,6 @@ import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.JdbcQuery;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
-import com.seomse.jdbc.connection.ConnectionPool;
 import com.seomse.jdbc.naming.JdbcMapDataHandler;
 import com.seomse.jdbc.naming.JdbcNamingMap;
 import org.slf4j.Logger;
@@ -89,15 +88,10 @@ public class RowDataInOut {
 	 * @param tableArray tableArray
 	 */
 	public void dataOut(String [] tableArray){
-		try{
-			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-			Connection conn = connectionPool.getConnection();
-			if(!connectionPool.isAutoCommit()){
-				conn.commit();
-			}
+		ApplicationConnectionPool applicationConnectionPool = ApplicationConnectionPool.getInstance();
+		try (Connection conn = applicationConnectionPool.getCommitConnection()) {
 			dataOut(conn, tableArray);
-
-		}catch(Exception e){
+		} catch (Exception e) {
 			logger.error(ExceptionUtil.getStackTrace(e));
 		}
 	}
@@ -123,7 +117,8 @@ public class RowDataInOut {
                 //파일생성
                 FileUtil.fileOutput("", charSet, fileName, false);
 
-                JdbcMapDataHandler handler = new JdbcMapDataHandler() {
+				//noinspection Convert2Lambda
+				JdbcMapDataHandler handler = new JdbcMapDataHandler() {
                     @Override
                     public void receive(Map<String, Object> data) {
 						dataCount++;
@@ -155,12 +150,8 @@ public class RowDataInOut {
 	 * @param tableArray tableArray
 	 */
 	public void dataIn( String [] tableArray){
-		try{
-			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-			Connection conn = connectionPool.getConnection();
-			if(!connectionPool.isAutoCommit()){
-				conn.commit();
-			}
+		ApplicationConnectionPool applicationConnectionPool = ApplicationConnectionPool.getInstance();
+		try(Connection conn = applicationConnectionPool.getCommitConnection()){
 			dataIn(conn, tableArray);
 		}catch(Exception e){
 			logger.error(ExceptionUtil.getStackTrace(e));
@@ -313,13 +304,10 @@ public class RowDataInOut {
 	public void tableCopy(Connection selectConn, final Connection insertConn, String table){
 		final List<Map<String, Object>> dataList = new ArrayList<>();
 
-        JdbcMapDataHandler handler = new JdbcMapDataHandler() {
-			@Override
-			public void receive(Map<String, Object> data) {
-				dataList.add(data);
-				if(maxDataCount <= dataList.size()){
-                    insert(insertConn, dataList);
-				}
+		JdbcMapDataHandler handler = data -> {
+			dataList.add(data);
+			if(maxDataCount <= dataList.size()){
+				insert(insertConn, dataList);
 			}
 		};
 

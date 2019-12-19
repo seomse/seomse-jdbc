@@ -9,7 +9,6 @@ import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Table;
 import com.seomse.jdbc.common.*;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
-import com.seomse.jdbc.connection.ConnectionPool;
 import com.seomse.jdbc.exception.FieldNullException;
 import com.seomse.jdbc.exception.PrimaryKeyNotSetException;
 import com.seomse.jdbc.exception.TableNameEmptyException;
@@ -94,8 +93,8 @@ public class JdbcObjects {
      * @return jdbc객체리스트
      */
     public static <T> List<T> getObjList(Class<T> objClass ){
-        try {
-            return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, null, null, -1, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return  getObjList(conn, objClass, null, null, null, -1, null);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -108,8 +107,8 @@ public class JdbcObjects {
      * @return jdbc 객체리스트
      */
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue){
-        try {
-            return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, null, -1, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObjList(conn, objClass, null, whereValue, null, -1, null);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -123,8 +122,8 @@ public class JdbcObjects {
      * @return jdbc 객체리스트
      */
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue, int size){
-        try {
-            return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, null, whereValue, null, size, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObjList(conn,  objClass, null, whereValue, null, size, null);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -138,8 +137,8 @@ public class JdbcObjects {
      * @return jdbc 객체리스트
      */
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue){
-        try {
-            return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, null, whereValue, orderByValue, -1, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObjList(conn,  objClass, null, whereValue, orderByValue, -1, null);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -154,8 +153,8 @@ public class JdbcObjects {
      * @return jdbc객체리스트
      */
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue, int size){
-        try {
-            return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, null, whereValue, orderByValue, size, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObjList(conn,  objClass, null, whereValue, orderByValue, size, null);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -170,8 +169,8 @@ public class JdbcObjects {
      * @return jdbc객체리스트
      */
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
-        try {
-            return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, null, whereValue, null, -1, prepareStatementDataMap);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObjList(conn,  objClass, null, whereValue, null, -1, prepareStatementDataMap);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -186,8 +185,8 @@ public class JdbcObjects {
      * @return jdbc객체리스트
      */
     public static <T> List<T> getObjList(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
-        try {
-            return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, sql, whereValue, null, -1, prepareStatementDataMap);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObjList(conn,  objClass, sql, whereValue, null, -1, prepareStatementDataMap);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -200,8 +199,8 @@ public class JdbcObjects {
      * @return jdbc객체리스트
      */
     public static <T> List<T> getSqlObjList(Class<T> objClass , String sql){
-        try {
-            return getObjList(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, sql, null, null, -1, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObjList(conn,  objClass, sql, null, null, -1, null);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -266,7 +265,6 @@ public class JdbcObjects {
             }
             if(size == -1){
                 while(result.next()){
-                    //noinspection deprecation
                     T resultObj = objClass.newInstance();
 
                     setFieldsValue(result, columnFieldMap, resultObj);
@@ -276,8 +274,6 @@ public class JdbcObjects {
             }else{
                 int checkCount = 0;
                 while(result.next()){
-
-                    //noinspection deprecation
                     T resultObj = objClass.newInstance();
 
                     setFieldsValue(result, columnFieldMap, resultObj);
@@ -396,8 +392,8 @@ public class JdbcObjects {
      * @return jdbc객체
      */
     public static <T> T getObj(Class<T> objClass ){
-        try {
-            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, null, null, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObj(conn, objClass, null, null, null, null);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -410,8 +406,8 @@ public class JdbcObjects {
      * @return jdbc객체
      */
     public static <T> T getObj(Class<T> objClass , String whereValue){
-        try {
-            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, null, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObj(conn, objClass, null, whereValue, null, null);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -425,8 +421,8 @@ public class JdbcObjects {
      * @return jdbc객체
      */
     public static <T> T getObj(Class<T> objClass , String whereValue, String orderByValue){
-        try {
-            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, orderByValue, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObj(conn, objClass, null, whereValue, orderByValue, null);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -441,8 +437,8 @@ public class JdbcObjects {
      * @return jdbc객체
      */
     public static <T> T getObj(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
-        try {
-            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, null, whereValue, null, prepareStatementDataMap);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObj(conn, objClass, null, whereValue, null, prepareStatementDataMap);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -457,8 +453,8 @@ public class JdbcObjects {
      * @return jdbc객체
      */
     public static <T> T getObj(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
-        try {
-            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(), objClass, sql, whereValue, null, prepareStatementDataMap);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObj(conn, objClass, sql, whereValue, null, prepareStatementDataMap);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -471,8 +467,8 @@ public class JdbcObjects {
      * @return jdbc객체
      */
     public static <T> T getSqlObj(Class<T> objClass , String sql){
-        try {
-            return getObj(ApplicationConnectionPool.getInstance().getCommitConnection(),  objClass, sql, null, null, null);
+        try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+            return getObj(conn,  objClass, sql, null, null, null);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -527,7 +523,6 @@ public class JdbcObjects {
             result = stmtResultSet.getResultSet();
             result.setFetchSize(2);
             if(result.next()){
-                //noinspection deprecation
                 resultObj = objClass.newInstance();
                 setFieldsValue(result, columnFieldMap, resultObj);
 
@@ -547,11 +542,12 @@ public class JdbcObjects {
      * @return fail -1
      */
     public static <T> int upsert( List<T> objClassList){
-        try {
-            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-            Connection conn = connectionPool.getConnection();
+        ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+        try(Connection conn = connectionPool.getCommitConnection()){
             int result = insert(conn, objClassList, "UPSERT", true);
-            connectionPool.commit(conn);
+            if(!connectionPool.isAutoCommit()){
+                conn.commit();
+            }
             return result;
         }catch(Exception e){
             throw new RuntimeException(e);
@@ -566,10 +562,12 @@ public class JdbcObjects {
      * @return fail -1
      */
     public static <T> int upsert( List<T> objClassList,   boolean isClearParameters){
-        try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-            Connection conn = connectionPool.getConnection();
+        ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+        try(Connection conn = connectionPool.getCommitConnection()){
             int result =  insert(conn, objClassList, "UPSERT", isClearParameters);
-            connectionPool.commit(conn);
+            if(!connectionPool.isAutoCommit()){
+                conn.commit();
+            }
             return result;
         }catch(Exception e){
             throw new RuntimeException(e);
@@ -595,11 +593,12 @@ public class JdbcObjects {
      * @return fail -1
      */
     public static <T> int insert( List<T> objClassList){
-        try {
-            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-            Connection conn = connectionPool.getConnection();
+        ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+        try(Connection conn = connectionPool.getCommitConnection()){
             int result =  insert(conn, objClassList, "INSERT", true);
-            connectionPool.commit(conn);
+            if(!connectionPool.isAutoCommit()){
+                conn.commit();
+            }
             return result;
         }catch(Exception e){
             throw new RuntimeException(e);
@@ -614,12 +613,12 @@ public class JdbcObjects {
      * @return fail -1
      */
     public static <T> int insert( List<T> objClassList, boolean isClearParameters){
-        try {
-            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-            Connection conn = connectionPool.getConnection();
+        ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+        try(Connection conn = connectionPool.getCommitConnection()){
             int result =  insert(conn, objClassList , "INSERT", isClearParameters);
-
-            connectionPool.commit(conn);
+            if(!connectionPool.isAutoCommit()){
+                conn.commit();
+            }
             return result;
 
         }catch(Exception e){
@@ -701,11 +700,12 @@ public class JdbcObjects {
      */
     public static <T> int insertOrUpdate(T obj, boolean isNullUpdate){
 
-        try{
-            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-            Connection conn = connectionPool.getCommitConnection();
+        ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+        try(Connection conn = connectionPool.getCommitConnection()){
             int result = insertOrUpdate(conn, obj, isNullUpdate);
-            connectionPool.commit(conn);
+            if(!connectionPool.isAutoCommit()){
+                conn.commit();
+            }
             return result;
         }catch(Exception e){
             throw new RuntimeException(e);
@@ -771,7 +771,7 @@ public class JdbcObjects {
             throw new PrimaryKeyNotSetException(objClass.getName());
         }
 
-        Collections.sort(pkColumnList, JdbcCommon.PK_SORT_ASC);
+        pkColumnList.sort(JdbcCommon.PK_SORT_ASC);
 
         StringBuilder whereBuilder = new StringBuilder();
         //noinspection ForLoopReplaceableByForEach
@@ -802,11 +802,14 @@ public class JdbcObjects {
      */
     public static <T> int upsert(T obj){
         try {
-            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+            ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
             Connection conn = connectionPool.getConnection();
 
             int result =  insert(conn, obj, "UPSERT");
-            connectionPool.commit(conn);
+            if(!connectionPool.isAutoCommit()){
+                conn.commit();
+            }
+            conn.close();
             return result;
         }catch(Exception e){
             throw new RuntimeException(e);
@@ -820,10 +823,13 @@ public class JdbcObjects {
      * @return success 1, fail -1
      */
     public static <T> int insert(T obj){
-        try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-            Connection conn = connectionPool.getConnection();
+        ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+        try(Connection conn = connectionPool.getCommitConnection()){
+
             int result =   insert(conn, obj, "INSERT");
-            connectionPool.commit(conn);
+            if(!connectionPool.isAutoCommit()){
+                conn.commit();
+            }
             return result;
 
         }catch(Exception e){
@@ -927,10 +933,12 @@ public class JdbcObjects {
      * @return  success 1, fail -1
      */
     public static <T> int update(T obj , boolean isNullUpdate ) {
-        try {ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-            Connection conn = connectionPool.getConnection();
+        ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+        try(Connection conn = connectionPool.getCommitConnection()){
             int result =   update(conn, obj, isNullUpdate);
-            connectionPool.commit(conn);
+            if(!connectionPool.isAutoCommit()){
+                conn.commit();
+            }
             return result;
 
         }catch(Exception e){
@@ -995,7 +1003,7 @@ public class JdbcObjects {
             throw new PrimaryKeyNotSetException(objClass.getName());
         }
 
-        Collections.sort(pkColumnList, JdbcCommon.PK_SORT_ASC);
+        pkColumnList.sort(JdbcCommon.PK_SORT_ASC);
 
 
 
@@ -1004,7 +1012,7 @@ public class JdbcObjects {
 
         fieldBuilder.setLength(0);
 
-
+        //noinspection ForLoopReplaceableByForEach
         for(int i= 0 ; i < pkColumnList.size() ; i++){
             Field field = pkColumnList.get(i);
             fieldBuilder.append(" AND ").append(columnNameMap.get(field)).append("=?");
@@ -1043,7 +1051,7 @@ public class JdbcObjects {
                 index++;
 
             }
-
+            //noinspection ForLoopReplaceableByForEach
             for(int i= 0 ; i < pkColumnList.size() ; i++){
                 Field field = pkColumnList.get(i);
                 Object object = field.get(obj);
@@ -1075,13 +1083,14 @@ public class JdbcObjects {
      * @return success insert count, fail -1
      */
     public static <T> int insertIfNoData(T obj){
-        try {
-            ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-            Connection conn = connectionPool.getCommitConnection();
+        ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+        try(Connection conn = connectionPool.getCommitConnection()){
 
 
             int result =  insertIfNoData(conn, obj);
-            connectionPool.commit(conn);
+            if(!connectionPool.isAutoCommit() && result != -1){
+                conn.commit();
+            }
             return result;
         }catch (Exception e){
             throw new RuntimeException(e);

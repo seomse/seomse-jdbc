@@ -5,7 +5,6 @@ package com.seomse.jdbc;
 import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.jdbc.common.JdbcClose;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
-import com.seomse.jdbc.connection.ConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,8 +39,8 @@ public class JdbcQuery {
 	public static Long getResultDateTime(String sql, Long defaultValue) {
 
 
-		try{
-			Long result = getResultDateTime(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			Long result = getResultDateTime(conn, sql);
 			if(result == null){
 				return defaultValue;
 			}
@@ -62,8 +61,8 @@ public class JdbcQuery {
 	 */
 	public static Long getResultDateTime(String sql) {
 
-		try{
-			return getResultDateTime(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			return getResultDateTime(conn, sql);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -124,8 +123,8 @@ public class JdbcQuery {
 	 */
 	public static Integer getResultInteger(String sql) {
 
-		try {
-			String result = getResultOne(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			String result = getResultOne(conn, sql);
 			if (result == null) {
 				return null;
 			}
@@ -160,8 +159,8 @@ public class JdbcQuery {
 	 * @return result(Double)
 	 */
 	public static Double getResultDouble(String sql, Double defaultValue) {
-		try {
-			Double result = getResultDouble(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			Double result = getResultDouble(conn, sql);
 			if (result == null) {
 				return defaultValue;
 			}
@@ -179,8 +178,8 @@ public class JdbcQuery {
 	 * @return result(Double)
 	 */
 	public static Double getResultDouble(String sql) {
-		try {
-			return getResultDouble(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			return getResultDouble(conn, sql);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -229,8 +228,8 @@ public class JdbcQuery {
 	 * @return result(Long)
 	 */
 	public static Long getResultLong(String sql, Long defaultValue) {
-		try {
-			Long result = getResultLong(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			Long result = getResultLong(conn, sql);
 			if (result == null) {
 				return defaultValue;
 			}
@@ -249,8 +248,8 @@ public class JdbcQuery {
 	 * @return  result(Long)
 	 */
 	public static Long getResultLong(String sql) {
-		try {
-			return getResultLong(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			return getResultLong(conn, sql);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -296,8 +295,8 @@ public class JdbcQuery {
 	 * @return 단일결과 값
 	 */
 	public static String getResultOne(String sql, String defaultValue){
-		try {
-			String result = getResultOne(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			String result = getResultOne(conn, sql);
 			if (result == null) {
 				return defaultValue;
 			}
@@ -315,8 +314,8 @@ public class JdbcQuery {
 	 * @return  단일결과 값
 	 */
 	public static String getResultOne(String sql){
-		try {
-			return getResultOne(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			return getResultOne(conn, sql);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -361,8 +360,8 @@ public class JdbcQuery {
 	 * @return 단일컬럼 결과 리스트
 	 */
 	public static List<String> getStringList(String sql){
-		try {
-			return getStringList(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			return getStringList(conn, sql);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -405,14 +404,12 @@ public class JdbcQuery {
 	 * @return MapStringList
 	 */
 	public static List<Map<String, String>> getAllMapStringList(String tableName){
-		try {
-			return getAllMapStringList(ApplicationConnectionPool.getInstance().getConnection(), tableName);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			return getAllMapStringList(conn, tableName);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
 
 	/**
 	 * 지정 된 테이블의 모든컬럼정보를 String 형태로 얻기
@@ -432,8 +429,8 @@ public class JdbcQuery {
 	 */
 	public static List<Map<String, String>> getMapStringList(String sql){
 
-		try {
-			return getMapStringList(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			return getMapStringList(conn, sql);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -486,8 +483,8 @@ public class JdbcQuery {
 	 * @return MapString
 	 */
 	public static Map<String, String> getMapString( String sql){
-		try {
-			return getMapString(ApplicationConnectionPool.getInstance().getConnection(), sql);
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			return getMapString(conn, sql);
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -542,17 +539,13 @@ public class JdbcQuery {
 	 * @return  실패-1
 	 */
 	public static int execute(String sql){
-		try {
-
-			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-
-			Connection conn = connectionPool.getConnection();
+		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+		try(Connection conn = connectionPool.getCommitConnection()){
 			int result =  execute(conn, sql);
 
 			if(!connectionPool.isAutoCommit()){
 				conn.commit();
 			}
-
 			return result;
 		}catch(Exception e){
 			logger.error(ExceptionUtil.getStackTrace(e));
@@ -598,10 +591,9 @@ public class JdbcQuery {
 	 * @return 성공 실패-1
 	 */
 	public static int callProcedure(String sql){
-		try {
-			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
+		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+		try(Connection conn = connectionPool.getCommitConnection()){
 
-			Connection conn = connectionPool.getConnection();
 
 			int result = callProcedure(conn, sql);
 			if(!connectionPool.isAutoCommit()) {
@@ -670,8 +662,8 @@ public class JdbcQuery {
 	  * @param sql 쿼리
 	  */
 	 public static void isRowWait(String sql) {
-	 	try {
-			isRowWait(ApplicationConnectionPool.getInstance().getConnection(), sql, 3, 350);
+		 try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
+			isRowWait(conn, sql, 3, 350);
 		}catch(Exception e){
 	 		logger.error(ExceptionUtil.getStackTrace(e));
 		}

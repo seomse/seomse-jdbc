@@ -12,8 +12,10 @@ import org.slf4j.LoggerFactory;
  *         
  *  작 성 자 : macle
  *  작 성 일 : 2017.09
- *  버    전 : 1.0
- *  수정이력 : 
+ *  버    전 : 1.1
+ *  수정이력 :
+ *  2019.12.19
+ *  maria support
  *  기타사항 :
  * </pre>
  * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
@@ -33,6 +35,8 @@ public class SequenceMakerFactory {
 			return new OracleSequenceMaker();
 //		}else if(dbType.equals("mssql")){
 //			return new MssqlSequenceMaker();
+		}else if(dbType.startsWith("maria")){
+			return new MariaSequenceMaker();
 		}else{
 //			throw new NotDbTypeException(dbType);
 

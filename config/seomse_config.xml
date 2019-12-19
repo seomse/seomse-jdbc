@@ -17,43 +17,41 @@
 
 
 
-	<entry key="application.jdbc.type">oracle</entry>
-	<entry key="application.jdbc.driver.class">oracle.jdbc.driver.OracleDriver</entry>
-	<entry key="application.jdbc.url">jdbc:oracle:thin:@127.0.0.1:1521:orcl</entry>
+	<entry key="application.jdbc.type">maria</entry>
+	<entry key="application.jdbc.driver.class">org.mariadb.jdbc.Driver</entry>
+	<entry key="application.jdbc.url">url</entry>
 	<entry key="application.jdbc.login.encrypt">N</entry>
-	<entry key="application.jdbc.user.id">id</entry>
+	<entry key="application.jdbc.user.id">userName</entry>
 	<entry key="application.jdbc.user.password">password</entry>
-	<entry key="application.jdbc.connection.pool.count">5</entry>
+	<entry key="application.jdbc.connection.pool.count">50</entry>
 
 	<!-- auto commit N 일경우 이벤트 단위로 commit 실행
-	  oracle 에서는 Y 일때랑 N 일때랑 차이가없는데 mysql 에서는 차이 있음 설정하지않으면 N-->
-	<entry key="application.jdbc.connection.auto.commit.flag">N</entry>
+	  oracle 에서는 Y 일때랑 N 일때랑 차이가없는데 mysql 에서는 차이 있음
+	  default Y-->
+	<entry key="application.jdbc.connection.auto.commit.flag">Y</entry>
 
-	<!-- db 연결이 유효한지 체크하는 시간-->
-	<entry key="application.jdbc.connection.valid.time">3000</entry>
+	<!-- db 연결이 유효한지 체크하는 시간
+		default 5000-->
+	<entry key="application.jdbc.connection.valid.time.out">5000</entry>
 
-
-	<!-- 재연결 사용여부-->
-	<entry key="application.jdbc.reconnection.flag">Y</entry>
-
-	<!-- 재연결 대기여부 Y 일경우 재연결 될때까지 대기됨
-	   server ='N', engine ='Y' 로하는게 좋을거 같음-->
-	<entry key="application.jdbc.reconnection.wait.flag">Y</entry>
+	<!-- connection 얻기위한 최대 대기 시간
+		default 30000-->
+	<entry key="application.jdbc.connection.time.out">30000</entry>
 
 
-	<!-- 재연결 대기여부 Y 일경우 재연결을 시도하는 주기 -->
-	<entry key="application.jdbc.reconnection.try.time">60000</entry>
+	<!-- connection 을 얻을때까지 대기하는 옵션 Y 일경우 재연결 될때까지 대기됨
+	   server ='N', engine ='Y' 로하는게 좋을거 같음
+	   default N -->
+	<entry key="application.jdbc.connection.wait.flag">Y</entry>
+
+	<!-- connection 을 얻을때까지 대기하다가 재시도 하는 주기
+		default 10000-->
+	<entry key="application.jdbc.connection.wait.try.time">10000</entry>
 
 
-	<!-- 재연결 시도중 발생하는 에러로그 출력여부-->
-	<entry key="application.jdbc.reconnection.error.log.flag">Y</entry>
-
-
-
-   
     <!-- 헤더 위치 정보 front,back 검사 순서대로 입력 뒷 해더부터 검색할경우 back,front 순
     앞쪽만 사용할경우 front 만 입력-->	
-    <entry key="application.jdbc.naming.header.position">front,back</entry>
+    <entry key="application.jdbc.naming.header.position">back,front</entry>
    	
    	<!-- 네이밍에 해당하는 도메인해더 -->
    	<entry key="application.jdbc.naming.string">ID,VAL,YMD,TP,NM,CD,FG</entry>

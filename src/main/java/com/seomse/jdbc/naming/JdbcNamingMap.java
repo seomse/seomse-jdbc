@@ -5,7 +5,6 @@ import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.common.JdbcClose;
 import com.seomse.jdbc.common.JdbcCommon;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
-import com.seomse.jdbc.connection.ConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,8 +50,7 @@ public class JdbcNamingMap {
 	 */
 	public static List<Map<String, Object>> getDataList( String tableName, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap)  {
 
-		try {
-			Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection();
+		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 
 			return getDataList(conn, tableName, whereValue, prepareStatementDataMap);
 		}catch(Exception e){
@@ -72,13 +70,7 @@ public class JdbcNamingMap {
 		ResultSet result = null;
 
 		String sql = getAllColumnSql(tableName, whereValue);
-		JdbcMapDataHandler dataHandler = new JdbcMapDataHandler(){
-
-			@Override
-			public void receive(Map<String, Object> data) {
-				dataList.add(data);
-			}
-		};
+		JdbcMapDataHandler dataHandler = dataList::add;
 
 		receiveData(conn,tableName,whereValue,prepareStatementDataMap,dataHandler);
 
@@ -103,9 +95,8 @@ public class JdbcNamingMap {
 	 * @return insert count
 	 */
 	public static <T> int insert(List<Map<String, Object>> dataList){
-		try{
-			ConnectionPool connectionPool = ApplicationConnectionPool.getInstance().getConnectionPool();
-			Connection conn = connectionPool.getConnection();
+		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+		try(Connection conn = connectionPool.getCommitConnection()){
 
 			int result = insert(conn, dataList, "INSERT", true);
 
@@ -292,22 +283,16 @@ public class JdbcNamingMap {
 
 					    Class<?> objClasses = 	object.getClass();
 						if(objClasses == Timestamp.class){
-							//noinspection ConstantConditions
 							pstmt.setTimestamp(i+1, (Timestamp)object);
 						}else if(objClasses == Long.class){
-							//noinspection ConstantConditions
 							pstmt.setLong(i+1, (Long)object);
 						}else if(objClasses  == Integer.class){
-							//noinspection ConstantConditions
 							pstmt.setInt(i+1, (Integer)object);
 						}else if(objClasses  == Float.class){
-							//noinspection ConstantConditions
 							pstmt.setFloat(i+1, (Float)object);
 						}else if(objClasses == Double.class){
-							//noinspection ConstantConditions
 							pstmt.setDouble(i+1, (Double)object);
 						}else{
-							//noinspection ConstantConditions
 							pstmt.setString(i+1, (String)object);
 						}
 
