@@ -808,7 +808,6 @@ public class JdbcObjects {
             if(!connectionPool.isAutoCommit()){
                 conn.commit();
             }
-            conn.close();
             return result;
         }catch(Exception e){
             throw new RuntimeException(e);
