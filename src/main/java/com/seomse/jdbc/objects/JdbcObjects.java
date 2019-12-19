@@ -701,7 +701,7 @@ public class JdbcObjects {
     public static <T> int insertOrUpdate(T obj, boolean isNullUpdate){
 
         ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-        try(Connection conn = connectionPool.getConnection()){
+        try(Connection conn = connectionPool.getCommitConnection()){
             int result = insertOrUpdate(conn, obj, isNullUpdate);
             if(!connectionPool.isAutoCommit()){
                 conn.commit();
