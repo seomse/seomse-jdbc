@@ -96,7 +96,7 @@ public class JdbcNamingMap {
 	 */
 	public static <T> int insert(List<Map<String, Object>> dataList){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = connectionPool.getCommitConnection()){
+		try(Connection conn = connectionPool.getConnection()){
 
 			int result = insert(conn, dataList, "INSERT", true);
 

@@ -540,7 +540,7 @@ public class JdbcQuery {
 	 */
 	public static int execute(String sql){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = connectionPool.getCommitConnection()){
+		try(Connection conn = connectionPool.getConnection()){
 			int result =  execute(conn, sql);
 
 			if(!connectionPool.isAutoCommit()){
@@ -592,7 +592,7 @@ public class JdbcQuery {
 	 */
 	public static int callProcedure(String sql){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = connectionPool.getCommitConnection()){
+		try(Connection conn = connectionPool.getConnection()){
 
 
 			int result = callProcedure(conn, sql);

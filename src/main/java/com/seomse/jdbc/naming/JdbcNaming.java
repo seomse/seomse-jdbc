@@ -524,7 +524,7 @@ public class JdbcNaming {
 	 */
 	public static <T> int upsert( List<T> objClassList){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = connectionPool.getCommitConnection()){
+		try(Connection conn = connectionPool.getConnection()){
 			int result = insert(conn, objClassList, "UPSERT", true);
 			if(!connectionPool.isAutoCommit()){
 				conn.commit();
@@ -545,7 +545,7 @@ public class JdbcNaming {
 	 */
 	public static <T> int upsert( List<T> objClassList,   boolean isClearParameters){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = connectionPool.getCommitConnection()){
+		try(Connection conn = connectionPool.getConnection()){
 			int result =  insert(conn, objClassList, "UPSERT", isClearParameters);
 			if(!connectionPool.isAutoCommit()){
 				conn.commit();
@@ -576,7 +576,7 @@ public class JdbcNaming {
 	 */
 	public static <T> int insert( List<T> objClassList){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = connectionPool.getCommitConnection()){
+		try(Connection conn = connectionPool.getConnection()){
 			int result =  insert(conn, objClassList, "INSERT", true);
 			if(!connectionPool.isAutoCommit()){
 				conn.commit();
@@ -596,7 +596,7 @@ public class JdbcNaming {
 	 */
 	public static <T> int insert( List<T> objClassList, boolean isClearParameters){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = connectionPool.getCommitConnection()){
+		try(Connection conn = connectionPool.getConnection()){
 			int result =  insert(conn, objClassList , "INSERT", isClearParameters);
 
 			if(!connectionPool.isAutoCommit()){
@@ -779,7 +779,7 @@ public class JdbcNaming {
 	 */
 	public static <T> int upsert(T obj){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = connectionPool.getCommitConnection()){
+		try(Connection conn = connectionPool.getConnection()){
 
 			int result =  insert(conn, obj, "UPSERT");
 			if(!connectionPool.isAutoCommit()){
@@ -799,7 +799,7 @@ public class JdbcNaming {
 	 */
 	public static <T> int insert(T obj){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = connectionPool.getCommitConnection()){
+		try(Connection conn = connectionPool.getConnection()){
 			int result =   insert(conn, obj, "INSERT");
 			if(!connectionPool.isAutoCommit()){
 				conn.commit();
@@ -868,9 +868,8 @@ public class JdbcNaming {
 	 * @return  success 1, fail -1
 	 */
 	public static <T> int update(T obj , boolean isNullUpdate ) {
-		try {
-			ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
-			Connection conn = connectionPool.getConnection();
+		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+		try(Connection conn = connectionPool.getConnection()){
 			int result =   update(conn, obj, isNullUpdate);
 			if(!connectionPool.isAutoCommit()){
 				conn.commit();
