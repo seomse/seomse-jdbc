@@ -23,7 +23,10 @@
 	<entry key="application.jdbc.login.encrypt">N</entry>
 	<entry key="application.jdbc.user.id">userName</entry>
 	<entry key="application.jdbc.user.password">password</entry>
-	<entry key="application.jdbc.connection.pool.count">50</entry>
+
+	<!-- max connection pool count
+		default 10-->
+	<entry key="application.jdbc.connection.pool.count">10</entry>
 
 	<!-- auto commit N 일경우 이벤트 단위로 commit 실행
 	  oracle 에서는 Y 일때랑 N 일때랑 차이가없는데 mysql 에서는 차이 있음

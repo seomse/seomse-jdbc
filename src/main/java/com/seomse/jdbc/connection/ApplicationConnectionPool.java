@@ -32,7 +32,7 @@ public class ApplicationConnectionPool {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConnectionPool.class);
 
     private static class Singleton {
-        private static final ApplicationConnectionPool instance = new ApplicationConnectionPool();
+        private static final ApplicationConnectionPool instance = new ApplicationConnectionPool().configBuild();
     }
 
     /**
@@ -43,31 +43,38 @@ public class ApplicationConnectionPool {
         return Singleton.instance;
     }
 
+
     /**
      * 생성자
-     * 싱글톤
+     * 따로 생성해서 사용할 수 있음
      */
-    private ApplicationConnectionPool(){
+    public ApplicationConnectionPool(){
 
+    }
+
+    public ApplicationConnectionPool configBuild(){
         try{
             setConfigConnectionInfo(false);
         }catch(Exception e){
             logger.error(ExceptionUtil.getStackTrace(e));
         }
-
+        return this;
     }
+
+    private long connectionTimeOut = 30000L;
+    private long validationTimeOut = 5000L;
+
 
     private boolean isConnectionWait = false;
 
     private long connectionWaitTryTime = 10000L;
 
-    private DataSource datasource;
+    private boolean isAutoCommit = false;
+    private int connectionPoolCount = 10;
 
+    private DataSource dataSource;
 
     private String jdbcType;
-
-    private boolean isAutoCommit = false;
-
 
     private String url;
     private String userId;
@@ -127,7 +134,7 @@ public class ApplicationConnectionPool {
             return ;
         }
 
-        int connectionPoolCount = Integer.parseInt(connectionPoolCountValue);
+        connectionPoolCount = Integer.parseInt(connectionPoolCountValue, 10);
 
 
         final String urlKey = "application.jdbc.url";
@@ -169,31 +176,37 @@ public class ApplicationConnectionPool {
             password = loginInfo.getPassword();
         }
 
+
         isConnectionWait = Config.getBoolean("application.jdbc.connection.wait.flag", false);
         connectionWaitTryTime = Config.getLong("application.jdbc.connection.wait.try.time", 10000L);
 
 
         isAutoCommit = Config.getBoolean("application.jdbc.connection.auto.commit.flag" , true);
 
+        connectionTimeOut = Config.getLong("application.jdbc.connection.time.out", 30000L);
+        validationTimeOut = Config.getLong("application.jdbc.connection.valid.time.out", 5000L);
+
         try {
-            HikariConfig config = new HikariConfig();
-
-            config.setJdbcUrl(url);
-            config.setUsername(userId);
-            config.setPassword(password);
-            config.setAutoCommit(isAutoCommit);
-            config.setConnectionTimeout(Config.getLong("application.jdbc.connection.time.out", 30000L));
-            config.setValidationTimeout(Config.getLong("application.jdbc.connection.valid.time.out", 5000L));
-            config.setMaximumPoolSize(connectionPoolCount);
-            datasource =  new HikariDataSource(config);
-
+            setDataSource();
         }catch(Exception e ){
             //섬세 설정을 사용하지않을경우 에러를 처리하지않기위한 초기 변수
             if(isErrorLog){
                 logger.error(ExceptionUtil.getStackTrace(e));
             }
         }
+    }
 
+    public void setDataSource(){
+        HikariConfig config = new HikariConfig();
+
+        config.setJdbcUrl(url);
+        config.setUsername(userId);
+        config.setPassword(password);
+        config.setAutoCommit(isAutoCommit);
+        config.setConnectionTimeout(connectionTimeOut);
+        config.setValidationTimeout(validationTimeOut);
+        config.setMaximumPoolSize(connectionPoolCount);
+        dataSource =  new HikariDataSource(config);
     }
 
     /**
@@ -224,7 +237,7 @@ public class ApplicationConnectionPool {
         if(isConnectionWait){
             for(;;){
                 try{
-                    Connection conn = datasource.getConnection();
+                    Connection conn = dataSource.getConnection();
                     if(conn != null){
                         return conn;
                     }
@@ -239,7 +252,7 @@ public class ApplicationConnectionPool {
                 }
             }
         }else{
-            return datasource.getConnection();
+            return dataSource.getConnection();
         }
 
     }
@@ -283,4 +296,48 @@ public class ApplicationConnectionPool {
 
     }
 
+
+    public void setConnectionTimeOut(long connectionTimeOut) {
+        this.connectionTimeOut = connectionTimeOut;
+    }
+
+    public void setValidationTimeOut(long validationTimeOut) {
+        this.validationTimeOut = validationTimeOut;
+    }
+
+    public void setConnectionWait(boolean connectionWait) {
+        isConnectionWait = connectionWait;
+    }
+
+    public void setConnectionWaitTryTime(long connectionWaitTryTime) {
+        this.connectionWaitTryTime = connectionWaitTryTime;
+    }
+
+    public void setAutoCommit(boolean autoCommit) {
+        isAutoCommit = autoCommit;
+    }
+
+    public void setConnectionPoolCount(int connectionPoolCount) {
+        this.connectionPoolCount = connectionPoolCount;
+    }
+
+    public void setJdbcType(String jdbcType) {
+        this.jdbcType = jdbcType;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setDatabaseTypeOrFullPackage(String databaseTypeOrFullPackage) {
+        this.databaseTypeOrFullPackage = databaseTypeOrFullPackage;
+    }
 }
