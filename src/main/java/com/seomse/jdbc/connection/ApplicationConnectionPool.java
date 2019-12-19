@@ -68,6 +68,12 @@ public class ApplicationConnectionPool {
 
     private boolean isAutoCommit = false;
 
+
+    private String url;
+    private String userId;
+    private String password;
+    private String databaseTypeOrFullPackage;
+
     /**
      * 설정정보대로 connection pool 설정
      */
@@ -84,7 +90,7 @@ public class ApplicationConnectionPool {
         jdbcType = Config.getConfig("application.jdbc.type");
         String driverClass = Config.getConfig("application.jdbc.driver.class");
 
-        String databaseTypeOrFullPackage = driverClass;
+        databaseTypeOrFullPackage = driverClass;
         if(driverClass == null){
             databaseTypeOrFullPackage = jdbcType;
         }
@@ -125,7 +131,7 @@ public class ApplicationConnectionPool {
 
 
         final String urlKey = "application.jdbc.url";
-        String url =  Config.getConfig(urlKey);
+        url =  Config.getConfig(urlKey);
         if(!isConfig(url, urlKey, isErrorLog)){
             return ;
         }
@@ -139,14 +145,14 @@ public class ApplicationConnectionPool {
 
 
         final String userIdKey = "application.jdbc.user.id";
-        String userId =  Config.getConfig(userIdKey);
+        userId =  Config.getConfig(userIdKey);
         if(!isConfig(userId, userIdKey, isErrorLog)){
             return ;
         }
 
         final String userPasswordKey = "application.jdbc.user.password";
-        String userPassword =  Config.getConfig(userPasswordKey);
-        if(!isConfig(userPassword, userPasswordKey, isErrorLog)){
+        password =  Config.getConfig(userPasswordKey);
+        if(!isConfig(password, userPasswordKey, isErrorLog)){
             return ;
         }
 
@@ -154,13 +160,13 @@ public class ApplicationConnectionPool {
 
         encryptFlag = encryptFlag.trim();
         userId = userId.trim();
-        userPassword = userPassword.trim();
+        password = password.trim();
 
         encryptFlag = encryptFlag.toUpperCase();
         if("Y".equals(encryptFlag)){
-            LoginInfo loginInfo = LoginSecurity.decryption(userId, userPassword);
+            LoginInfo loginInfo = LoginSecurity.decryption(userId, password);
             userId = loginInfo.getId();
-            userPassword = loginInfo.getPassword();
+            password = loginInfo.getPassword();
         }
 
         isConnectionWait = Config.getBoolean("application.jdbc.connection.wait.flag", false);
@@ -174,20 +180,13 @@ public class ApplicationConnectionPool {
 
             config.setJdbcUrl(url);
             config.setUsername(userId);
-            config.setPassword(userPassword);
+            config.setPassword(password);
             config.setAutoCommit(isAutoCommit);
             config.setConnectionTimeout(Config.getLong("application.jdbc.connection.time.out", 30000L));
             config.setValidationTimeout(Config.getLong("application.jdbc.connection.valid.time.out", 5000L));
             config.setMaximumPoolSize(connectionPoolCount);
             datasource =  new HikariDataSource(config);
 
-
-
-//            connectionPool = new ConnectionPool(jdbcType, driverClass, url, userId, userPassword, connectionPoolCount, Config.getBoolean("application.jdbc.connection.auto.commit.flag" , false));
-//            connectionPool.setValidTime(Config.getInteger("application.jdbc.connection.valid.time", 3000));
-//            connectionPool.setReconnection(Config.getBoolean("application.jdbc.reconnection.flag", true));
-//            connectionPool.setReconnectionTryTime(Config.getLong("application.jdbc.reconnection.try.time", 60000L));
-//            connectionPool.setReconnectionErrorLog(Config.getBoolean("application.jdbc.reconnection.error.log.flag", true));
         }catch(Exception e ){
             //섬세 설정을 사용하지않을경우 에러를 처리하지않기위한 초기 변수
             if(isErrorLog){
@@ -267,4 +266,21 @@ public class ApplicationConnectionPool {
     public boolean isAutoCommit() {
         return isAutoCommit;
     }
+
+    /**
+     * 연결정보로 connection 을 생성해서 활용할떄
+     * @param isAutoCommit
+     * @return
+     */
+    public Connection newConnection(boolean isAutoCommit){
+        try {
+            Connection connection = ConnectionFactory.newConnection(databaseTypeOrFullPackage, url, userId, password);
+            connection.setAutoCommit(isAutoCommit);
+            return connection;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
