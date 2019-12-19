@@ -150,9 +150,12 @@ public class RowDataInOut {
 	 * @param tableArray tableArray
 	 */
 	public void dataIn( String [] tableArray){
-		ApplicationConnectionPool applicationConnectionPool = ApplicationConnectionPool.getInstance();
-		try(Connection conn = applicationConnectionPool.getCommitConnection()){
+		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
+		try(Connection conn = connectionPool.getConnection()){
 			dataIn(conn, tableArray);
+			if(!connectionPool.isAutoCommit()){
+				conn.commit();
+			}
 		}catch(Exception e){
 			logger.error(ExceptionUtil.getStackTrace(e));
 		}
