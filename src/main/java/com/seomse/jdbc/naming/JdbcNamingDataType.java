@@ -4,6 +4,7 @@ package com.seomse.jdbc.naming;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.seomse.commons.config.ConfigInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,28 +108,35 @@ public class JdbcNamingDataType {
 		
 		
 		ConfigObserver configObserver = new ConfigObserver() {
-			
-			public void updateConfig(Map<String, String> configMap) {
-				String value = configMap.get(headerPositionKey);
-				if(value != null){
-					setHeaderPosition(value);
-				}
-				value = configMap.get(defaultKey);
-				if(value != null){
-					setDefaultKey(value);
-				}
-				
-				
-				for(String typeKey : typeKeyArray){
-					setTypeHeader(typeKey, configMap.get("application.jdbc.naming." + typeKey) );
-				}
-				
 
-				String seqValue = configMap.get(seqKey);
-				if(seqValue != null){
-					setSeq(seqValue);
+			@Override
+			public void updateConfig(ConfigInfo[] configInfos) {
+
+				outer:
+				for(ConfigInfo configInfo : configInfos){
+					if(configInfo.getKey().equals(headerPositionKey)){
+						setHeaderPosition(configInfo.getValue());
+						continue;
+					}else if(configInfo.getKey().equals(defaultKey)){
+						setDefaultKey(configInfo.getValue());
+						continue;
+					}
+
+
+					for(String typeKey : typeKeyArray){
+						if(configInfo.getKey().equals("application.jdbc.naming." + typeKey)){
+							setTypeHeader(typeKey, configInfo.getValue());
+							continue outer;
+						}
+					}
+
+					if(configInfo.getKey().equals(seqKey)){
+						setSeq(configInfo.getValue());
+					}
 				}
+
 			}
+
 		};
 		
 		Config.addObserver(configObserver);

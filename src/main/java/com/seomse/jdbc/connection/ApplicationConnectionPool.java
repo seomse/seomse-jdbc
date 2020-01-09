@@ -2,9 +2,9 @@ package com.seomse.jdbc.connection;
 
 
 import com.seomse.commons.config.Config;
-import com.seomse.commons.security.login.LoginInfo;
-import com.seomse.commons.security.login.LoginSecurity;
 import com.seomse.commons.utils.ExceptionUtil;
+import com.seomse.security.login.LoginInfo;
+import com.seomse.security.login.LoginSecurity;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
