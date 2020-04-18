@@ -1200,4 +1200,57 @@ public class JdbcObjects {
         }
         return sb.toString();
     }
+
+
+    /**
+     * 바뀐정보가 있으면 업데이트
+     * @param obj jdbc obj
+     * @param updateInfo update info jdbc obj
+     * @param <T> jdbc obj
+     * @return boolean isUpdate
+     */
+    public static <T> boolean updateObj(T obj, T updateInfo) {
+
+        Class<?> objClass = obj.getClass();
+
+        Field[] fields = FieldUtil.getFieldArrayToParents(objClass);
+
+        boolean isUpdate = false;
+
+        try {
+            for (Field field : fields) {
+                field.setAccessible(true);
+                if (field.isAnnotationPresent(Column.class)) {
+
+                    Object data = field.get(obj);
+
+                    Object updateData = field.get(updateInfo);
+
+                    if(data == null &&  updateData == null){
+                        continue;
+                    }
+
+                    if(data == updateData){
+                        continue;
+                    }
+
+                    if(
+                            (data == null || updateData == null)
+                            || !data.equals(updateData)
+                    ){
+                        field.set(obj, updateData);
+                        isUpdate = true;
+                    }
+                }
+
+            }
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+
+
+
+        return isUpdate;
+    }
+
 }
