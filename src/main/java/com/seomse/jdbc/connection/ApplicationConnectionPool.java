@@ -54,7 +54,7 @@ public class ApplicationConnectionPool {
 
     public ApplicationConnectionPool configBuild(){
         try{
-            setConfigConnectionInfo(false);
+            setConfigConnectionInfo();
         }catch(Exception e){
             logger.error(ExceptionUtil.getStackTrace(e));
         }
@@ -82,18 +82,11 @@ public class ApplicationConnectionPool {
     private String databaseTypeOrFullPackage;
 
     /**
-     * 설정정보대로 connection pool 설정
-     */
-    public void setConfigConnectionInfo(){
-        setConfigConnectionInfo(true);
-    }
-
-    /**
      * DB접속정보를 seomse_config에서 가져와서 설정
      * isErrorLog는 초기생성자에서 에러를 출력하지않기위한 로그
-     * @param isErrorLog 에러로그 출력 여부
+
      */
-    public void setConfigConnectionInfo(boolean isErrorLog){
+    public void setConfigConnectionInfo(){
         jdbcType = Config.getConfig("application.jdbc.type");
         String driverClass = Config.getConfig("application.jdbc.driver.class");
 
@@ -102,7 +95,7 @@ public class ApplicationConnectionPool {
             databaseTypeOrFullPackage = jdbcType;
         }
 
-        if(!isConfig(databaseTypeOrFullPackage, "application.jdbc.type or application.jdbc.driver.class", isErrorLog)){
+        if(!isConfig(databaseTypeOrFullPackage, "application.jdbc.type or application.jdbc.driver.class")){
             return ;
         }
 
@@ -110,7 +103,7 @@ public class ApplicationConnectionPool {
 
         final String connectionPoolCountKey = "application.jdbc.connection.pool.count";
         String connectionPoolCountValue =  Config.getConfig(connectionPoolCountKey);
-        if(!isConfig(connectionPoolCountValue, connectionPoolCountKey, isErrorLog)){
+        if(!isConfig(connectionPoolCountValue, connectionPoolCountKey)){
             return ;
         }
 
@@ -127,9 +120,9 @@ public class ApplicationConnectionPool {
         }
 
         if(!isNumber){
-            if(isErrorLog){
-                logger.error("application.jdbc.connection.pool.count is not number");
-            }
+
+            logger.error("application.jdbc.connection.pool.count is not number");
+
 
             return ;
         }
@@ -139,27 +132,27 @@ public class ApplicationConnectionPool {
 
         final String urlKey = "application.jdbc.url";
         url =  Config.getConfig(urlKey);
-        if(!isConfig(url, urlKey, isErrorLog)){
+        if(!isConfig(url, urlKey)){
             return ;
         }
 
 
         final String encryptFlagKey = "application.jdbc.login.encrypt";
         String encryptFlag =  Config.getConfig(encryptFlagKey);
-        if(!isConfig(encryptFlag, encryptFlagKey, isErrorLog)){
+        if(!isConfig(encryptFlag, encryptFlagKey)){
             return ;
         }
 
 
         final String userIdKey = "application.jdbc.user.id";
         userId =  Config.getConfig(userIdKey);
-        if(!isConfig(userId, userIdKey, isErrorLog)){
+        if(!isConfig(userId, userIdKey)){
             return ;
         }
 
         final String userPasswordKey = "application.jdbc.user.password";
         password =  Config.getConfig(userPasswordKey);
-        if(!isConfig(password, userPasswordKey, isErrorLog)){
+        if(!isConfig(password, userPasswordKey)){
             return ;
         }
 
@@ -190,9 +183,9 @@ public class ApplicationConnectionPool {
             setDataSource();
         }catch(Exception e ){
             //섬세 설정을 사용하지않을경우 에러를 처리하지않기위한 초기 변수
-            if(isErrorLog){
-                logger.error(ExceptionUtil.getStackTrace(e));
-            }
+
+            logger.error(ExceptionUtil.getStackTrace(e));
+
         }
     }
 
@@ -213,15 +206,15 @@ public class ApplicationConnectionPool {
      * 설정정보 유효성여부
      * @param value 설정된 값
      * @param keyMessage 설정 키와 관련된 에러 메시지
-     * @param isErrorLog 에러로그 출력여부
+
      * @return 설정값이 있는지 여부
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean isConfig(String value, String keyMessage, boolean isErrorLog){
+    private boolean isConfig(String value, String keyMessage){
         if(value == null || "".equals(value.trim())){
-            if(isErrorLog){
-                logger.error("config key: [" + keyMessage +"] set");
-            }
+
+            logger.error("config key: [" + keyMessage +"] set");
+
             return false;
         }
 
