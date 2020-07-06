@@ -969,11 +969,9 @@ public class JdbcNaming {
 						continue;
 					}
 				}
-				
-				
-				
+
 				if(object == null){
-					pstmt.setNull(index+1,  java.sql.Types.NULL);
+					JdbcCommon.setNullPstmt(obj,fields[i],pstmt,index);
 				}else{
 					JdbcCommon.setPstmt(obj, object, fields[i], pstmt, index);
 				}

@@ -14,14 +14,14 @@ import java.lang.annotation.Target;
  *         
  *  작 성 자 : macle
  *  작 성 일 : 2017.08
- *  버    전 : 1.0
- *  수정이력 : 
+ *  버    전 : 1.1
+ *  수정이력 :  2020.07.07
  *  기타사항 :
  * </pre>
- * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
+ * @author Copyrights 2017 ~ 2020 by ㈜섬세한사람들. All right reserved.
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DateTime {
-	 String dateFormatter() default "";
+	boolean isNullable() default true;
 }

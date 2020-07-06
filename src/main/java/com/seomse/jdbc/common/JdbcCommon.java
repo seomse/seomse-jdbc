@@ -82,16 +82,7 @@ public class JdbcCommon {
             Object object = fields[i].get(obj);
 
             if(object == null){
-                Sequence sequence = fields[i].getAnnotation(Sequence.class);
-                if(sequence == null){
-                    pstmt.setNull(i+1,  java.sql.Types.NULL);
-                }else{
-                    String nextVal = Database.nextVal(sequence.name());
-                    nextVal =  sequence.prefix() + nextVal;
-
-                    fields[i].set(obj, nextVal);
-                    pstmt.setString(i+1, nextVal);
-                }
+                setNullPstmt(obj, fields[i], pstmt, i);
 
             }else{
                 setPstmt(obj,object, fields[i], pstmt, i);
@@ -102,6 +93,28 @@ public class JdbcCommon {
         }
 
         pstmt.addBatch();
+    }
+
+    public static <T> void setNullPstmt(T obj, Field field, PreparedStatement pstmt, int i) throws SQLException, IllegalAccessException {
+        Sequence sequence = field.getAnnotation(Sequence.class);
+        if(sequence != null){
+            String nextVal = Database.nextVal(sequence.name());
+            nextVal =  sequence.prefix() + nextVal;
+
+            field.set(obj, nextVal);
+            pstmt.setString(i+1, nextVal);
+            return;
+        }
+
+        DateTime dateTime = field.getAnnotation(DateTime.class);
+        if(dateTime != null && !dateTime.isNullable()) {
+            Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
+            pstmt.setTimestamp(i+1, timeStamp);
+            return;
+        }
+
+        pstmt.setNull(i+1,  java.sql.Types.NULL);
+
     }
 
     public static <T> void setPstmt(T obj, Object object,Field field, PreparedStatement pstmt, int i) throws SQLException, IllegalAccessException {
@@ -140,21 +153,15 @@ public class JdbcCommon {
                 pstmt.setDouble(i+1, (double)object);
             }
         }else{
+
             Timestamp timeStamp = new Timestamp((long)object);
             pstmt.setTimestamp(i+1, timeStamp);
         }
     }
 
 
-    public final static Comparator<Field> PK_SORT_ASC =  new Comparator<Field>() {
-        @Override
-        public int compare(Field f1, Field f2 ) {
-            return Integer.compare(f1.getAnnotation(PrimaryKey.class).seq(), f2.getAnnotation(PrimaryKey.class).seq());
-        }
-    };
 
 
-    public static void main(String[] args) {
+    public final static Comparator<Field> PK_SORT_ASC = Comparator.comparingInt(f -> f.getAnnotation(PrimaryKey.class).seq());
 
-    }
 }
