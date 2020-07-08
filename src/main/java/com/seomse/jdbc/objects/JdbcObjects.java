@@ -5,6 +5,7 @@ import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.annotation.Column;
+import com.seomse.jdbc.annotation.FlagBoolean;
 import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Table;
 import com.seomse.jdbc.common.*;
@@ -778,7 +779,23 @@ public class JdbcObjects {
         for(int i= 0 ; i < pkColumnList.size() ; i++){
             Field field = pkColumnList.get(i);
             field.setAccessible(true);
-            whereBuilder.append(" AND ").append(columnNameMap.get(field)).append("='").append(field.get(obj)).append("'");
+            if(field.isAnnotationPresent(FlagBoolean.class)){
+
+                boolean flag  = (boolean)field.get(obj);
+
+                if(flag){
+                    whereBuilder.append(" AND ").append(columnNameMap.get(field)).append("='").append("Y").append("'");
+                }else{
+                    whereBuilder.append(" AND ").append(columnNameMap.get(field)).append("='").append("N").append("'");
+                }
+
+            }else if(field.getType().isEnum()){
+                whereBuilder.append(" AND ").append(columnNameMap.get(field)).append("='").append(field.get(obj).toString()).append("'");
+            }else{
+                whereBuilder.append(" AND ").append(columnNameMap.get(field)).append("='").append(field.get(obj)).append("'");
+            }
+
+
         }
 
         return whereBuilder.substring(4);
