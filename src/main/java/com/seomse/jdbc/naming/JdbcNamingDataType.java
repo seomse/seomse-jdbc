@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.seomse.commons.config.ConfigInfo;
+import com.seomse.jdbc.JdbcNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.seomse.commons.config.Config;
 import com.seomse.commons.config.ConfigObserver;
-import com.seomse.commons.utils.string.StringArray;
-/** 
+/**
  * <pre>
  *  파 일 명 : JdbcNamingDataType.java
  *  설    명 : Jdbc명명 규칙의 데이터 유형 
@@ -178,12 +178,12 @@ public class JdbcNamingDataType {
 
 		TypeAndHeader typeAndHeader = typeHeaderMap.get(type);
 		if(value == null){
-			typeAndHeader.setHeaderArray(StringArray.EMPTY_STRING_ARRAY);
+			typeAndHeader.setHeaderArray(JdbcNull.EMPTY_STRING_ARRAY);
 			return ;
 		}
 		value = value.trim();
 		if("".equals(value)){
-			typeAndHeader.setHeaderArray(StringArray.EMPTY_STRING_ARRAY);
+			typeAndHeader.setHeaderArray(JdbcNull.EMPTY_STRING_ARRAY);
 			return ;
 		}
 	
@@ -215,7 +215,7 @@ public class JdbcNamingDataType {
 	}
 	
 	private class TypeAndHeader{
-		private String [] headerArray = StringArray.EMPTY_STRING_ARRAY;
+		private String [] headerArray = JdbcNull.EMPTY_STRING_ARRAY;
 		private JdbcDataType dataType;
 		private TypeAndHeader(JdbcDataType jdbcDataType){
 			dataType = jdbcDataType;

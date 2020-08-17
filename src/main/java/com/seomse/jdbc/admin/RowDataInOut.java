@@ -2,9 +2,10 @@
 
 package com.seomse.jdbc.admin;
 
-import com.seomse.commons.file.FileUtil;
-import com.seomse.commons.packages.classes.ClassJsonUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.seomse.commons.utils.ExceptionUtil;
+import com.seomse.commons.utils.FileUtil;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.JdbcQuery;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
@@ -43,7 +44,7 @@ public class RowDataInOut {
 
 	private String fileHome = "tables/";
 
-	private String charSet ="UTF-8";
+	private final String charSet ="UTF-8";
 
 	private String dbType = "oracle";
 
@@ -102,6 +103,9 @@ public class RowDataInOut {
 	 * @param tableArray tableArray
 	 */
 	public void dataOut(Connection conn, String [] tableArray){
+
+		Gson gson = new Gson();
+
 		try {
 			if (tableArray == null) {
 				List<String> tableList = JdbcQuery.getStringList(Database.getTableListSql(dbType));
@@ -122,7 +126,7 @@ public class RowDataInOut {
                     @Override
                     public void receive(Map<String, Object> data) {
 						dataCount++;
-						outBuilder.append(ClassJsonUtil.mapDataToJsonString(data)).append("\n");
+						outBuilder.append(gson.toJson(data)).append("\n");
 						if(dataCount >= maxDataCount){
 							dataCount = 0;
 							FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
@@ -173,7 +177,7 @@ public class RowDataInOut {
 			List<String> tableList = JdbcQuery.getStringList(Database.getTableListSql(dbType));
 			tableArray = tableList.toArray(new String[0]);
 		}
-
+		Gson gson = new Gson();
 		List<Map<String,Object>> insertList = new ArrayList<>();
 		for(String tableName : tableArray){
 
@@ -189,7 +193,7 @@ public class RowDataInOut {
 					if("".equals(line.trim())){
 						continue;
 					}
-					Map<String,Object> dataMap = ClassJsonUtil.makeDataMap(line);
+					Map<String, Object> dataMap = gson.fromJson(line, new TypeToken<Map<String, Object>>(){}.getType());
 					insertList.add(dataMap);
 					if(insertList.size() >= maxDataCount){
 						dataInsert(conn, insertList);

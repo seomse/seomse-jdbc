@@ -2,8 +2,8 @@
 
 package com.seomse.jdbc.naming;
 
-import com.seomse.commons.packages.classes.field.FieldUtil;
 import com.seomse.commons.utils.ExceptionUtil;
+import com.seomse.commons.utils.packages.classes.field.FieldUtil;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.annotation.PrimaryKey;

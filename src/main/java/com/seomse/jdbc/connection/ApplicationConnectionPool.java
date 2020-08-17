@@ -3,8 +3,7 @@ package com.seomse.jdbc.connection;
 
 import com.seomse.commons.config.Config;
 import com.seomse.commons.utils.ExceptionUtil;
-import com.seomse.security.login.LoginInfo;
-import com.seomse.security.login.LoginSecurity;
+import com.seomse.cypto.LoginCrypto;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -83,8 +82,7 @@ public class ApplicationConnectionPool {
 
     /**
      * DB접속정보를 seomse_config에서 가져와서 설정
-     * isErrorLog는 초기생성자에서 에러를 출력하지않기위한 로그
-
+     * isErrorLog 는 초기생성자에서 에러를 출력하지않기위한 로그
      */
     public void setConfigConnectionInfo(){
         jdbcType = Config.getConfig("application.jdbc.type");
@@ -164,9 +162,9 @@ public class ApplicationConnectionPool {
 
         encryptFlag = encryptFlag.toUpperCase();
         if("Y".equals(encryptFlag)){
-            LoginInfo loginInfo = LoginSecurity.decryption(userId, password);
-            userId = loginInfo.getId();
-            password = loginInfo.getPassword();
+            String [] loginInfos = LoginCrypto.decryption(userId,password);
+            userId = loginInfos[0];
+            password = loginInfos[1];
         }
 
 
@@ -239,6 +237,7 @@ public class ApplicationConnectionPool {
                 }
 
                 try {
+                    //noinspection BusyWait
                     Thread.sleep(connectionWaitTryTime);
                 } catch (InterruptedException e) {
                     logger.error(ExceptionUtil.getStackTrace(e));
@@ -269,6 +268,7 @@ public class ApplicationConnectionPool {
     }
 
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isAutoCommit() {
         return isAutoCommit;
     }
