@@ -1,4 +1,18 @@
-
+/*
+ * Copyright (C) 2020 Seomse Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.seomse.jdbc.admin;
 
@@ -24,17 +38,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <pre>
- *  파 일 명 : RowDataInOut.java
- *  설    명 : 다른 DB 계정관의 데이터이관 기능
+ * 다른 db 계정간의 데이터 전송 이관 기능 지원
+ * data 백업, 복원기능 지원 (데이터만 스키마는 안됨)
  *
- *  작 성 자 : macle
- *  작 성 일 : 2019.06.07
- *  버    전 : 1.0
- *  수정이력 :
- *  기타사항 :
- * </pre>
- * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
+ * @author macle
  */
 public class RowDataInOut {
 
@@ -57,7 +64,8 @@ public class RowDataInOut {
 
 	/**
 	 * 최대 메모리 저장 개수 설정
-	 * @param maxDataCount MaxCommit
+	 * 최대 건수가 넘어 가면 commit 함
+	 * @param maxDataCount int maxDataCount
 	 */
 	public void setMaxDataCount(int maxDataCount) {
 		this.maxDataCount = maxDataCount;
@@ -65,13 +73,19 @@ public class RowDataInOut {
 
 
 	/**
-	 * 테이블파일 홈경로를 설정
-	 * @param fileHome FileHome
+	 * 테이블 파일 홈 경로를 설정 (dir path)
+	 * @param fileHome string FileHome
 	 */
 	public void setFileHome(String fileHome) {
 		this.fileHome = fileHome;
 	}
 
+
+	/**
+	 * db 유형 설정
+	 * oracle, maria 등
+	 * @param dbType marla db
+	 */
 	public void setDbType(String dbType) {
 		this.dbType = dbType;
 	}
@@ -85,8 +99,8 @@ public class RowDataInOut {
 	}
 
 	/**
-	 * 테이블데이터를 파일로 추출한다
-	 * @param tableArray tableArray
+	 * 테이블 데이터를 파일로 츠츨
+	 * @param tableArray string [] table name array
 	 */
 	public void dataOut(String [] tableArray){
 		ApplicationConnectionPool applicationConnectionPool = ApplicationConnectionPool.getInstance();
@@ -99,8 +113,9 @@ public class RowDataInOut {
 
 	private int dataCount = 0;
 	/**
-	 * 테이블데이터를 파일로 추출한다
-	 * @param tableArray tableArray
+	 * 테이블 데이터를 파일로 츠츨
+	 * @param conn Connection
+	 * @param tableArray string [] table name array
 	 */
 	public void dataOut(Connection conn, String [] tableArray){
 
@@ -150,8 +165,8 @@ public class RowDataInOut {
 	}
 
 	/**
-	 * 파일로 추출된 데이터를 DB에 추가한다.
-	 * @param tableArray tableArray
+	 * 추출된 파일중 테이블 이름에 해당하는 데이터를 db 에 insert
+	 * @param tableArray  string [] table name array
 	 */
 	public void dataIn( String [] tableArray){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -168,8 +183,8 @@ public class RowDataInOut {
 	/**
 	 * 파일로 추출된 데이터를 DB에 추가한다.
 	 * mysql 의 경우  Connection setAutoCommit 을 false 로 하는게 좋음
-	 *
-	 * @param tableArray tableArray
+	 * @param conn Connection
+	 * @param tableArray string [] table name array
 	 */
 	public void dataIn(Connection conn, String [] tableArray){
 
@@ -211,6 +226,11 @@ public class RowDataInOut {
 		}
 	}
 
+	/**
+	 * list data insert
+	 * @param conn Connection
+	 * @param insertList List<Map<String,Object>> insert data list
+	 */
 	private void dataInsert(Connection conn, List<Map<String,Object>> insertList ){
 		try {
 			JdbcNamingMap.insert(conn, insertList);
@@ -227,9 +247,9 @@ public class RowDataInOut {
 
 
 	/**
-	 * 모든 테이블의 전체데이터를 맞춘다.
-	 * @param selectConn 복사대상테이블
-	 * @param insertConn 복사테이블
+	 * 전체 테이블 싱크
+	 * @param selectConn Connection select
+	 * @param insertConn Connection insert
 	 */
 	public void allTableSync(Connection selectConn, Connection insertConn){
 		List<String> tableList = JdbcQuery.getStringList(Database.getTableListSql(dbType));
@@ -237,9 +257,9 @@ public class RowDataInOut {
 	}
 
 	/**
-	 * 모든 테이블의 전체데이터를 복사한다
-	 * @param selectConn 복사대상테이블
-	 * @param insertConn 복사테이블
+	 * 전체 테이블 복사
+	 * @param selectConn Connection select
+	 * @param insertConn Connection insert
 	 */
 	public void allTableCopy(Connection selectConn, Connection insertConn){
 		List<String> tableList = JdbcQuery.getStringList(Database.getTableListSql(dbType));
@@ -248,9 +268,10 @@ public class RowDataInOut {
 
 
 	/**
-	 * 테이블의 전체데이터를 맞춘다. (truncate 사용)
-	 * @param selectConn 복사대상테이블
-	 * @param insertConn 복사테이블
+	 * table sync (truncate 사용)
+	 * @param selectConn Connection select
+	 * @param insertConn Connection insert
+	 * @param tables string [] table name array
 	 */
 	public void tableSync(Connection selectConn, Connection insertConn, String [] tables){
 
@@ -267,11 +288,12 @@ public class RowDataInOut {
 	}
 
 	/**
-	 * 테이블의 전체데이터를 맞춘다. (delete 사용)
-	 * @param selectConn 복사대상테이블
-	 * @param insertConn 복사테이블
+	 * table sync (delete 사용)
+	 * @param selectConn Connection select
+	 * @param insertConn Connection insert
+	 * @param tables string [] table name array
 	 */
-	public  void tableSyncToDelete(Connection selectConn, Connection insertConn, String [] tables){
+	public void tableSyncToDelete(Connection selectConn, Connection insertConn, String [] tables){
 
 		for(String table : tables){
 			try{
@@ -287,9 +309,10 @@ public class RowDataInOut {
 	}
 
 	/**
-	 * 테이블의 전체데이터를 복사한다
-	 * @param selectConn 복사대상테이블
-	 * @param insertConn 복사테이블
+	 * table copy
+	 * @param selectConn Connection select
+	 * @param insertConn Connection insert
+	 * @param tables string [] table name array
 	 */
 	public void tableCopy(Connection selectConn, Connection insertConn, String [] tables){
 
@@ -302,11 +325,12 @@ public class RowDataInOut {
 			}
 		}
 	}
+
 	/**
-	 * 테이블 복사
-	 * @param selectConn selectConn
-	 * @param insertConn insertConn
-	 * @param table table
+	 * table copy
+	 * @param selectConn Connection select
+	 * @param insertConn Connection insert
+	 * @param table string table name
 	 */
 	public void tableCopy(Connection selectConn, final Connection insertConn, String table){
 		final List<Map<String, Object>> dataList = new ArrayList<>();
@@ -324,6 +348,11 @@ public class RowDataInOut {
 		}
 	}
 
+	/**
+	 * data insert
+	 * @param conn Connection
+	 * @param dataList List<Map<String, Object>> insert data list
+	 */
 	private void insert(Connection conn, List<Map<String, Object>> dataList){
         JdbcNamingMap.insert(conn, dataList);
         try{
