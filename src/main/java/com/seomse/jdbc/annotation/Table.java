@@ -1,4 +1,18 @@
-
+/*
+ * Copyright (C) 2020 Seomse Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.seomse.jdbc.annotation;
 import java.lang.annotation.ElementType;
@@ -6,17 +20,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 /**
- * <pre>
- *  파 일 명 : Table.java
- *  설    명 : Table에대한 기본옵션을 가지고있는 어노테이션
- *
- *  작 성 자 : macle
- *  작 성 일 : 2017.08
- *  버    전 : 1.0
- *  수정이력 :
- *  기타사항 :
- * </pre>
- * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
+ * 테이블 지정
+ * 필수 조건
+ * @author macle
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -26,40 +32,39 @@ public @interface Table {
 	
 	/**
 	 * 테이블명
-	 * @return 테이블명
+	 * @return String 테이블명
 	 */
 	String name() default EMPTY;
 	
 	/**
 	 * 쿼리 
-	 * @return 쿼리
+	 * @return String 쿼리
 	 */
 	String sql() default EMPTY;
 	
 	/**
 	 * 조건
-	 * @return 조건
+	 * @return String 조건
 	 */
-	 String where()  default EMPTY;
+	String where()  default EMPTY;
 	
 	 /**
 	  * 정렬
-	  * @return 정렬조건
+	  * @return String 정렬조건
 	  */
 	 String orderBy() default EMPTY;
 	 
-	 
-	 
+
 	 /**
 	  * row가 너무많은경우 최대max개수 지정
-	  * @return max개수
+	  * @return int max개수
 	  */
 	 int size() default -1;
 	 
 	 
 	 /**
 	  * DB에서 데이터를 가져오는 단위수
-	  * @return 데이터 단위 개수
+	  * @return int 데이터 단위 개수
 	  */
 	 int fetchSize() default 10;
 	 
