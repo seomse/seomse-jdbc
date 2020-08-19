@@ -27,5 +27,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DateTime {
+	/**
+	 * 널 가능여부
+	 * @return boolean default true
+	 */
 	boolean isNullable() default true;
 }

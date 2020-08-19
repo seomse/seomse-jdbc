@@ -27,10 +27,11 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PrimaryKey {
-	
+
+	/**
+	 * 기본키 순번
+	 * @return int
+	 */
 	 int seq() default -1;
-	
-	 String dateFormatter() default "";
-	
-	
+
 }

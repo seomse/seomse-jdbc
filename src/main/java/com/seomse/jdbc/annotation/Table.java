@@ -48,24 +48,24 @@ public @interface Table {
 	 */
 	String where()  default EMPTY;
 	
-	 /**
-	  * 정렬
-	  * @return String 정렬조건
-	  */
-	 String orderBy() default EMPTY;
+	/**
+	 * 정렬
+	 * @return String 정렬조건
+	 */
+	String orderBy() default EMPTY;
 	 
 
-	 /**
-	  * row가 너무많은경우 최대max개수 지정
-	  * @return int max개수
-	  */
-	 int size() default -1;
+	/**
+	 * row가 너무많은경우 최대max개수 지정
+	 * @return int max개수
+	 */
+	int size() default -1;
 	 
 	 
-	 /**
-	  * DB에서 데이터를 가져오는 단위수
-	  * @return int 데이터 단위 개수
-	  */
-	 int fetchSize() default 10;
+	/**
+	 * DB에서 데이터를 가져오는 단위수
+	 * @return int 데이터 단위 개수
+	 */
+	int fetchSize() default 10;
 	 
 }

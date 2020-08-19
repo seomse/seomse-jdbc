@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2020 Seomse Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.seomse.jdbc.common;
 
 import com.seomse.jdbc.Database;
@@ -18,22 +33,20 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * <pre>
- *  파 일 명 : JdbcCommon.java
- *  설    명 : stmt 와 ResultSet 관련 처리
- *
- *  작 성 자 : macle
- *  작 성 일 : 2019.10.18
- *  버    전 : 1.0
- *  수정이력 :
- *  기타사항 :
- * </pre>
- * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
+ * jdbc common method util
+ * @author macle
  */
 public class JdbcCommon {
 
 
-
+    /**
+     *
+     * @param conn Connection
+     * @param sql String
+     * @param prepareStatementDataMap Map<Integer, PrepareStatementData>
+     * @return StmtResultSet
+     * @throws SQLException
+     */
     public static StmtResultSet makeStmtResultSet(Connection conn, String sql,  Map<Integer, PrepareStatementData> prepareStatementDataMap) throws SQLException {
 
         StmtResultSet stmtResultSet = new StmtResultSet();
@@ -52,9 +65,12 @@ public class JdbcCommon {
         return stmtResultSet;
     }
 
+
     /**
      * prepareStatementDataMap 을 이용한 stmt 설정
-     * @param prepareStatementDataMap prepareStatementDataMap
+     * @param pstmt PreparedStatement
+     * @param prepareStatementDataMap  Map<Integer, PrepareStatementData>
+     * @throws SQLException
      */
     public static void setStmt(PreparedStatement pstmt, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws SQLException {
         Set<Integer> indexSet = prepareStatementDataMap.keySet();
@@ -75,6 +91,15 @@ public class JdbcCommon {
         }
     }
 
+    /**
+     *
+     * @param obj  T jdbc object
+     * @param fields Field []
+     * @param pstmt PreparedStatement
+     * @param <T> T jdbc object
+     * @throws IllegalAccessException
+     * @throws SQLException
+     */
     public static <T> void addBatch(T obj, Field [] fields, PreparedStatement pstmt ) throws IllegalAccessException, SQLException {
         for(int i=0 ; i<fields.length ; i++){
 
@@ -86,15 +111,22 @@ public class JdbcCommon {
 
             }else{
                 setPstmt(obj,object, fields[i], pstmt, i);
-
-
             }
 
         }
-
         pstmt.addBatch();
     }
 
+    /**
+     *
+     * @param obj T jdbc object
+     * @param field Field
+     * @param pstmt PreparedStatement
+     * @param i int index
+     * @param <T> T jdbc object
+     * @throws SQLException
+     * @throws IllegalAccessException
+     */
     public static <T> void setNullPstmt(T obj, Field field, PreparedStatement pstmt, int i) throws SQLException, IllegalAccessException {
         Sequence sequence = field.getAnnotation(Sequence.class);
         if(sequence != null){
@@ -117,6 +149,17 @@ public class JdbcCommon {
 
     }
 
+    /**
+     * PreparedStatement data set
+     * @param obj T jdbc object
+     * @param object Object field set data
+     * @param field Field
+     * @param pstmt PreparedStatement
+     * @param i int index
+     * @param <T> T jdbc object
+     * @throws SQLException
+     * @throws IllegalAccessException
+     */
     public static <T> void setPstmt(T obj, Object object,Field field, PreparedStatement pstmt, int i) throws SQLException, IllegalAccessException {
 
         if(field.getType().isEnum()){
@@ -159,9 +202,9 @@ public class JdbcCommon {
         }
     }
 
-
-
-
+    /**
+     * pk sort
+     */
     public final static Comparator<Field> PK_SORT_ASC = Comparator.comparingInt(f -> f.getAnnotation(PrimaryKey.class).seq());
 
 }

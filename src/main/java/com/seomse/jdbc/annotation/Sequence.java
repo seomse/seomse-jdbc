@@ -30,13 +30,13 @@ public @interface Sequence {
 	
 	/**
 	 * 시퀀스명
-	 * @return 시퀀스명
+	 * @return string 시퀀스명
 	 */
 	String name();
 	
 	/**
 	 * 앞쪽에 붙는 문자열 
-	 * @return 시퀀스 앞 문자
+	 * @return string 시퀀스 앞 문자
 	 */
 	String prefix() default "";
 	

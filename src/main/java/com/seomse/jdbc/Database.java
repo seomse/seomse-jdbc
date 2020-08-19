@@ -64,10 +64,10 @@ public class Database {
 		dbType = dbType.toLowerCase();
 		if(dbType.startsWith("oracle") || dbType.startsWith("tibero")){
 			return "SELECT SYSTIMESTAMP FROM DUAL";
-		}else if(dbType.startsWith("mssql") || dbType.startsWith("ms-sql")){
-			return "SELECT GETDATE()";
 		}else if(dbType.startsWith("mysql") || dbType.startsWith("maria")){
 			return "SELECT now()";
+		}else if(dbType.startsWith("mssql") || dbType.startsWith("ms-sql")){
+			return "SELECT GETDATE()";
 		}
 		
 		
