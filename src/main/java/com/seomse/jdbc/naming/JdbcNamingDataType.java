@@ -229,27 +229,25 @@ public class JdbcNamingDataType {
 	
 	public JdbcDataType getType(String columnName){
 		if(isFront && isBack){
+			JdbcDataType type;
 			if(isFrontPriority){
-				JdbcDataType type = front(columnName);
-				if(type != null){
-					return type;
-				}
-				type = back(columnName);
-				if(type != null){
-					return type;
-				}
-				
-			}else{
-				JdbcDataType type = back(columnName);
-				if(type != null){
-					return type;
-				}
 				type = front(columnName);
 				if(type != null){
 					return type;
 				}
+				type = back(columnName);
+
+			}else{
+				type = back(columnName);
+				if(type != null){
+					return type;
+				}
+				type = front(columnName);
 			}
-			
+			if(type != null){
+				return type;
+			}
+
 		}else if(isFront){
 			JdbcDataType type = front(columnName);
 			if(type != null){
@@ -257,9 +255,13 @@ public class JdbcNamingDataType {
 			}
 		}else if(isBack){
 			JdbcDataType type = back(columnName);
+
 			if(type != null){
 				return type;
 			}
+
+
+
 		}
 		return defaultDataType;
 	}

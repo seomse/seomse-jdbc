@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -165,6 +166,13 @@ public class RowDataInOut {
 	}
 
 	/**
+	 * 추출된 파일 경로에 있는 모든 파일 insert
+	 */
+	public void dataIn(){
+		dataIn(new File(fileHome).list());
+	}
+
+	/**
 	 * 추출된 파일중 테이블 이름에 해당하는 데이터를 db 에 insert
 	 * @param tableArray  string [] table name array
 	 */
@@ -196,7 +204,7 @@ public class RowDataInOut {
 		List<Map<String,Object>> insertList = new ArrayList<>();
 		for(String tableName : tableArray){
 
-			logger.info(tableName);
+			logger.info("data in: " + tableName+"\n");
 			String fileName =fileHome+tableName;
 
 			BufferedReader br ;
@@ -233,12 +241,13 @@ public class RowDataInOut {
 	 */
 	private void dataInsert(Connection conn, List<Map<String,Object>> insertList ){
 		try {
+
 			JdbcNamingMap.insert(conn, insertList);
 
 			if (!conn.getAutoCommit()) {
 				conn.commit();
 			}
-		}catch(SQLException e){
+		}catch(Exception e){
 			logger.error(ExceptionUtil.getStackTrace(e));
 		}
 		insertList.clear();

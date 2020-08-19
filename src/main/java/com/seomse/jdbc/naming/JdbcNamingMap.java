@@ -184,7 +184,7 @@ public class JdbcNamingMap {
             JdbcDataType dataType = jdbcNamingDataType.getType(columnName);
 
 			if( obj != null){
-				if(dataType == JdbcDataType.DATE_TIME &&  (obj.getClass() == Long.class || obj.getClass() == Integer.class )){
+				if(dataType == JdbcDataType.DATE_TIME &&  (obj.getClass() == Long.class || obj.getClass() == Integer.class || obj.getClass() == Double.class || obj.getClass() == Float.class)){
 					classes = Timestamp.class;
 				}else{
 					classes = obj.getClass();
@@ -235,6 +235,7 @@ public class JdbcNamingMap {
 				for(i=0 ; i<nameClassArray.length ; i++){
 					Object object =data.get(nameClassArray[i].getColumnName());
 
+
 					if(object == null){
 						pstmt.setNull(i+1,  Types.NULL);
 						continue;
@@ -263,12 +264,16 @@ public class JdbcNamingMap {
 
 							if(object.getClass() == Integer.class){
 								value = (long) (int) (Integer)object;
+							}else if(object.getClass() == Double.class){
+								value =(long) (double) (Double)object;
+							}else if(object.getClass() == Float.class){
+								value =(long) (float) (Float)object;
 							}else{
 								value =(Long)object;
 							}
 
-
 							Timestamp timeStamp = new Timestamp(value);
+
 							pstmt.setTimestamp(i+1, timeStamp);
 						}else if(nameClassArray[i].getClasses() == Long.class){
 							pstmt.setLong(i+1, (Long)object);
@@ -280,7 +285,6 @@ public class JdbcNamingMap {
 							pstmt.setDouble(i+1, (Double)object);
 						}
 					}catch(Exception e){
-
 					    Class<?> objClasses = 	object.getClass();
 						if(objClasses == Timestamp.class){
 							pstmt.setTimestamp(i+1, (Timestamp)object);
