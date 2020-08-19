@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2020 Seomse Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.seomse.jdbc.connection;
 
 
@@ -12,19 +27,9 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-
 /**
- * <pre>
- *  파 일 명 : ApplicationConnectionPool.java
- *  설    명 : 어플리케이션 기본 connection pool
- *            seomse 설정 활용
- *  작 성 자 : macle
- *  작 성 일 : 2019.02
- *  버    전 : 1.1
- *  수정이력 : 2019.12.19
- *  기타사항 :
- * </pre>
- * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
+ * default application connection pool
+ * @author macle
  */
 public class ApplicationConnectionPool {
 
@@ -36,7 +41,7 @@ public class ApplicationConnectionPool {
 
     /**
      * 싱글인스턴스 얻기
-     * @return ApplicationConnectionPool
+     * @return ApplicationConnectionPool Singleton instance
      */
     public static ApplicationConnectionPool getInstance (){
         return Singleton.instance;
@@ -51,6 +56,10 @@ public class ApplicationConnectionPool {
 
     }
 
+    /**
+     * Singleton instance 생성
+     * @return ApplicationConnectionPool 
+     */
     public ApplicationConnectionPool configBuild(){
         try{
             setConfigConnectionInfo();
@@ -187,6 +196,10 @@ public class ApplicationConnectionPool {
         }
     }
 
+    /**
+     * data source set
+     *  Hikari
+     */
     public void setDataSource(){
         HikariConfig config = new HikariConfig();
 
@@ -202,10 +215,9 @@ public class ApplicationConnectionPool {
 
     /**
      * 설정정보 유효성여부
-     * @param value 설정된 값
-     * @param keyMessage 설정 키와 관련된 에러 메시지
-
-     * @return 설정값이 있는지 여부
+     * @param value String 설정된 값
+     * @param keyMessage String 설정 키와 관련된 에러 메시지
+     * @return boolean 설정값이 있는지 여부
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isConfig(String value, String keyMessage){
@@ -252,7 +264,7 @@ public class ApplicationConnectionPool {
     /**
      * jdbc 종류 얻기
      * oracle mysql 등
-     * @return jdbc oracle mysql 등
+     * @return string jdbc type oracle mysql 등
      */
     public String getJdbcType(){
         return jdbcType;
@@ -267,7 +279,10 @@ public class ApplicationConnectionPool {
         return connection;
     }
 
-
+    /**
+     * auto commit 여부 얻기
+     * @return boolean auto commit flag
+     */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isAutoCommit() {
         return isAutoCommit;
@@ -275,8 +290,8 @@ public class ApplicationConnectionPool {
 
     /**
      * 연결정보로 connection 을 생성해서 활용할떄
-     * @param isAutoCommit
-     * @return
+     * @param isAutoCommit boolean  auto commit 여부
+     * @return Connection
      */
     public Connection newConnection(boolean isAutoCommit){
         try {
@@ -289,47 +304,91 @@ public class ApplicationConnectionPool {
 
     }
 
-
+    /**
+     * connectionTimeOut set milli second
+     * @param connectionTimeOut long time out (milli second)
+     */
     public void setConnectionTimeOut(long connectionTimeOut) {
         this.connectionTimeOut = connectionTimeOut;
     }
 
+    /**
+     * validationTimeOut set
+     * @param validationTimeOut long time out (milli second)
+     */
     public void setValidationTimeOut(long validationTimeOut) {
         this.validationTimeOut = validationTimeOut;
     }
 
+    /**
+     * 컨넥션이 될떄 까지 기다 릴지 여부
+     * @param connectionWait boolean
+     */
     public void setConnectionWait(boolean connectionWait) {
         isConnectionWait = connectionWait;
     }
 
+    /**
+     * 컨넥션 재연결 반복 시도 주기
+     * @param connectionWaitTryTime long  (milli second)
+     */
     public void setConnectionWaitTryTime(long connectionWaitTryTime) {
         this.connectionWaitTryTime = connectionWaitTryTime;
     }
 
+    /**
+     * auto commit set
+     * @param autoCommit boolean
+     */
     public void setAutoCommit(boolean autoCommit) {
         isAutoCommit = autoCommit;
     }
 
+    /**
+     * connection count set
+     * @param connectionPoolCount int
+     */
     public void setConnectionPoolCount(int connectionPoolCount) {
         this.connectionPoolCount = connectionPoolCount;
     }
 
+    /**
+     * jdbc type (oracle, maria, etc ...)
+     * @param jdbcType string
+     */
     public void setJdbcType(String jdbcType) {
         this.jdbcType = jdbcType;
     }
 
+    /**
+     * url set
+     * @param url string
+     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /**
+     * user id set
+     * @param userId string
+     */
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
+    /**
+     * password set
+     * @param password string
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * 알맞는 db 유형이 아닐때
+     * 유명하지 않은 DB일때 직접 전체 경로 설정
+     * @param databaseTypeOrFullPackage string
+     */
     public void setDatabaseTypeOrFullPackage(String databaseTypeOrFullPackage) {
         this.databaseTypeOrFullPackage = databaseTypeOrFullPackage;
     }

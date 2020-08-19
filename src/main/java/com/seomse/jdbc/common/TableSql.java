@@ -24,6 +24,13 @@ import com.seomse.jdbc.exception.TableNameEmptyException;
  */
 public class TableSql {
 
+    /**
+     * table annotation 을 활용하여 생성한 쿼리 얻기 
+     * @param table Table annotation
+     * @param whereValue String
+     * @param orderByValue String
+     * @return String query
+     */
     public static String getWhereOrderBySql(Table table, String whereValue, String orderByValue){
 
         StringBuilder sqlBuilder = new StringBuilder();
@@ -48,6 +55,12 @@ public class TableSql {
         return sqlBuilder.toString();
     }
 
+    /**
+     * 테이블 명 얻기
+     * @param table Table  annotation
+     * @param objClassName String class name
+     * @return String trble name
+     */
     public static String getTableName(Table table, String objClassName){
         String tableName = table.name();
         if(tableName.equals(Table.EMPTY)){

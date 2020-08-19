@@ -1,19 +1,24 @@
+/*
+ * Copyright (C) 2020 Seomse Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.seomse.jdbc.example.objects;
 
 import com.seomse.jdbc.annotation.*;
 
 /**
- * <pre>
- *  파 일 명 : StockItem.java
- *  설    명 : 주식 종목
- *
- *  작 성 자 : macle(김용수)
- *  작 성 일 : 2019.11
- *  버    전 : 1.0
- *  수정이력 :
- *  기타사항 :
- * </pre>
- * @author Copyrights 2019 by ㈜모아라. All right reserved.
+ * @author macle
  */
 @Table(name="TB_STOCK_ITEM")
 public class StockItem {

@@ -33,10 +33,18 @@ public class StmtResultSet {
 
     }
 
+    /**
+     * Statement 얻기
+     * @return Statement
+     */
     public Statement getStmt() {
         return stmt;
     }
 
+    /**
+     * ResultSet 얻기
+     * @return ResultSet
+     */
     public ResultSet getResultSet() {
         return resultSet;
     }

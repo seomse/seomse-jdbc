@@ -13,11 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.seomse.jdbc.example.objects;
+
+package com.seomse.jdbc.example.admin;
+
+import com.seomse.jdbc.admin.RowDataInOut;
+
 /**
  * @author macle
  */
-public enum MarketType {
-    KOSPI //코스피
-    ,KOSDAQ //코스닥
+public class RowDataIn {
+    public static void main(String[] args) {
+        RowDataInOut dataInOut = new RowDataInOut();
+        dataInOut.dataIn();
+
+    }
 }

@@ -57,11 +57,7 @@ public class JdbcField {
             }else{
                 char ch = value.charAt(0);
                 ch = Character.toUpperCase(ch);
-                if(ch == 'Y'){
-                    field.set(resultObj, true);
-                }else{
-                    field.set(resultObj, false);
-                }
+                field.set(resultObj, ch == 'Y');
             }
 
             return;

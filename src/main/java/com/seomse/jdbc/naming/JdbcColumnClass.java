@@ -15,13 +15,13 @@ package com.seomse.jdbc.naming;
  * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
  */
 public class JdbcColumnClass {
-	private String columnName;
+	private final String columnName;
 	private Class<?> classes;
 	
 	/**
 	 * 생성자
-	 * @param columnName 컬럼명
-	 * @param classes 사용자바 클래스
+	 * @param columnName String 컬럼명
+	 * @param classes Class<?>   클래스
 	 */
 	JdbcColumnClass(String columnName, Class<?> classes){
 		this.columnName = columnName;
@@ -30,19 +30,23 @@ public class JdbcColumnClass {
 	
 	/**
 	 * 컬럼이름 얻기
-	 * @return ColumnName
+	 * @return String Column Name
 	 */
 	public String getColumnName() {
 		return columnName;
 	}
 	/**
 	 * 컬럼 이름에 맞는 클래스를 얻기.
-	 * @return ColumnName To Class<?>
+	 * @return  Class<?>  ColumnName To Class
 	 */
 	public Class<?> getClasses() {
 		return classes;
 	}
 
+	/**
+	 * 클래스 설정
+	 * @param classes Class<?> 
+	 */
 	void setClasses(Class<?> classes) {
 		this.classes = classes;
 	}

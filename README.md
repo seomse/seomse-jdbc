@@ -82,7 +82,14 @@ public class StockItem {
     private MarketType marketType = MarketType.KOSPI;
 }
 ```
- 
+
+### query
+- query(sql)를 활용한 다양한 유틸성 클래스 지원 
+- com.seomse.jdbc.JdbcQuery
+- public static List<Map<String, String>> getMapStringList(String sql);
+- public static String getResultOne(String sql)
+- 위와 같은 유틸성 method 지원
+
 # gradle
  - 아직 미지원
 
