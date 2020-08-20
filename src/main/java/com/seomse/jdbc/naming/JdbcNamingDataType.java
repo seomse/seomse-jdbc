@@ -26,19 +26,10 @@ import org.slf4j.LoggerFactory;
 import com.seomse.commons.config.Config;
 import com.seomse.commons.config.ConfigObserver;
 /**
- * <pre>
- *  파 일 명 : JdbcNamingDataType.java
- *  설    명 : Jdbc명명 규칙의 데이터 유형 
- *         
- *  작 성 자 : macle
- *  작 성 일 : 2017.09
- *  버    전 : 1.1
- *  수정이력 : 2019.10.17
- *  기타사항 :
- * </pre>
- * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
+ * naming data type 관리
+ * 설정 정보 활용
+ * @author macle
  */
-
 public class JdbcNamingDataType {
 	private static final Logger logger = LoggerFactory.getLogger(JdbcNamingDataType.class);	
 	
@@ -66,14 +57,14 @@ public class JdbcNamingDataType {
 	
 	private JdbcDataType defaultDataType = JdbcDataType.STRING;
 	
-	private Map<JdbcDataType, TypeAndHeader> typeHeaderMap;
+	private final Map<JdbcDataType, TypeAndHeader> typeHeaderMap;
 	
 	// null 방지 
 	private TypeAndHeader [] sortArray = new TypeAndHeader[0];
 	
-	private Map<String, JdbcDataType> typeKeyMap;
+	private final Map<String, JdbcDataType> typeKeyMap;
 	
-	private String [] typeKeyArray = {
+	private final String [] typeKeyArray = {
 			"string"
 			,"double"
 			,"integer"
@@ -121,34 +112,29 @@ public class JdbcNamingDataType {
 		
 		
 		
-		ConfigObserver configObserver = new ConfigObserver() {
+		ConfigObserver configObserver = configInfos -> {
 
-			@Override
-			public void updateConfig(ConfigInfo[] configInfos) {
-
-				outer:
-				for(ConfigInfo configInfo : configInfos){
-					if(configInfo.getKey().equals(headerPositionKey)){
-						setHeaderPosition(configInfo.getValue());
-						continue;
-					}else if(configInfo.getKey().equals(defaultKey)){
-						setDefaultKey(configInfo.getValue());
-						continue;
-					}
+			outer:
+			for(ConfigInfo configInfo : configInfos){
+				if(configInfo.getKey().equals(headerPositionKey)){
+					setHeaderPosition(configInfo.getValue());
+					continue;
+				}else if(configInfo.getKey().equals(defaultKey)){
+					setDefaultKey(configInfo.getValue());
+					continue;
+				}
 
 
-					for(String typeKey : typeKeyArray){
-						if(configInfo.getKey().equals("application.jdbc.naming." + typeKey)){
-							setTypeHeader(typeKey, configInfo.getValue());
-							continue outer;
-						}
-					}
-
-					if(configInfo.getKey().equals(seqKey)){
-						setSeq(configInfo.getValue());
+				for(String typeKey : typeKeyArray){
+					if(configInfo.getKey().equals("application.jdbc.naming." + typeKey)){
+						setTypeHeader(typeKey, configInfo.getValue());
+						continue outer;
 					}
 				}
 
+				if(configInfo.getKey().equals(seqKey)){
+					setSeq(configInfo.getValue());
+				}
 			}
 
 		};
@@ -228,9 +214,9 @@ public class JdbcNamingDataType {
 
 	}
 	
-	private class TypeAndHeader{
+	private static class TypeAndHeader{
 		private String [] headerArray = JdbcNull.EMPTY_STRING_ARRAY;
-		private JdbcDataType dataType;
+		private final JdbcDataType dataType;
 		private TypeAndHeader(JdbcDataType jdbcDataType){
 			dataType = jdbcDataType;
 		}

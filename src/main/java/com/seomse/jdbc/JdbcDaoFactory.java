@@ -17,18 +17,9 @@ package com.seomse.jdbc;
 
 import com.seomse.commons.config.Config;
 import com.seomse.jdbc.exception.DaoClassNotFoundException;
-/** 
- * <pre>
- *  파 일 명 : JdbcDaoFactory.java
- *  설    명 : Dao 생성 
- *         
- *  작 성 자 : macle
- *  작 성 일 : 2017.09
- *  버    전 : 1.0
- *  수정이력 : 
- *  기타사항 :
- * </pre>
- * @author Copyrights 2017 by ㈜섬세한사람들. All right reserved.
+/**
+ * JdbcDaoFactory
+ * @author macle
  */
 public class JdbcDaoFactory {
 
@@ -37,8 +28,8 @@ public class JdbcDaoFactory {
 	
 	/**
 	 * Dao객체 생성
-	 * @param daoClass daoClass
-	 * @return ImplDaoClass
+	 * @param daoClass string daoClass
+	 * @return  <T> ImplDaoClass
 	 */
 	public static <T> T getDao(Class<T> daoClass){
 		return getDao(daoClass, Config.getConfig(TYPE_KEY));
@@ -46,9 +37,9 @@ public class JdbcDaoFactory {
 	
 	/**
 	 * Moara에서 사용하는 JDBC Dao를 생성하여 돌려준다.
-	 * @param daoClass daoClass
-	 * @param dbType dataBaseType
-	 * @return ImplDaoClass
+	 * @param daoClass Class<T>  daoClass
+	 * @param dbType string dataBaseType
+	 * @return <T>  ImplDaoClass
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getDao(Class<T> daoClass, String dbType){
@@ -77,7 +68,7 @@ public class JdbcDaoFactory {
 		}
 		T t ;
 		try{
-			//noinspection deprecation
+
 			t = (T) makeDaoClass.newInstance();
 		}catch(Exception e){
 			throw new DaoClassNotFoundException(	 "Class Not Found  " 

@@ -27,19 +27,10 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * <pre>
- *  파 일 명 : JdbcNamingMap.java
- *  설    명 : DB네이밍 룰을 이용하여 맵형태의 데이터를 생성
- *            테이블 전체정보에대한 컨트롤을 편하게 하기위해 사용
- *            특별한 클래스 생성없이 Map에 column, data 형태의 List 로 데이터 관리
-
- *  작 성 자 : macle
- *  작 성 일 : 2019.06.06
- *  버    전 : 1.1
- *  수정이력 : 2019.10.17
- *  기타사항 :
- * </pre>
- * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
+ * naming domain header 를 이용 하여 
+ * Map<String, Object>를 row로 출력하여 사용함
+ * db 의 데이터 이간에 활용 됨
+ * @author macle
  */
 public class JdbcNamingMap {
 

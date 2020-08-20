@@ -34,17 +34,8 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * <pre>
- *  파 일 명 : JdbcNaming.java
- *  설    명 : 명명규칙을 활용한 jdbc활용
- *         
- *  작 성 자 : macle
- *  작 성 일 : 2017.09
- *  버    전 : 1.5
- *  수정이력 :  2017.11, 2018.04, 2018.07, 2019.10, 2019.12.19
- *  기타사항 :
- * </pre>
- * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
+ * naming domain header 를 이용한 class 사용
+ * @author macle
  */
 public class JdbcNaming {
 

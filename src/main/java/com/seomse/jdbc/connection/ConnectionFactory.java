@@ -20,7 +20,7 @@ import java.sql.Driver;
 import java.sql.SQLException;
 
 /**
- * default application connection pool
+ * ConnectionFactory
  * @author macle
  */
 public class ConnectionFactory {
@@ -67,7 +67,7 @@ public class ConnectionFactory {
 	 *Connection 생성
 	 * @param databaseTypeOrDriverClass oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
 	 * @param urlText urlText
-	 * @return 연결정보
+	 * @return Connection
 	 */
 	public  static Connection  newConnection(String databaseTypeOrDriverClass, String urlText) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		Driver driver = newDriver(databaseTypeOrDriverClass);
@@ -79,7 +79,7 @@ public class ConnectionFactory {
 	/**
 	 * sqlite Connection 생성
 	 * @param sqliteDbFilePath sqlite 파일 경로
-	 * @return sqlite Connection
+	 * @return Connection sqlite Connection
 
 	 */
 	public synchronized static Connection  newConnectionSqlite(String sqliteDbFilePath) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
@@ -91,46 +91,35 @@ public class ConnectionFactory {
 	/**
 	 * Driver 생성
 	 * @param databaseTypeOrDriverClass oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
-	 * @return driver
+	 * @return Driver
 	 */
-	public  static Driver newDriver(String databaseTypeOrDriverClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	public static Driver newDriver(String databaseTypeOrDriverClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 		Driver driver ;
 		
 		String databaseType = databaseTypeOrDriverClass.toUpperCase().trim();
 
 		if(databaseType.equals("ORACLE")){
-			//noinspection deprecation
 			driver = (Driver)Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
 		}else if(databaseType.startsWith("MSSQL") || databaseType.startsWith("MS-SQL")){
-			//noinspection deprecation
 			driver = (Driver)Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
 		}else if(databaseType.startsWith("DB2")){
-			//noinspection deprecation
-			driver = (Driver)Class.forName("com.ibm.db2.jcc.DB2Driver").newInstance();	
+			driver = (Driver)Class.forName("com.ibm.db2.jcc.DB2Driver").newInstance();
 		}else if(databaseType.startsWith("UNISQL")){
-			//noinspection deprecation
-			driver = (Driver)Class.forName("unisql.jdbc.driver.UniSQLDriver").newInstance();	
+			driver = (Driver)Class.forName("unisql.jdbc.driver.UniSQLDriver").newInstance();
 		}else if(databaseType.startsWith("MYSQL")){
-			//noinspection deprecation
-			driver = (Driver)Class.forName("com.mysql.jdbc.Driver").newInstance();	
+			driver = (Driver)Class.forName("com.mysql.jdbc.Driver").newInstance();
 		}else if(databaseType.startsWith("SQLITE")){
-			//noinspection deprecation
-			driver = (Driver)Class.forName("org.sqlite.JDBC").newInstance();		
+			driver = (Driver)Class.forName("org.sqlite.JDBC").newInstance();
 		}else if(databaseType.startsWith("TIBERO")){
-			//noinspection deprecation
-			driver = (Driver)Class.forName("com.tmax.tibero.jdbc.TbDriver").newInstance();	
+			driver = (Driver)Class.forName("com.tmax.tibero.jdbc.TbDriver").newInstance();
 		}else if(databaseType.startsWith("DRILL")){
-			//noinspection deprecation
-			driver = (Driver)Class.forName("org.apache.drill.jdbc.Driver").newInstance();	
+			driver = (Driver)Class.forName("org.apache.drill.jdbc.Driver").newInstance();
 		}else if(databaseType.startsWith("MARIA")){
-			//noinspection deprecation
-			driver = (Driver)Class.forName("org.mariadb.jdbc.Driver").newInstance();	
+			driver = (Driver)Class.forName("org.mariadb.jdbc.Driver").newInstance();
 		}else if(databaseType.startsWith("HIVE")){
-			//noinspection deprecation
 			driver = (Driver)Class.forName("org.apache.hive.jdbc.HiveDriver").newInstance();
 		}
 		else{
-			//noinspection deprecation
 			 driver = (Driver)Class.forName(databaseTypeOrDriverClass).newInstance();
 		}		
 		return driver;
