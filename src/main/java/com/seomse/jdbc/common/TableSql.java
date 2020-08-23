@@ -59,7 +59,7 @@ public class TableSql {
      * 테이블 명 얻기
      * @param table Table  annotation
      * @param objClassName String class name
-     * @return String trble name
+     * @return String table name
      */
     public static String getTableName(Table table, String objClassName){
         String tableName = table.name();

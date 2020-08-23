@@ -29,12 +29,17 @@ import java.sql.Timestamp;
  */
 public class JdbcField {
 
+
+
     /**
-     * 필드를 활용한 Object 세팅
-     * @param result result
-     * @param field field
-     * @param columnName columnName
-     * @param resultObj resultObj
+     *  필드를 활용한 Object 세팅
+     * @param result ResultSet
+     * @param field result
+     * @param columnName String
+     * @param resultObj Object
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws SQLException
      */
     public static void setFieldObject(ResultSet result, Field field, String columnName, Object resultObj ) throws IllegalArgumentException, IllegalAccessException, SQLException{
         field.setAccessible(true);

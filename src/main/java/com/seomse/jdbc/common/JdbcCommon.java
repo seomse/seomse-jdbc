@@ -40,7 +40,7 @@ public class JdbcCommon {
 
 
     /**
-     *
+     * PreparedStatement ResultSet setting
      * @param conn Connection
      * @param sql String
      * @param prepareStatementDataMap Map<Integer, PrepareStatementData>
