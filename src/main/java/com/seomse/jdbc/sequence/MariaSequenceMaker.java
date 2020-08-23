@@ -18,17 +18,9 @@ package com.seomse.jdbc.sequence;
 import com.seomse.jdbc.JdbcQuery;
 
 /**
- * <pre>
- *  파 일 명 : MariaSequenceMaker.java
- *  설    명 : maria db sequence maker
+ * maria 유형의 시퀀스 생성기
  *
- *  작 성 자 : macle
- *  작 성 일 : 2019.09
- *  버    전 : 1.0
- *  수정이력 :
- *  기타사항 :
- * </pre>
- * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
+ * @author macle
  */
 public class MariaSequenceMaker implements SequenceMaker{
 

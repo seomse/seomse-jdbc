@@ -39,20 +39,20 @@ public class JdbcNamingMap {
 	public static final String TABLE_NAME = "TABLE_NAME^";
 
 	/**
-	 * 테이블의 모든정보를 가져온다.
-	 * @param tableName 테이블 명
-	 * @return data list
+	 * table 의 모든 데이터 얻기
+	 * @param tableName String table name
+	 * @return List<Map<String, Object>>
 	 */
 	public static List<Map<String, Object>> getDataList(String tableName) {
 		return 	getDataList(tableName, null, null );
 	}
 
 	/**
-	 * 테이블의 모든정보를 가져온다.
-	 * @param tableName 테이블명
-	 * @param whereValue 조건
-	 * @param prepareStatementDataMap 조건맵
-	 * @return data list
+	 * Table 데이터 얻기
+	 * @param tableName String table name
+	 * @param whereValue String where query
+	 * @param prepareStatementDataMap  Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @return List<Map<String, Object>>
 	 */
 	public static List<Map<String, Object>> getDataList( String tableName, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap)  {
 
@@ -63,11 +63,14 @@ public class JdbcNamingMap {
 			throw new RuntimeException(e);
 		}
 	}
+
 	/**
-	 * 테이블의 모든정보를 가져온다.
+	 * Table 데이터 얻기
 	 * @param conn Connection
-	 * @param tableName tableName
-	 * @return data list
+	 * @param tableName String table name
+	 * @param whereValue String where query
+	 * @param prepareStatementDataMap  Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @return List<Map<String, Object>>
 	 */
 	public static  List<Map<String, Object>> getDataList(Connection conn, String tableName, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) {
 		final List<Map<String, Object>> dataList = new ArrayList<>();
@@ -83,6 +86,12 @@ public class JdbcNamingMap {
 		return dataList;
 	}
 
+	/**
+	 * column sql get
+	 * @param tableName String table name
+	 * @param whereValue String where query
+	 * @return String
+	 */
 	private static String getAllColumnSql(String tableName, String whereValue){
 
 
@@ -95,12 +104,13 @@ public class JdbcNamingMap {
 	}
 
 
+
 	/**
 	 * data list insert
-	 * @param dataList data list
-	 * @return insert count
+	 * @param dataList List<Map<String, Object>>
+	 * @return int insert count
 	 */
-	public static <T> int insert(List<Map<String, Object>> dataList){
+	public static int insert(List<Map<String, Object>> dataList){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
 		try(Connection conn = connectionPool.getConnection()){
 
@@ -116,12 +126,12 @@ public class JdbcNamingMap {
 	}
 
 	/**
-	 * data list upsert
+	 * data list insert
 	 * @param conn Connection
-	 * @param dataList data list
-	 * @return upsert count
+	 * @param dataList List<Map<String, Object>>
+	 * @return int upsert count
 	 */
-	public static <T> int upsert(Connection conn,  List<Map<String, Object>> dataList) {
+	public static int upsert(Connection conn,  List<Map<String, Object>> dataList) {
 		return insert(conn, dataList, "UPSERT", true);
 	}
 
@@ -130,22 +140,25 @@ public class JdbcNamingMap {
 	/**
 	 * data list insert
 	 * @param conn Connection
-	 * @param dataList data list
-	 * @return insert count
+	 * @param dataList List<Map<String, Object>>
+	 * @return int insert count
 	 */
-	public static <T> int insert(Connection conn, List<Map<String, Object>> dataList){
+	public static int insert(Connection conn, List<Map<String, Object>> dataList){
 		return insert(conn, dataList, "INSERT", true);
 	}
 
 
+
+
 	/**
-	 *  data list insert or upsert
+	 * data list insert
 	 * @param conn Connection
-	 * @param dataList data list
-	 * @param insertQueryValue insert OR Upsert
-	 * @return  insert count
+	 * @param dataList List<Map<String, Object>>
+	 * @param insertQueryValue String
+	 * @param isClearParameters boolean
+	 * @return int insert count
 	 */
-	public static <T> int insert(Connection conn, List<Map<String, Object>> dataList, String insertQueryValue, boolean isClearParameters)  {
+	public static int insert(Connection conn, List<Map<String, Object>> dataList, String insertQueryValue, boolean isClearParameters)  {
 
 		if(dataList == null || dataList.size() == 0){
 			return 0 ;
@@ -331,6 +344,14 @@ public class JdbcNamingMap {
 		return successCount;
 	}
 
+	/**
+	 * 뎅이터를 건별로 handler로 전달 받아서 처리
+	 * @param conn Connection
+	 * @param tableName String
+	 * @param whereValue String
+	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param handler JdbcMapDataHandler
+	 */
 	public static void receiveData(Connection conn, String tableName, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap
 			, JdbcMapDataHandler handler){
 

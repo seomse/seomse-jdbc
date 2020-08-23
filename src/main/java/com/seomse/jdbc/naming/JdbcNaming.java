@@ -1038,7 +1038,10 @@ public class JdbcNaming {
 
 					String defaultValue = defaultValueMap.get(columnName);
 					if(defaultValue != null){
-						if(defaultValue.replace("'", "").toUpperCase().trim().equals("SYSDATE")){
+
+						defaultValue = defaultValue.replace("'", "").toUpperCase().trim();
+
+						if(defaultValue.equals("SYSDATE") || defaultValue.equals("NOW()") || defaultValue.equals("CURRENT_TIMESTAMP()")){
 							fieldBuilder.append( " = System.currentTimeMillis()" );
 						}
 					}

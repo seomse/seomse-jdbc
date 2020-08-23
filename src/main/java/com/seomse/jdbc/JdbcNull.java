@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 package com.seomse.jdbc;
-
+/**
+ * Jdbc null 유형 정의
+ * @author macle
+ */
 public class JdbcNull {
+    /**
+     * jdbc 에서 사용 하는 string empty 유형
+     */
     public static final String [] EMPTY_STRING_ARRAY = new String[0];
 }

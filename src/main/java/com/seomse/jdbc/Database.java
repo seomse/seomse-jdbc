@@ -28,18 +28,10 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-/** 
- * <pre>
- *  파 일 명 : Database.java
- *  설    명 : DB의 정보활용 클래스
- *         
- *  작 성 자 : macle
- *  작 성 일 : 2017.09
- *  버    전 : 1.3
- *  수정이력 : 2019.02, 2019.06, 2019.11
- *  기타사항 :
- * </pre>
- * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
+
+/**
+ * Database system use
+ * @author macle
  */
 public class Database {
 
@@ -47,32 +39,30 @@ public class Database {
 
 	private static final SequenceMaker sequenceMaker = SequenceMakerFactory.make(ApplicationConnectionPool.getInstance().getJdbcType());
 
-
 	/**
-	 * 시퀀스 값 얻기
-	 * @param sequenceName 시퀀스 명
-	 * @return 스퀀스값
+	 *
+	 * @param sequenceName String sequence name
+	 * @return String sequence value
 	 */
 	public static String nextVal(String sequenceName){
 		return sequenceMaker.nextVal(sequenceName);
 	}
-	
-	
-	/**
-	 * DB 서버 시간정보 얻기
-	 * @return DB 서버 시간정보
-	 */
-	public static Long getDateTime(){
 
+	/**
+	 * database server time
+	 * unix time
+	 * @return long
+	 */
+	public static long getDateTime(){
 
 		return getDateTime(getSysDateQuery(ApplicationConnectionPool.getInstance().getJdbcType()));
 		
 	}
 
 	/**
-	 * DB유형에 맞는 시간을 가져올수 있는 쿼리목록
-	 * @param dbType db 유형
-	 * @return db 서버 시간 얻는 쿼리
+	 * time sql
+	 * @param dbType String database type
+	 * @return String sql
 	 */
 	public static String getSysDateQuery(String dbType){
 		dbType = dbType.toLowerCase();
@@ -83,15 +73,13 @@ public class Database {
 		}else if(dbType.startsWith("mssql") || dbType.startsWith("ms-sql")){
 			return "SELECT GETDATE()";
 		}
-		
-		
 		throw new NotDbTypeException(dbType);
 	}
-	
+
 	/**
-	 * DB 유형에 맞는 Date 호출 값 얻기
-	 * @param dbType db 유형
-	 * @return date 가져오는 select
+	 * database date query
+	 * @param dbType String database type
+	 * @return String
 	 */
 	public static String getSysDateName(String dbType){
 		dbType = dbType.toLowerCase();
@@ -108,9 +96,9 @@ public class Database {
 	}
 
 	/**
-	 * 테이블 리스트를 조회하는 sql 얻기
-	 * @param dbType dbType db 유형
-	 * @return sql
+	 * table list sql
+	 * @param dbType String database type
+	 * @return String sql
 	 */
 	public static String getTableListSql(String dbType){
 
@@ -126,13 +114,12 @@ public class Database {
 		throw new NotDbTypeException(dbType);
 	}
 
-	
-
 	/**
-	 * 시간정보 얻기
-	 * @param sql 시간 select 쿼리
+	 * time get
+	 * @param sql String time sql
+	 * @return long unix time
 	 */
-	public static Long getDateTime(String sql){
+	public static long getDateTime(String sql){
 
 		try(Connection conn =  ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getDateTime(conn, sql);
@@ -142,16 +129,15 @@ public class Database {
 		}
 
 	}
-	
+
 	/**
-	 * sql에 대한 결과를 dateTime(timestamp) 형태로 받는다.
-	 * @param conn 연결
-	 * @param sql 쿼리
-	 * @return 시간
+	 * time get
+	 * @param conn Connection
+	 * @param sql String sql
+	 * @return long unix time
+	 * @throws SQLException
 	 */
-	public static Long getDateTime(Connection conn, String sql) throws SQLException {
-		Long resultValue = null;
-		
+	public static long getDateTime(Connection conn, String sql) throws SQLException {
 		Statement stmt = null;
 		ResultSet result = null;
 
@@ -165,8 +151,7 @@ public class Database {
 				String columnName = metaData.getColumnLabel(1); 		
 				if(result.next()){
 					Timestamp timestamp = result.getTimestamp(columnName);
-					if(timestamp != null)
-						resultValue = timestamp.getTime();			
+					return timestamp.getTime();
 				}
 			}
 		}catch(Exception e){
@@ -174,15 +159,14 @@ public class Database {
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
 		}
-		
-		return resultValue;
+		throw new RuntimeException("date time error sql: " + sql);
 	}
 	
 
 	/**
-	 * 테이블의 컬럼명 목록 얻기
-	 * @param tableName 테이블명
-	 * @return 컬럼명 배열
+	 * 테이블 컬럼 목록 얻기
+	 * @param tableName String
+	 * @return String []
 	 */
 	public static String [] getColumnNameArray(String tableName){
 
@@ -193,11 +177,13 @@ public class Database {
 		}
 	}
 	
+
 	/**
-	 * 테이블의 컬럼명 목록 얻기
-	 * @param conn DB연결 컨넥션
-	 * @param tableName 테이블 네임
-	 * @return 컬럼명 배열
+	 * 테이블 컬럼 목록 얻기
+	 * @param conn Connection
+	 * @param tableName String
+	 * @return String []
+	 * @throws SQLException
 	 */
 	public static String [] getColumnNameArray(Connection conn, String tableName) throws SQLException {
 		Statement stmt = null;
@@ -224,11 +210,11 @@ public class Database {
 		}
 		return nameArray;
 	}
-	
+
 	/**
 	 * 기본키 컬럼정보 얻기
-	 * @param tableName tableName
-	 * @return PrimaryKeyColumnsForTable
+	 * @param tableName String
+	 * @return Map<String, Integer> PrimaryKeyColumnsForTable
 	 */
 	public static Map<String, Integer> getPrimaryKeyColumnsForTable( String tableName) {
 		try(Connection conn =  ApplicationConnectionPool.getInstance().getCommitConnection()) {
@@ -242,8 +228,8 @@ public class Database {
 	/**
 	 * 기본키 컬럼정보 얻기
 	 * @param conn Connection
-	 * @param tableName tableName
-	 * @return PrimaryKeyColumnsForTable
+	 * @param tableName String
+	 * @return  Map<String, Integer> PrimaryKeyColumnsForTable
 	 */
 	 public static Map<String, Integer> getPrimaryKeyColumnsForTable(Connection conn, String tableName) throws SQLException {
 		 ResultSet pkColumns= null;
@@ -265,18 +251,15 @@ public class Database {
 			 //noinspection CatchMayIgnoreException
 			 try{if(pkColumns!=null)pkColumns.close(); }catch(Exception e){}
 		 }
-
 		return pkMap;
 
 	 }
 
-	 
-
-	 /**
-	  * 테이블의 컬럼별 디폴트값을 가져온다.
-	  * @param tableName tableName
-	  * @return DefaultValue
-	  */
+	/**
+	 * 기본값 얻기 
+	 * @param tableName String
+	 * @return Map<String, String> 컬럼별 기본 값
+	 */
 	 public static Map<String, String> getDefaultValue(String tableName){
 		 //혹시 받는쪽에서 데이터변환코딩을 할 수 있으므로 디폴트값이 없어도 빈객체를 생성해서 돌려준다.
 		
@@ -301,7 +284,20 @@ public class Database {
 				defaultMap.put(columnName, value);
 				
 			}
-			
+
+		}else if(dbType.startsWith("maria") || dbType.startsWith("mysql")) {
+			List<Map<String,String>> dataList =JdbcQuery.getMapStringList("SELECT COLUMN_NAME, COLUMN_DEFAULT FROM Information_Schema.Columns  WHERE Table_Name = '" + tableName +"'");
+			for(Map<String,String> data : dataList){
+				String value = data.get("COLUMN_DEFAULT");
+				if(value == null){
+					continue;
+				}
+				String columnName  = data.get("COLUMN_NAME");
+				if(columnName == null){
+					continue;
+				}
+				defaultMap.put(columnName, value);
+			}
 		}else{
 			throw new NotDbTypeException(dbType);
 		}
@@ -309,11 +305,11 @@ public class Database {
 		return defaultMap;
 	 }
 
-	 /**
-	  * 연결유지 쿼리를 돌려준다.
-	  * @return ConnectionKeepQuery
-	  */
-	 public static String getConnectionKeepQuery(){
+	/**
+	 * 연결 유지 쿼리
+	 * @return String sql
+	 */
+	public static String getConnectionKeepQuery(){
 		String sql  ;
 			
 		String dbType = ApplicationConnectionPool.getInstance().getJdbcType();

@@ -20,7 +20,7 @@ import com.seomse.jdbc.annotation.*;
 /**
  * @author macle
  */
-@Table(name="TB_STOCK_ITEM")
+@Table(name="T_STOCK_ITEM")
 public class StockItem {
     @PrimaryKey(seq = 1)
     @Column(name = "ITEM_CD")

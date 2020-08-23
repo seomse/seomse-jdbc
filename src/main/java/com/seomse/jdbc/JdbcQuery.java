@@ -27,28 +27,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-/** 
- * <pre>
- *  파 일 명 : JdbcQuery.java
- *  설    명 : jdbc 쿼리용 클래스
- *         
- *  작 성 자 : macle
- *  작 성 일 : 2017.09
- *  버    전 : 1.2
- *  수정이력 : 2019.02, 2019.06
- *  기타사항 :
- * </pre>
- * @author Copyrights 2017 ~ 2019 by ㈜섬세한사람들. All right reserved.
+/**
+ * JdbcQuery sql 유틸성 메소드
+ * @author macle
  */
 public class JdbcQuery {
+
 	private static final Logger logger = LoggerFactory.getLogger(JdbcQuery.class);
-	
-	
-	
+
 	/**
-	 * 단일결과를 DateTime 의 long 값얻기
-	 * Date로 변환방법 new Date(result);
-	 * @return DateTime
+	 * sql을 활용하여 time 얻기
+	 * unix time
+	 * @param sql String sql
+	 * @param defaultValue Long default
+	 * @return Long unix time
 	 */
 	public static Long getResultDateTime(String sql, Long defaultValue) {
 
@@ -65,13 +57,13 @@ public class JdbcQuery {
 			return defaultValue;
 		}
 	}
-	
-	
+
 
 	/**
-	 * 단일결과를 DateTime의 long값얻기
-	 * Date로 변환방법 new Date(result);
-	 * @return DateTime
+	 * sql을 활용하여 time 얻기
+	 * unix time
+	 * @param sql String sql
+	 * @return Long unix time
 	 */
 	public static Long getResultDateTime(String sql) {
 
@@ -82,12 +74,15 @@ public class JdbcQuery {
 		}
 
 	}
-	
+
 
 	/**
-	 * 단일결과를 DateTime의 long값얻기
-	 * Date로 변환방법 new Date(result);
-	 * @return DateTime
+	 * sql을 활용하여 time 얻기
+	 * unix time
+	 * @param conn Connection
+	 * @param sql sql String sql
+	 * @return Long unix time
+	 * @throws SQLException
 	 */
 	public static Long getResultDateTime(Connection conn, String sql) throws SQLException {
 		Long resultTime = null;
@@ -115,11 +110,13 @@ public class JdbcQuery {
 		
 		return resultTime;
 	}
-	
-	
+
+
 	/**
-	 * 단일결과를 Integer형태로 옫기
-	 * @return result(Integer)
+	 * 단일 결과를 integer 로 얻기
+	 * @param sql String sql
+	 * @param defaultValue Integer default
+	 * @return Integer
 	 */
 	public static Integer getResultInteger(String sql, Integer defaultValue) {
 
@@ -130,10 +127,11 @@ public class JdbcQuery {
 		
 		return 	result;
 	}
-	
+
 	/**
-	 * 단일결과를 Integer 형태로 얻기
-	 * @return result(Integer)
+	 * 단일 결과를 integer 로 얻기
+	 * @param sql String sql
+	 * @return Integer
 	 */
 	public static Integer getResultInteger(String sql) {
 
@@ -149,13 +147,13 @@ public class JdbcQuery {
 			return null;
 		}
 	}
-	
-	
+
 	/**
-	 * 단일결과를 Integer 형태로 얻기
+	 * 단일 결과를 integer 로 얻기
 	 * @param conn Connection
-	 * @param sql sql
-	 * @return result(Integer)
+	 * @param sql String sql
+	 * @return Integer
+	 * @throws SQLException
 	 */
 	public static Integer getResultInteger(Connection conn, String sql) throws SQLException {
 		String result = getResultOne(conn, sql);
@@ -166,11 +164,12 @@ public class JdbcQuery {
 	 }
 
 
+
 	/**
-	 * 단일결과를 double 형태로 얻기
-	 * @param sql sql
-	 * @param defaultValue defaultValue
-	 * @return result(Double)
+	 * 단일 결과를 double 형태로 얻기
+	 * @param sql String sql
+	 * @param defaultValue Double default
+	 * @return Double
 	 */
 	public static Double getResultDouble(String sql, Double defaultValue) {
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -186,10 +185,11 @@ public class JdbcQuery {
 		}
 	}
 
+
 	/**
-	 * 단일결과를 double 형태로 얻기
-	 * @param sql sql
-	 * @return result(Double)
+	 * 단일 결과를 double 형태로 얻기
+	 * @param sql String sql
+	 * @return Double
 	 */
 	public static Double getResultDouble(String sql) {
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -200,10 +200,11 @@ public class JdbcQuery {
 	}
 
 	/**
-	 * 단일결과를 double 형태로 얻기
+	 * 단일 결과를 double 형태로 얻기
 	 * @param conn Connection
-	 * @param sql sql
-	 * @return result(Double)
+	 * @param sql String sql
+	 * @return Double
+	 * @throws SQLException
 	 */
 	public static Double getResultDouble(Connection conn, String sql) throws SQLException {
 		Double resultDouble = null;
@@ -236,10 +237,10 @@ public class JdbcQuery {
 
 
 	/**
-	 *  단일결과를 Long형태로 얻기
-	 * @param sql sql
-	 * @param defaultValue defaultValue
-	 * @return result(Long)
+	 * 단일결과를 Long형태로 얻기
+	 * @param sql  String sql
+	 * @param defaultValue Long default
+	 * @return Long
 	 */
 	public static Long getResultLong(String sql, Long defaultValue) {
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -258,8 +259,8 @@ public class JdbcQuery {
 
 	/**
 	 * 단일결과를 Long 형태로 얻기
-	 * @param sql sql
-	 * @return  result(Long)
+	 * @param sql String sql
+	 * @return Long
 	 */
 	public static Long getResultLong(String sql) {
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -268,10 +269,13 @@ public class JdbcQuery {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
-	 * 단일결과를 Long형태로 얻기
-	 * @return result(Long)
+	 * 단일결과를 Long 형태로 얻기
+	 * @param conn Connection
+	 * @param sql String sql
+	 * @return Long
+	 * @throws SQLException
 	 */
 	public static Long getResultLong(Connection conn, String sql) throws SQLException {
 		Long resultLong = null;
@@ -299,14 +303,13 @@ public class JdbcQuery {
 		
 		return resultLong;
 	}
-	
-	
-	
+
+
 	/**
-	 * 단일결과 얻기
-	 * @param sql sql
-	 *  @param defaultValue 기본값
-	 * @return 단일결과 값
+	 * 단일 결과 얻기 String
+	 * @param sql String sql
+	 * @param defaultValue String default
+	 * @return String
 	 */
 	public static String getResultOne(String sql, String defaultValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -320,12 +323,12 @@ public class JdbcQuery {
 			logger.error(ExceptionUtil.getStackTrace(e));
 			return defaultValue;
 		}
-	}	
-	
+	}
+
 	/**
-	 * 단일결과 얻기
-	 * @param sql sql
-	 * @return  단일결과 값
+	 * 단일 결과 얻기 String
+	 * @param sql String sql
+	 * @return String
 	 */
 	public static String getResultOne(String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -334,11 +337,13 @@ public class JdbcQuery {
 			throw new RuntimeException(e);
 		}
 	}
+
 	/**
-	 * 단일결과 얻기
+	 * 단일 결과 얻기 String
 	 * @param conn Connection
-	 * @param sql sql
-	 * @return 단일결과 값
+	 * @param sql String sql
+	 * @return String
+	 * @throws SQLException
 	 */
 	public static String getResultOne(Connection conn, String sql) throws SQLException {
 		String resultValue = null;
@@ -367,11 +372,10 @@ public class JdbcQuery {
 		return resultValue;
 	}
 	
-	
 	/**
-	 * 단일컬럼 결과 리스트 얻기
-	 * @param sql sql
-	 * @return 단일컬럼 결과 리스트
+	 * 단일 컬럼의 결과를 list로 얻기
+ 	 * @param sql String sql
+	 * @return List<String>
 	 */
 	public static List<String> getStringList(String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -381,12 +385,12 @@ public class JdbcQuery {
 		}
 	}
 	
-	
 	/**
-	 * 단일컬럼 결과 리스트
+	 * 단일 컬럼의 결과를 list로 얻기
 	 * @param conn Connection
-	 * @param sql Query
-	 * @return 단일컬럼 결과 리스트
+	 * @param sql  String sql
+	 * @return List<String>
+	 * @throws SQLException
 	 */
 	public static List<String> getStringList(Connection conn, String sql) throws SQLException {
 		List<String> resultList = new ArrayList<>();
@@ -412,10 +416,9 @@ public class JdbcQuery {
 	}
 
 	/**
-	 * 지정 된 테이블의 모든컬럼정보를 String 형태로 얻기
-	 * Map<String, String> 컬럼, 값
-	 * @param tableName tableName
-	 * @return MapStringList
+	 * 테이블의 모든 데이터를 Map<String, String> == row 화 하여 list로 얻기
+	 * @param tableName String table name
+	 * @return List<Map<String, String>> Map<String, String> == row
 	 */
 	public static List<Map<String, String>> getAllMapStringList(String tableName){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -425,22 +428,24 @@ public class JdbcQuery {
 		}
 	}
 
+
 	/**
-	 * 지정 된 테이블의 모든컬럼정보를 String 형태로 얻기
-	 * Map<String, String> 컬럼, 값
+	 * 테이블의 모든 데이터를 Map<String, String> == row 화 하여 list로 얻기
 	 * @param conn Connection
-	 * @param tableName tableName
-	 * @return MapStringList
+	 * @param tableName String table name
+	 * @return List<Map<String, String>> Map<String, String> == row
+	 * @throws SQLException
 	 */
 	public static List<Map<String, String>> getAllMapStringList(Connection conn, String tableName) throws SQLException {
 		String sql = "SELECT * FROM " + tableName;	
 		return 	getMapStringList(conn, sql);
 	}
+
 	/**
-	 * 데이터 베이스 결과를 List에 Map형태로 가져온다 키:컬럼명 내용: 벨류
-	 * @param sql sql
-	 * @return MapStringList
-	 */
+	 * sql을 이용하여 결과를 Map<String, String> == row 화 하여 list로 얻기
+	 * @param sql String sql 
+	 * @return List<Map<String, String>> Map<String, String> == row
+	 */ 
 	public static List<Map<String, String>> getMapStringList(String sql){
 
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -449,14 +454,13 @@ public class JdbcQuery {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
-	
+
 	/**
-	 * 데이터 베이스 결과를 List 에 Map 형태로 가져온다 키:컬럼명 내용: 벨류
+	 * sql을 이용하여 결과를 Map<String, String> == row 화 하여 list로 얻기
 	 * @param conn Connection
-	 * @param sql sql
-	 * @return MapStringList
+	 * @param sql  String sql 
+	 * @return List<Map<String, String>> Map<String, String> == row
+	 * @throws SQLException
 	 */
 	public static List<Map<String, String>> getMapStringList(Connection conn, String sql) throws SQLException {
 		
@@ -488,13 +492,10 @@ public class JdbcQuery {
 		return resultMapList;
 	}
 
-
-
-	
 	/**
-	 * 단일결과를 Map<String, String>형태로 얻기
-	 * @param sql sql
-	 * @return MapString
+	 * 단일 row 를 Map<String, String> 화 하여 얻기
+	 * @param sql String sql
+	 * @return Map<String, String>
 	 */
 	public static Map<String, String> getMapString( String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -504,11 +505,13 @@ public class JdbcQuery {
 		}
 	}
 	
+
 	/**
-	 * 단일결과를 Map<String, String>형태로 얻기
+	 * 단일 row 를 Map<String, String> 화 하여 얻기
 	 * @param conn Connection
-	 * @param sql sql
-	 * @return MapString
+	 * @param sql  String sql
+	 * @return Map<String, String>
+	 * @throws SQLException
 	 */
 	public static Map<String, String> getMapString(Connection conn, String sql) throws SQLException {
 		Map<String, String> resultMap = new HashMap<>();
@@ -535,7 +538,12 @@ public class JdbcQuery {
 		return resultMap;
 	}
 
-
+	/**
+	 * 컬럼 목록 얻기
+	 * @param resultSet ResultSet
+	 * @return String [] ColumnNames
+	 * @throws SQLException
+	 */
 	public static String [] getColumnNames(ResultSet resultSet) throws SQLException {
 		ResultSetMetaData metaData = resultSet.getMetaData();
 		int count = metaData.getColumnCount(); //number of column
@@ -548,9 +556,9 @@ public class JdbcQuery {
 
 
 	/**
-	 * 쿼리에 해당하는 내용을 실행한다.
-	 * @param sql 실행쿼리
-	 * @return  실패-1
+	 * sql 실행
+	 * @param sql String sql
+	 * @return int fail -1
 	 */
 	public static int execute(String sql){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -566,14 +574,13 @@ public class JdbcQuery {
 			return -1;
 		}
 	}
-	
 
-	
 	/**
-	 * 쿼리 실행
-	 * @param conn DB연결 컨넥션 
-	 * @param sql 실행쿼리
-	 * @return  실패 -1
+	 * sql 실행
+	 * @param conn Connection
+	 * @param sql String sql
+	 * @return int fail -1
+	 * @throws SQLException
 	 */
 	public static int execute(Connection conn, String sql) throws SQLException {
 		PreparedStatement pstmt = null;
@@ -598,11 +605,12 @@ public class JdbcQuery {
 	
 		return count;
 	}
-	
+
+
 	/**
-	 * 프로시져 호출
-	 * @param sql 실행쿼리
-	 * @return 성공 실패-1
+	 * sql procedure 실행
+	 * @param sql String sql(procedure)
+	 * @return int fail -1
 	 */
 	public static int callProcedure(String sql){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -621,12 +629,13 @@ public class JdbcQuery {
 
 		}
 	}
-	
+
 	/**
-	 * 프로시져 호출용
-	 * @param conn DB연결 컨넥션 
-	 * @param sql 실행쿼리
-	 * @return 성공 1 실패 -1
+	 * sql procedure 실행
+	 * @param conn Connection
+	 * @param sql String sql(procedure)
+	 * @return int success 1, fail -1
+	 * @throws SQLException
 	 */
 	public static int callProcedure(Connection conn, String sql) throws SQLException {
 		PreparedStatement pstmt = null;
@@ -649,32 +658,33 @@ public class JdbcQuery {
 		return count;
 	}
 
-	
-	 /**
-	  * RowData 존재여부
-	  * @param conn Connection
-	  * @param sql sql
-	  * @return isRowData
-	  */
+	/**
+	 * row data가 있는지 확인
+	 * @param conn Connection
+	 * @param sql String sql row data check
+	 * @return boolean
+	 * @throws SQLException
+	 */
 	 public static boolean isRowData(Connection conn, String sql) throws SQLException {
 		String result =  getResultOne(conn, sql);
 		return result != null;
 	 }
-	
-	 /**
-	  * RowData 존재여부
-	  * @param sql sql
-	  * @return isRowData
-	  */
-	 public static boolean isRowData(String sql){
+
+
+	/**
+	 * row data가 있는지 확인
+	 * @param sql String sql row data check
+	 * @return boolean
+	 */
+	public static boolean isRowData(String sql){
 		String result =  getResultOne(sql);
 		return result != null;
 	 }
 
-	 /**
-	  * RowData가 등록인식 될떄까지 기다림
-	  * @param sql 쿼리
-	  */
+	/**
+	 * row data insert wait
+	 * @param sql String sql row data check
+	 */
 	 public static void isRowWait(String sql) {
 		 try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			isRowWait(conn, sql, 3, 350);
@@ -682,14 +692,15 @@ public class JdbcQuery {
 	 		logger.error(ExceptionUtil.getStackTrace(e));
 		}
 	 }
-			 
-	 /**
-	  * RowData가 등록인식 될떄까지 기다림
-	  * @param conn 연결정보
-	  * @param sql 쿼리
-	  * @param checkCount 최대반복횟수
-	  * @param waitTime 기다리는 시간
-	  */
+
+	/**
+	 * row data insert wait
+	 * @param conn Connection
+	 * @param sql String sql row data check
+	 * @param checkCount int max check count
+	 * @param waitTime long check 당 wait time
+	 * @throws SQLException
+	 */
 	 public static void isRowWait(Connection conn, String sql, int checkCount, long waitTime) throws SQLException {
 		 
 		 for(int i=0 ; i<checkCount ; i++){

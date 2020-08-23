@@ -24,7 +24,7 @@ public class ObjectMake {
 
     public static void main(String[] args) {
 
-        String tableName = "TB_STOCK_ITEM";
+        String tableName = "T_STOCK_ITEM";
         System.out.println(JdbcObjects.makeObjectValue(tableName));
 
     }

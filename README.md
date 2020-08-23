@@ -6,6 +6,9 @@
 # 개요
 oracle, mysql 계열의 DB를 지원 하기 위해 개발 되었습니다.
 
+개발할 당시 oracle 용을 먼저 개발 하고 mysql, maria를 지원하는 형태로 진행 하였기 때문에 maria 에서의 문제점이 발생 하면 아래 communication 경로에 제보해주시면 수정 하겠습니다.
+
+ 
 한번 작성한 코드로 oracle, mysql 계열 에서 동작 하고 두 DB간의 데이터 이관 등의 작업을 지원 합니다 
  - 모든 DB를 지원 하고자 시작 하였지만 현시점에서의 목적 DB는 oracle, tibero, mysql, mariadb 등의 관련 계열 입니다.
 

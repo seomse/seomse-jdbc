@@ -1097,7 +1097,6 @@ public class JdbcObjects {
         try{
             Map<String, Integer> pkMap = Database.getPrimaryKeyColumnsForTable(conn, tableName);
 
-            Map<String,String> defaultValueMap = Database.getDefaultValue(tableName);
             stmt = conn.createStatement();
             //noinspection SqlDialectInspection,SqlNoDataSourceInspection
             result = stmt.executeQuery("SELECT * FROM " + tableName);

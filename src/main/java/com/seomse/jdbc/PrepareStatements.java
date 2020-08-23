@@ -21,19 +21,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <pre>
- *  파 일 명 : PrepareStatements.java
- *  설    명 : PrepareStatement 용 유틸성 클래스
- *
- *  작 성 자 : macle
- *  작 성 일 : 2019.10.27
- *  버    전 : 1.0
- *  수정이력 :
- *  기타사항 :
- * </pre>
- * @author Copyrights 2019 by ㈜섬세한사람들. All right reserved.
+ * PrepareStatementData 를 활용 하는 유틸성 클래서
+ * @author macle
  */
 public class PrepareStatements {
+    /**
+     * time 을 활용한 조건 생성
+     * @param time long unix time
+     * @return Map<Integer, PrepareStatementData>
+     */
     public static Map<Integer, PrepareStatementData> newTimeMap(long time){
 
         Map<Integer, PrepareStatementData> prepareStatementDataMap = new HashMap<>();

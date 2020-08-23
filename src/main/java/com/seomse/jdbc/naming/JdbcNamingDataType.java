@@ -108,10 +108,7 @@ public class JdbcNamingDataType {
 		if(seqValue != null){
 			setSeq(seqValue);
 		}
-		
-		
-		
-		
+
 		ConfigObserver configObserver = configInfos -> {
 
 			outer:
@@ -142,7 +139,11 @@ public class JdbcNamingDataType {
 		Config.addObserver(configObserver);
 	}
 
-
+	/**
+	 * header 위치 설정
+	 * 앞, 뒤, 앞뒤
+	 * @param value String
+	 */
 	private void setHeaderPosition(String value){
 
 		
@@ -157,8 +158,11 @@ public class JdbcNamingDataType {
 			isFrontPriority = frontIndex < backIndex;
 		}
 	}
-	
 
+	/**
+	 * default set
+	 * @param value String
+	 */
 	private void setDefaultKey(String value){
 		String checkValue = value.toLowerCase().trim();
 		JdbcDataType type = typeKeyMap.get(checkValue);
@@ -171,7 +175,12 @@ public class JdbcNamingDataType {
 		}
 		
 	}
-	
+
+	/**
+	 * type header set
+	 * @param typeKey String
+	 * @param value String
+	 */
 	private void setTypeHeader(String typeKey, String value){
 		
 		JdbcDataType type  = typeKeyMap.get(typeKey);
@@ -190,7 +199,11 @@ public class JdbcNamingDataType {
 		typeAndHeader.setHeaderArray(value.split(","));
 		
 	}
-	
+
+	/**
+	 * seq set
+	 * @param value String
+	 */
 	private void setSeq(String value){
 		value = value.trim().toLowerCase().replace(" ", "");
 		
@@ -225,8 +238,12 @@ public class JdbcNamingDataType {
 			headerArray = array;
 		}
 	}
-	
-	
+
+	/**
+	 * JdbcDataType get
+	 * @param columnName String
+	 * @return JdbcDataType
+	 */
 	public JdbcDataType getType(String columnName){
 		if(isFront && isBack){
 			JdbcDataType type;
@@ -266,8 +283,12 @@ public class JdbcNamingDataType {
 		return defaultDataType;
 	}
 
-	
-	
+
+	/**
+	 * front first 를 활용 하여 JdbcDataType 얻기
+	 * @param columnName String
+	 * @return JdbcDataType
+	 */
 	private JdbcDataType front(String columnName){
 		
 		TypeAndHeader [] sortArray =this.sortArray ;
@@ -284,7 +305,12 @@ public class JdbcNamingDataType {
 		
 		return null;
 	}
-	
+
+	/**
+	 * back last 를 활용 하여 JdbcDataType 얻기
+	 * @param columnName String
+	 * @return JdbcDataType
+	 */
 	private JdbcDataType back(String columnName){
 		
 		TypeAndHeader [] sortArray =this.sortArray ;
@@ -302,15 +328,27 @@ public class JdbcNamingDataType {
 		return null;
 	}
 
-
+	/**
+	 * front flag
+	 * @return boolean
+	 */
 	public boolean isFront() {
 		return isFront;
 	}
 
+	/**
+	 * back flag
+	 * @return boolean
+	 */
 	public boolean isBack() {
 		return isBack;
 	}
 
+	/**
+	 * 앞 뒤 사용일때 front 우선순위 여부
+	 * falst 일경우 back 이 우선
+	 * @return boolean
+	 */
 	public boolean isFrontPriority() {
 		return isFrontPriority;
 	}

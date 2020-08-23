@@ -25,21 +25,23 @@ public class JdbcDaoFactory {
 
 	private static final String TYPE_KEY = "application.jdbc.type";
 
-	
+
 	/**
-	 * Dao객체 생성
-	 * @param daoClass string daoClass
-	 * @return  <T> ImplDaoClass
+	 * dao implement get
+	 * @param daoClass  daoClass
+	 * @param <T> ImplDaoClass
+	 * @return T ImplDaoClass
 	 */
 	public static <T> T getDao(Class<T> daoClass){
 		return getDao(daoClass, Config.getConfig(TYPE_KEY));
 	}
-	
+
 	/**
-	 * Moara에서 사용하는 JDBC Dao를 생성하여 돌려준다.
+	 * dao implement get
 	 * @param daoClass Class<T>  daoClass
 	 * @param dbType string dataBaseType
-	 * @return <T>  ImplDaoClass
+	 * @param <T> ImplDaoClass
+	 * @return <T> ImplDaoClass
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getDao(Class<T> daoClass, String dbType){
