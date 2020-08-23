@@ -35,6 +35,8 @@ import java.util.*;
 
 /**
  * naming domain header 를 이용한 class 사용
+ * DB용 객체와 사용객체를 나눠서 슬때 유용
+ * 생성 되는 객체의 변수는 컬럼명으로 생성 됨
  * @author macle
  */
 public class JdbcNaming {
