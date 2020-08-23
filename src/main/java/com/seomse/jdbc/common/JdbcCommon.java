@@ -29,6 +29,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,9 +62,30 @@ public class JdbcCommon {
             stmtResultSet.resultSet = stmtResultSet.stmt.executeQuery(sql);
         }
 
+        return stmtResultSet;
+    }
+
+    /**
+     * PreparedStatement ResultSet setting
+     * @param conn Connection
+     * @param sql String
+     * @param prepareStatementDataMap  Map<Integer, PrepareStatementData>
+     * @param fetchSize int
+     * @return StmtResultSet
+     * @throws SQLException
+     */
+    public static StmtResultSet makeStmtResultSet(Connection conn, String sql,  Map<Integer, PrepareStatementData> prepareStatementDataMap, int fetchSize) throws SQLException {
+        StmtResultSet stmtResultSet = makeStmtResultSet(conn,sql,prepareStatementDataMap);
+        if(fetchSize > 0){
+            stmtResultSet.stmt.setFetchSize(fetchSize);
+            stmtResultSet.resultSet.setFetchSize(fetchSize);
+        }
 
         return stmtResultSet;
     }
+
+
+
 
 
     /**
@@ -200,6 +222,121 @@ public class JdbcCommon {
             Timestamp timeStamp = new Timestamp((long)object);
             pstmt.setTimestamp(i+1, timeStamp);
         }
+    }
+
+    /**
+     * insert
+     * @param conn conn
+     * @param objClassList List<T>
+     * @param fields  Field []
+     * @param insertSql String
+     * @param isClearParameters boolean
+     * @param <T> Table annotation object class
+     * @return int
+     */
+    public static <T>  int insert(Connection conn, List<T> objClassList, Field [] fields, String insertSql, boolean isClearParameters){
+        PreparedStatement pstmt = null;
+        int successCount ;
+
+        try{
+            pstmt = conn.prepareStatement(insertSql);
+
+            for(T obj : objClassList){
+                JdbcCommon.addBatch(obj, fields, pstmt);
+                if(isClearParameters){
+                    pstmt.clearParameters();
+                }else{
+                    pstmt.executeBatch();
+                }
+
+            }
+            if(isClearParameters){
+                pstmt.executeBatch();
+            }
+            successCount = objClassList.size();
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }finally{
+            //noinspection CatchMayIgnoreException
+            try{if(pstmt != null)pstmt.close(); }catch(Exception e){}
+        }
+        return successCount;
+    }
+
+    /**
+     * insert
+     * @param conn Connection
+     * @param obj T
+     * @param fields Field []
+     * @param insertSql String
+     * @param <T> Table annotation object class
+     * @return int
+     */
+    public static <T>  int insert(Connection conn, T obj, Field [] fields, String insertSql ){
+
+        int successCount ;
+
+        PreparedStatement pstmt = null;
+
+        //noinspection TryFinallyCanBeTryWithResources
+        try{
+            pstmt = conn.prepareStatement(insertSql);
+
+            JdbcCommon.addBatch(obj, fields, pstmt);
+            pstmt.clearParameters();
+
+            pstmt.executeBatch();
+            successCount = 1;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }finally{
+            //noinspection CatchMayIgnoreException
+            try{if(pstmt!=null)pstmt.close();  }catch(Exception e){}
+        }
+
+        return successCount;
+    }
+
+    /**
+     * setPrimaryKeyField
+     * @param pstmt  PreparedStatement
+     * @param fields Field []
+     * @param obj T
+     * @param isNullUpdate boolean null value update flag
+     * @param <T> Table annotation object class
+     * @return int index
+     * @throws SQLException
+     * @throws IllegalAccessException
+     */
+    public static <T> int setPrimaryKeyField( PreparedStatement pstmt, Field [] fields, T obj, boolean isNullUpdate) throws SQLException, IllegalAccessException {
+
+        int index = 0;
+        //noinspection ForLoopReplaceableByForEach
+        for(int i=0 ; i<fields.length ; i++){
+
+            PrimaryKey  pk = fields[i].getAnnotation(PrimaryKey.class);
+            if(pk != null){
+                continue;
+            }
+            fields[i].setAccessible(true);
+            Object object = fields[i].get(obj);
+            if(!isNullUpdate){
+
+                if(object == null){
+                    continue;
+                }
+            }
+
+            if(object == null){
+                JdbcCommon.setNullPstmt(obj,fields[i],pstmt,index);
+            }else{
+                JdbcCommon.setPstmt(obj, object, fields[i], pstmt, index);
+            }
+            index++;
+
+        }
+
+        return index;
     }
 
     /**

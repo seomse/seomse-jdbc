@@ -36,10 +36,10 @@ public class JdbcNamingDataType {
 	private static class Singleton {
 		private static final JdbcNamingDataType instance = new JdbcNamingDataType();
 	}
-	
+
 	/**
-	 * 싱글턴 인스턴스 얻기
-	 * @return singleton instance
+	 * singleton instance get
+	 * @return JdbcNamingDataType singleton instance
 	 */
 	public static JdbcNamingDataType getInstance(){
 		return Singleton.instance;
@@ -141,8 +141,8 @@ public class JdbcNamingDataType {
 		
 		Config.addObserver(configObserver);
 	}
-	
-	
+
+
 	private void setHeaderPosition(String value){
 
 		

@@ -270,15 +270,10 @@ public class JdbcObjects {
 
         //noinspection CaughtExceptionImmediatelyRethrown
         try{
-            StmtResultSet stmtResultSet = JdbcCommon.makeStmtResultSet(conn, selectSql, prepareStatementDataMap);
+            StmtResultSet stmtResultSet = JdbcCommon.makeStmtResultSet(conn, selectSql, prepareStatementDataMap, table.fetchSize());
             stmt = stmtResultSet.getStmt();
             result = stmtResultSet.getResultSet();
 
-            int fetchSize = table.fetchSize();
-            if(fetchSize > 0){
-                stmt.setFetchSize(table.fetchSize());
-                result.setFetchSize(table.fetchSize());
-            }
             if(size == -1){
                 while(result.next()){
                     T resultObj = objClass.newInstance();
@@ -664,38 +659,13 @@ public class JdbcObjects {
         String [] columnNames = columnFieldMap.keySet().toArray(new String[0]);
         String insertSql = getInsertSql(objClass, columnNames, insertQueryValue);
 
-        PreparedStatement pstmt = null;
         //순서정보를 위한 세팅
         Field [] fields = new Field[columnNames.length];
         for (int i = 0; i <columnNames.length ; i++) {
             fields[i] = columnFieldMap.get(columnNames[i]);
         }
 
-        int successCount ;
-        try{
-            pstmt = conn.prepareStatement(insertSql);
-
-            for(T obj : objClassList){
-                JdbcCommon.addBatch(obj, fields, pstmt);
-                if(isClearParameters){
-                    pstmt.clearParameters();
-                }else{
-                    pstmt.executeBatch();
-                }
-
-            }
-            if(isClearParameters){
-                pstmt.executeBatch();
-            }
-            successCount = objClassList.size();
-        }catch(Exception e){
-            throw new RuntimeException(e);
-        }finally{
-            //noinspection CatchMayIgnoreException
-            try{if(pstmt != null)pstmt.close(); }catch(Exception e){}
-        }
-
-        return successCount;
+        return JdbcCommon.insert(conn, objClassList, fields, insertSql, isClearParameters);
 
     }
 
@@ -887,28 +857,7 @@ public class JdbcObjects {
             fields[i] = columnFieldMap.get(columnNames[i]);
         }
 
-        int successCount ;
-
-
-        PreparedStatement pstmt = null;
-
-        //noinspection TryFinallyCanBeTryWithResources
-        try{
-            pstmt = conn.prepareStatement(insertSql);
-
-            JdbcCommon.addBatch(obj, fields, pstmt);
-            pstmt.clearParameters();
-
-            pstmt.executeBatch();
-            successCount = 1;
-        }catch(Exception e){
-            throw new RuntimeException(e);
-        }finally{
-            //noinspection CatchMayIgnoreException
-            try{if(pstmt!=null)pstmt.close();  }catch(Exception e){}
-        }
-
-        return successCount;
+        return JdbcCommon.insert(conn, obj, fields, insertSql);
     }
 
 
@@ -1044,34 +993,8 @@ public class JdbcObjects {
         int successCount;
         try{
             pstmt = conn.prepareStatement(sqlBuilder.toString());
+            int index = JdbcCommon.setPrimaryKeyField(pstmt,fields,obj,isNullUpdate);
 
-            int index = 0;
-            //noinspection ForLoopReplaceableByForEach
-            for(int i=0 ; i<fields.length ; i++){
-
-                PrimaryKey  pk = fields[i].getAnnotation(PrimaryKey.class);
-                if(pk != null){
-                    continue;
-                }
-                fields[i].setAccessible(true);
-                Object object = fields[i].get(obj);
-                if(!isNullUpdate){
-
-                    if(object == null){
-                        continue;
-                    }
-                }
-
-
-
-                if(object == null){
-                    JdbcCommon.setNullPstmt(obj,fields[i],pstmt,index);
-                }else{
-                    JdbcCommon.setPstmt(obj, object, fields[i], pstmt, index);
-                }
-                index++;
-
-            }
             //noinspection ForLoopReplaceableByForEach
             for(int i= 0 ; i < pkColumnList.size() ; i++){
                 Field field = pkColumnList.get(i);

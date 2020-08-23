@@ -41,59 +41,74 @@ public class JdbcNaming {
 
 	private static final Logger logger = LoggerFactory.getLogger(JdbcNaming.class);
 
-	
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @return jdbc객체리스트
+	 * List<T> 얻기
+	 * @param conn Connection
+	 * @param objClass  Class<T>
+	 * @param <T> Table annotation object
+	 * @return List<T>
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass ) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn, objClass, null, null, null, -1, null);
 
 	}
-	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @return jdbc객체리스트
+	 * List<T> 얻기
+	 * @param conn Connection
+	 * @param objClass  Class<T>
+	 * @param whereValue String where query
+	 * @param <T> Table annotation object class
+	 * @return List<T>
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String whereValue) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn,  objClass, null, whereValue, null, -1, null);
 	}
-	
-	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @param orderByValue 정렬문
-	 * @return jdbc 객체리스트
+	 * List<T> 얻기
+	 * @param conn Connection
+	 * @param objClass  Class<T>
+	 * @param whereValue String where query
+	 * @param orderByValue String order by query
+	 * @param <T> Table annotation object class
+	 * @return List<T>
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String whereValue, String orderByValue) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn,  objClass, null, whereValue, orderByValue, -1, null);
 	}
-	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @param orderByValue 정렬문
-	 * @param size 건수제한
-	 * @return jdbc 객체리스트
+	 * List<T> 얻기
+	 * @param conn Connection
+	 * @param objClass  Class<T>
+	 * @param whereValue String where query
+	 * @param orderByValue String order by query
+	 * @param size int lust cut size
+	 * @param <T> Table annotation object class
+	 * @return List<T>
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String whereValue, String orderByValue, int size) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn,  objClass, null, whereValue, orderByValue, size, null);
 	}
-	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param objClass 객체 클래스
-	 * @return jdbc객체리스트
+	 * List<T> 얻기
+	 * @param objClass  Class<T>
+	 * @param <T> Table annotation object class
+	 * @return List<T>
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass ){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -102,12 +117,13 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @return jdbc 객체리스트
+	 * List<T> 얻기
+	 * @param objClass  Class<T>
+	 * @param whereValue String where query
+	 * @param <T> Table annotation object class
+	 * @return List<T>
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -116,13 +132,14 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @param size 건수제한
-	 * @return jdbc 객체리스트
+	 * List<T> 얻기
+	 * @param objClass  Class<T>
+	 * @param whereValue String where query
+	 * @param size int lust cut size
+	 * @param <T> Table annotation object class
+	 * @return List<T>
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, int size){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -132,12 +149,14 @@ public class JdbcNaming {
 		}
 	}
 	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @param orderByValue 정렬문
-	 * @return jdbc 객체리스트
+	 * List<T> 얻기
+	 * @param objClass  Class<T>
+	 * @param whereValue String where query
+	 * @param orderByValue  String order by query
+	 * @param <T> Table annotation object class
+	 * @return List<T>
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -146,14 +165,16 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @param orderByValue 정렬문
-	 * @param size 건수제한
-	 * @return jdbc객체리스트
+	 * List<T> 얻기
+	 * @param objClass  Class<T>
+	 * @param whereValue String where query
+	 * @param orderByValue  String order by query
+	 * @param size int lust cut size
+	 * @param <T> Table annotation object class
+	 * @return List<T>
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue, int size){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -162,14 +183,15 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
+
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @param prepareStatementDataMap 조건데이터
-	 * @return jdbc객체리스트
+	 * List<T> 얻기
+	 * @param objClass Class<T>
+	 * @param whereValue String where query
+	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param <T> Table annotation object class
+	 * @return List<T>
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -178,14 +200,15 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param objClass 객체 클래스
-	 * @param sql 쿼리
-	 * @param whereValue 조건문
-	 * @param prepareStatementDataMap 조건데이터
-	 * @return jdbc객체리스트
+	 * List<T> 얻기
+	 * @param objClass Class<T>
+	 * @param sql String direct query
+	 * @param whereValue String where query
+	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param <T> Table annotation object class
+	 * @return List<T>
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -195,11 +218,13 @@ public class JdbcNaming {
 		}
 	}
 	
+
 	/**
-	 * 쿼리를이용한 객체결과 리스트 얻기
-	 * @param objClass 객체 클래스
-	 * @param sql 쿼리
-	 * @return jdbc객체리스트
+	 * List<T> 얻기
+	 * @param objClass Class<T>
+	 * @param sql String direct query
+	 * @param <T> Table annotation object class
+	 * @return List<T>
 	 */
 	public static <T> List<T> getSqlObjList(Class<T> objClass , String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -210,28 +235,39 @@ public class JdbcNaming {
 	}
 	
 	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @param sql 쿼리
-	 * @param whereValue 조건문
-	 * @param prepareStatementDataMap 조건데이터
-	 * @return jdbc객체리스트
+	 * List<T> 얻기
+	 * @param conn Connection
+	 * @param objClass Class<T>
+	 * @param sql String direct query
+	 * @param whereValue String where query
+	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param <T> Table annotation object class
+	 * @return List<T>
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn, objClass, sql, whereValue , null, -1 , prepareStatementDataMap);
 	}
 	
+
 	/**
-	 * 객체결과 리스트 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @param sql 쿼리
-	 * @param whereValue 조건문
-	 * @param orderByValue 정렬문
-	 * @param prepareStatementDataMap 조건데이터
-	 * @return jdbc객체리스트
+	 * List<T> 얻기
+	 * @param conn Connection
+	 * @param objClass Class<T>
+	 * @param sql String direct query
+	 * @param whereValue String where query
+	 * @param orderByValue  String order by query
+	 * @param size int lust cut size
+	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param <T> Table annotation object class
+	 * @return List<T>
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String sql, String whereValue, String orderByValue, int size, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
 		
@@ -258,15 +294,10 @@ public class JdbcNaming {
 		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
 
-			StmtResultSet stmtResultSet = JdbcCommon.makeStmtResultSet(conn, selectSql, prepareStatementDataMap);
+			StmtResultSet stmtResultSet = JdbcCommon.makeStmtResultSet(conn, selectSql, prepareStatementDataMap, table.fetchSize());
 			stmt = stmtResultSet.getStmt();
 			result = stmtResultSet.getResultSet();
-			
-			int fetchSize = table.fetchSize(); 
-			if(fetchSize > 0){
-				stmt.setFetchSize(table.fetchSize());
-				result.setFetchSize(table.fetchSize());
-			}
+
 			if(size == -1){
 				while(result.next()){
 					T resultObj = objClass.newInstance();
@@ -283,13 +314,10 @@ public class JdbcNaming {
 
 					T resultObj = objClass.newInstance();
 
-
 					for(Field field : fields){
 						JdbcField.setFieldObject(result, field, field.getName(), resultObj);
 					}
-						
-						
-					
+
 					resultList.add(resultObj);
 					checkCount ++ ;
 					if(checkCount >= size)
@@ -308,11 +336,15 @@ public class JdbcNaming {
 		
 	}
 
-
-
 	/**
 	 * sql 얻기
-	 * @return sql
+	 * @param objClass Class<T>
+	 * @param table Table annotation
+	 * @param fields Field []
+	 * @param whereValue String where query
+	 * @param orderByValue String order by query
+	 * @param <T> Table annotation object class
+	 * @return String sql
 	 */
 	public static <T> String getSql(Class<T> objClass, Table table , Field [] fields, String whereValue, String orderByValue){
 		StringBuilder sqlBuilder = new StringBuilder();
@@ -346,33 +378,43 @@ public class JdbcNaming {
 		return sqlBuilder.toString();
 	}
 
-	
+
+
 	/**
-	 * 객체결과 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @return jdbc객체
+	 * Table annotation object get
+	 * @param conn Connection
+	 * @param objClass Class<T>
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> T getObj(Connection conn, Class<T> objClass ) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObj(conn,  objClass, null, null, null, null);
 	}
-	
+
+
 	/**
-	 * 객체결과 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @return jdbc객체
+	 * Table annotation object get
+	 * @param conn Connection
+	 * @param objClass Class<T>
+	 * @param whereValue String where query
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> T getObj(Connection conn, Class<T> objClass , String whereValue) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObj(conn,  objClass, null, whereValue, null, null);
 	}
-	
-	
+
 	/**
-	 * 객체결과 얻기
-	 * @param objClass 객체 클래스
-	 * @return jdbc객체
+	 * Table annotation object get
+	 * @param objClass Class<T>
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass ){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -381,12 +423,13 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
-	 * 객체결과 얻기
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @return jdbc객체
+	 * Table annotation object get
+	 * @param objClass Class<T>
+	 * @param whereValue String where query
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass , String whereValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -395,13 +438,14 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
-	 * 객체결과 얻기
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @param orderByValue 정렬문
-	 * @return jdbc객체
+	 * Table annotation object get
+	 * @param objClass Class<T>
+	 * @param whereValue String where query
+	 * @param orderByValue String order by query
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass , String whereValue, String orderByValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -410,14 +454,15 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
+
+
 	/**
-	 * 객체결과 얻기
-	 * @param objClass 객체 클래스
-	 * @param whereValue 조건문
-	 * @param prepareStatementDataMap 조건데이터
-	 * @return jdbc객체
+	 * Table annotation object get
+	 * @param objClass Class<T>
+	 * @param whereValue String where query
+	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -427,13 +472,15 @@ public class JdbcNaming {
 		}
 	}
 	
+
 	/**
-	 * 객체결과 얻기
-	 * @param objClass 객체 클래스
-	 * @param sql 쿼리
-	 * @param whereValue 조건문
-	 * @param prepareStatementDataMap 조건데이터
-	 * @return jdbc객체
+	 * Table annotation object get
+	 * @param objClass Class<T>
+	 * @param sql String direct query
+	 * @param whereValue String where query
+	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -442,12 +489,13 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
-	 * 쿼리를이용한 객체결과 얻기
-	 * @param objClass 객체 클래스
-	 * @param sql 쿼리
-	 * @return jdbc객체
+	 * Table annotation object get
+	 * @param objClass Class<T>
+	 * @param sql String direct query
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
 	 */
 	public static <T> T getSqlObj(Class<T> objClass , String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -456,29 +504,37 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
+
 	/**
-	 * 객체결과 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @param sql 쿼리
-	 * @param whereValue 조건문
-	 * @param prepareStatementDataMap 조건데이터
-	 * @return 객체
+	 * Table annotation object get
+	 * @param conn Connection
+	 * @param objClass Class<T>
+	 * @param sql String direct query
+	 * @param whereValue String where query
+	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> T getObj(Connection conn, Class<T> objClass, String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObj(conn, objClass, sql, whereValue, null, prepareStatementDataMap);
 	}
+
 	/**
-	 * 객체결과 얻기
-	 * @param conn 연결 컨넥션
-	 * @param objClass 객체 클래스
-	 * @param sql 쿼리
-	 * @param whereValue 조건문
-	 * @param orderByValue 정렬문
-	 * @param prepareStatementDataMap 조건데이터
-	 * @return jdbc객체
+	 * Table annotation object get
+	 * @param conn Connection
+	 * @param objClass Class<T>
+	 * @param sql String direct query
+	 * @param whereValue String where query
+	 * @param orderByValue String order by query
+	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param <T> Table annotation object class
+	 * @return <T> Table annotation object class
+	 * @throws IllegalAccessException
+	 * @throws SQLException
+	 * @throws InstantiationException
 	 */
 	public static <T> T getObj(Connection conn, Class<T> objClass, String sql, String whereValue, String orderByValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
 
@@ -490,7 +546,6 @@ public class JdbcNaming {
 		}else{
 			makeSql = sql;
 		}
-		
 
 		Statement stmt = null;
 		ResultSet result = null;
@@ -499,11 +554,9 @@ public class JdbcNaming {
 
 		//noinspection CaughtExceptionImmediatelyRethrown
 		try{
-
-			StmtResultSet stmtResultSet = JdbcCommon.makeStmtResultSet(conn, makeSql, prepareStatementDataMap);
+			StmtResultSet stmtResultSet = JdbcCommon.makeStmtResultSet(conn, makeSql, prepareStatementDataMap, 2);
 			stmt = stmtResultSet.getStmt();
 			result = stmtResultSet.getResultSet();
-			result.setFetchSize(2);
 			if(result.next()){
 				resultObj = objClass.newInstance();
 
@@ -516,15 +569,15 @@ public class JdbcNaming {
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
 		}
-		
 		return resultObj;	
 	}
-	
+
 
 	/**
-	 * obj를 이용한 데이터 upsert
-	 * @param objClassList 객체리시트
-	 * @return fail -1
+	 * upsert
+	 * @param objClassList List<T>
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int upsert( List<T> objClassList){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -542,41 +595,43 @@ public class JdbcNaming {
 	
 
 	/**
-	 * obj를 이용한 데이터 upsert
-	 * @param objClassList 객체리시트
-	 * @param isClearParameters ClearParameters 여부
-	 * @return fail -1
+	 * upsert
+	 * @param objClassList List<T>
+	 * @param isClearParameters boolean
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int upsert( List<T> objClassList,   boolean isClearParameters){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
 		try(Connection conn = connectionPool.getConnection()){
 			int result =  insert(conn, objClassList, "UPSERT", isClearParameters);
-			if(!connectionPool.isAutoCommit()){
-				conn.commit();
-			}
+			if(!connectionPool.isAutoCommit()) conn.commit();
 			return result;
 		}catch(Exception e){
 			throw new RuntimeException(e);
 
 		}
 	}
-	
 
 	/**
-	 * obj를 이용한 데이터 upsert
-	 * @param conn 연결 컨넥션
-	 * @param objClassList 객체리시트
-	 * @param isClearParameters ClearParameters 여부
-	 * @return fail -1
+	 * upsert
+	 * @param conn Connection
+	 * @param objClassList List<T>
+	 * @param isClearParameters boolean
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int upsert(Connection conn, List<T> objClassList,   boolean isClearParameters){
 		return insert(conn, objClassList , "UPSERT", isClearParameters);
 	}
 	
 	/**
-	 * obj를 이용한 데이터 insert
-	 * @param objClassList 객체리시트
-	 * @return fail -1
+
+	/**
+	 * insert
+	 * @param objClassList List<T>
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int insert( List<T> objClassList){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -593,10 +648,11 @@ public class JdbcNaming {
 	
 
 	/**
-	 * obj를 이용한 데이터 insert
-	 * @param objClassList 객체리시트
-	 * @param isClearParameters ClearParameters 여부
-	 * @return fail -1
+	 * insert
+	 * @param objClassList List<T>
+	 * @param isClearParameters boolean
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int insert( List<T> objClassList, boolean isClearParameters){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -614,74 +670,44 @@ public class JdbcNaming {
 	}
 	
 	
-	
+
 	/**
-	 * obj를 이용한 데이터 insert
-	 * @param conn 연결 컨넥션
-	 * @param objClassList 객체리시트
-	 * @param isClearParameters ClearParameters 여부
-	 * @return fail -1
+	 * insert
+	 * @param conn Connection
+	 * @param objClassList List<T>
+	 * @param isClearParameters boolean
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int insert(Connection conn, List<T> objClassList,   boolean isClearParameters){
 		return insert(conn, objClassList , "INSERT", isClearParameters);
 	}
 
-
 	/**
-	 * obj를 이용한 데이터 insert
-	 * @param conn 연결 컨넥션
-	 * @param objClassList 객체리시트
-	 * @param insertQueryValue insert ot upsert
-	 * @param isClearParameters ClearParameters 여부
-	 * @return fail -1
+	 * insert
+	 * @param conn Connection
+	 * @param objClassList List<T>
+	 * @param insertQueryValue string insert query
+	 * @param isClearParameters boolean
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int insert(Connection conn, List<T> objClassList, String insertQueryValue,  boolean isClearParameters){
 		if(objClassList == null || objClassList.size() ==0){
 			return 0;
 		}
-
-
 		Class<?> objClass = objClassList.get(0).getClass();
-
 		Field [] fields = getFields(objClass);
-
 		String insertSql = getInsertSql(objClass, fields, insertQueryValue);
-
-
-		PreparedStatement pstmt = null;
-
-		int successCount ;
-
-		try{
-			pstmt = conn.prepareStatement(insertSql);
-
-			for(T obj : objClassList){
-				JdbcCommon.addBatch(obj, fields, pstmt);
-				if(isClearParameters){
-					pstmt.clearParameters();
-				}else{
-					pstmt.executeBatch();
-				}
-
-			}
-			if(isClearParameters){
-				pstmt.executeBatch();
-			}
-			successCount = objClassList.size();
-		}catch(Exception e){
-			throw new RuntimeException(e);
-		}finally{
-			//noinspection CatchMayIgnoreException
-			try{if(pstmt != null)pstmt.close(); }catch(Exception e){}
-		}
-
-		return successCount;
+		return JdbcCommon.insert(conn, objClassList, fields, insertSql, isClearParameters);
 	}
 
-
 	/**
-	 * insert 계열의 sql 얻기
-	 * @return InsertSql
+	 * insert query get
+	 * @param objClass Class<?>
+	 * @param fields Field []
+	 * @param insertQueryValue string INSERT, UPSERT
+	 * @return String insert query
 	 */
 	public static String getInsertSql(Class<?> objClass, Field [] fields , String insertQueryValue){
 
@@ -713,11 +739,14 @@ public class JdbcNaming {
 		return sqlBuilder.toString();
 	}
 
+
+
 	/**
-	 * 있으면 업데이트 없으면 추가
-	 * @param obj jdbcObject
-	 * @param isNullUpdate null column update flag
-	 * @return fail -1
+	 * insert or update
+	 * @param obj T
+	 * @param isNullUpdate boolean null value update flag
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int insertOrUpdate(T obj, boolean isNullUpdate){
 
@@ -733,14 +762,14 @@ public class JdbcNaming {
 		}
 
 	}
-	
-	
+
 	/**
-	 * 있으면 업데이트 없으면 추가
+	 * insert or update
 	 * @param conn Connection
-	 * @param obj jdbcObject
-	 * @param isNullUpdate null column update flag
-	 * @return 실패 -1
+	 * @param obj T
+	 * @param isNullUpdate boolean null value update flag
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int insertOrUpdate(Connection conn, Object obj , boolean isNullUpdate ){
 
@@ -763,23 +792,22 @@ public class JdbcNaming {
 		
 	}
 
-
-
-	
 	/**
-	 * 객체를이용한 자동 upsert 
+	 * upsert
 	 * @param conn Connection
-	 * @param obj jdbcObject
-	 * @return fail -1
+	 * @param obj T
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int upsert(Connection conn, T obj){
 		return insert(conn, obj, "UPSERT");
 	}
 
 	/**
-	 * 객체를이용한 자동 upsert 
-	 * @param obj jdbcObject
-	 * @return success 1, fail -1
+	 * upsert
+	 * @param obj T
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int upsert(T obj){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -795,11 +823,11 @@ public class JdbcNaming {
 		}
 	}
 
-	
 	/**
-	 * 객체를이용한 자동 insert 
-	 * @param obj jdbcObject
-	 * @return success 1, fail -1
+	 * inset
+	 * @param obj T
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int insert(T obj){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -815,22 +843,25 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
-	 * 객체를이용한 자동 insert 
+	 * inset
 	 * @param conn Connection
-	 * @param obj jdbcObject
-	 * @return success 1, fail -1
+	 * @param obj T
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int insert(Connection conn, T obj){
 		return insert(conn, obj, "INSERT");
 	}
-	
+
 	/**
-	 * 객체를이용한 자동 insert 
+	 * insert
 	 * @param conn Connection
-	 * @param obj jdbcObject
-	 * @return success 1, fail -1
+	 * @param obj T
+	 * @param insertQueryValue String INSERT, UPSERT
+	 * @param <T> Table annotation object class
+	 * @return int fail -1
 	 */
 	public static <T> int insert(Connection conn, T obj, String insertQueryValue){
 		
@@ -839,37 +870,15 @@ public class JdbcNaming {
 
 		String insertSql = getInsertSql(objClass, fields, insertQueryValue);
 
-		int successCount ;
-
-
-		PreparedStatement pstmt = null;
-
-		//noinspection TryFinallyCanBeTryWithResources
-		try{
-			pstmt = conn.prepareStatement(insertSql);
-
-			JdbcCommon.addBatch(obj, fields, pstmt);
-			pstmt.clearParameters();	
-			
-			pstmt.executeBatch();
-			successCount = 1;
-		}catch(Exception e){
-			throw new RuntimeException(e);
-		}finally{
-			//noinspection CatchMayIgnoreException
-			try{if(pstmt!=null)pstmt.close();  }catch(Exception e){}
-		} 
-				
-		return successCount;
+		return JdbcCommon.insert(conn, obj, fields, insertSql);
 	}
 
-
-
 	/**
-	 * 객체를 이용한 update
-	 * @param obj jdbcObject
-	 * @param isNullUpdate null 업데이트 여부
-	 * @return  success 1, fail -1
+	 * update
+	 * @param obj T
+	 * @param isNullUpdate  boolean null value update flag
+	 * @param <T> Table annotation object class
+	 * @return
 	 */
 	public static <T> int update(T obj , boolean isNullUpdate ) {
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -886,15 +895,14 @@ public class JdbcNaming {
 	}
 
 
-
-
 	/**
-    * 객체를 이용한 update
-    * @param conn Connection
-    * @param obj jdbcObject
-    * @param isNullUpdate null 업데이트 여부
-    * @return  success 1, fail -1
-    */
+	 * update
+	 * @param conn Connection
+	 * @param obj T
+	 * @param isNullUpdate boolean null value update flag
+	 * @param <T> Table annotation object class
+	 * @return
+	 */
 	public static <T> int update(Connection conn,T obj , boolean isNullUpdate ){
 			
 		Class<?> objClass = obj.getClass();
@@ -936,9 +944,6 @@ public class JdbcNaming {
 			throw new PrimaryKeyNotSetException(objClass.getName());
 		}
 
-
-
-
 		sqlBuilder.append(fieldBuilder.toString().substring(1));		
 		sqlBuilder.append(" WHERE ");
 		
@@ -956,33 +961,8 @@ public class JdbcNaming {
 		int successCount;
 		try{
 			pstmt = conn.prepareStatement(sqlBuilder.toString());
-				
-			int index = 0;
-			//noinspection ForLoopReplaceableByForEach
-			for(int i=0 ; i<fields.length ; i++){
-				
-				PrimaryKey  pk = fields[i].getAnnotation(PrimaryKey.class);
-				if(pk != null){
-					continue;
-				}
-				fields[i].setAccessible(true);
-				Object object = fields[i].get(obj);
-				if(!isNullUpdate){
-					
-					if(object == null){
-						continue;
-					}
-				}
+			int index = JdbcCommon.setPrimaryKeyField(pstmt,fields,obj,isNullUpdate);
 
-				if(object == null){
-					JdbcCommon.setNullPstmt(obj,fields[i],pstmt,index);
-				}else{
-					JdbcCommon.setPstmt(obj, object, fields[i], pstmt, index);
-				}
-				index++;
-						
-			}
-				
 			for(int i= 0 ; i < pkColumnList.size() ; i++){
 				Field field = pkColumnList.get(i);
 				Object object = field.get(obj);
@@ -1005,12 +985,11 @@ public class JdbcNaming {
 		return successCount;
 	}
 
-	
 	/**
-	 * 클래스 맴버변수 생성
+	 * object 생성 도움 매소드
 	 * @param conn Connection
-	 * @param tableName tableName
-	 * @return 변수생성값
+	 * @param tableName String table name
+	 * @return String object 생성할 때 복사 붙여 넣기 값
 	 */
 	public static String makeObjectValue(Connection conn, String tableName){
 		Statement stmt = null;
@@ -1117,10 +1096,11 @@ public class JdbcNaming {
 		return fieldBuilder.toString();
 	}
 
+
 	/**
-	 * 클래스 맴버변수 생성
-	 * @param tableName tableName
-	 * @return 변수생성값
+	 * object 생성 도움 매소드
+	 * @param tableName String table name
+	 * @return String object 생성할 때 복사 붙여 넣기 값
 	 */
 	public static String makeObjectValue( String tableName){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -1131,9 +1111,10 @@ public class JdbcNaming {
 	}
 
 	/**
-	 * 데이터가 없을경우에만 insert
-	 * @param obj jdbcObject
-	 * @return success insert count, fail -1
+	 * data 가 없는 경우 insert
+	 * @param obj T
+	 * @param <T> Table annotation object class
+	 * @return int success insert count, fail -1
 	 */
 	public static <T> int insertIfNoData(T obj){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -1148,11 +1129,13 @@ public class JdbcNaming {
 			throw new RuntimeException(e);
 		}
 	}
+
 	/**
-	 * 데이터가 없을경우에만 insert
+	 * data 가 없는 경우 insert
 	 * @param conn Connection
-	 * @param obj jdbcObject
-	 * @return success insert count, fail -1
+	 * @param obj T
+	 * @param <T> Table annotation object class
+	 * @return  int success insert count, fail -1
 	 */
 	public static <T> int insertIfNoData(Connection conn,T obj){
 
@@ -1172,6 +1155,13 @@ public class JdbcNaming {
 		return successCount;
 	}
 
+	/**
+	 * where query 얻기
+	 * @param obj T
+	 * @param <T> Table annotation object class
+	 * @return String where query
+	 * @throws IllegalAccessException
+	 */
 	public static <T> String getCheckWhere(T obj) throws IllegalAccessException {
 		Class<?> objClass = obj.getClass();
 		String tableName = TableSql.getTableName(objClass.getAnnotation(Table.class), objClass.getName());
