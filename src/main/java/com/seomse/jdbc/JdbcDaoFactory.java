@@ -38,10 +38,10 @@ public class JdbcDaoFactory {
 
 	/**
 	 * dao implement get
-	 * @param daoClass Class<T>  daoClass
+	 * @param daoClass Class  daoClass
 	 * @param dbType string dataBaseType
 	 * @param <T> ImplDaoClass
-	 * @return <T> ImplDaoClass
+	 * @return T ImplDaoClass
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getDao(Class<T> daoClass, String dbType){

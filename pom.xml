@@ -139,6 +139,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>3.4.5</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.seomse.commons</groupId>
             <artifactId>seomse-commons</artifactId>
             <version>1.1.0</version>
@@ -147,7 +153,7 @@
         <dependency>
             <groupId>com.seomse.cypto</groupId>
             <artifactId>seomse-cypto</artifactId>
-            <version>1.0.0</version>
+            <version>0.1.0</version>
         </dependency>
 
 

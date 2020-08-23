@@ -28,7 +28,7 @@ import java.util.*;
 
 /**
  * naming domain header 를 이용 하여 
- * Map<String, Object>를 row로 출력하여 사용함
+ * Map 를 row로 출력하여 사용함
  * db 의 데이터 이간에 활용 됨
  * @author macle
  */
@@ -41,7 +41,7 @@ public class JdbcNamingMap {
 	/**
 	 * table 의 모든 데이터 얻기
 	 * @param tableName String table name
-	 * @return List<Map<String, Object>>
+	 * @return List
 	 */
 	public static List<Map<String, Object>> getDataList(String tableName) {
 		return 	getDataList(tableName, null, null );
@@ -51,8 +51,8 @@ public class JdbcNamingMap {
 	 * Table 데이터 얻기
 	 * @param tableName String table name
 	 * @param whereValue String where query
-	 * @param prepareStatementDataMap  Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
-	 * @return List<Map<String, Object>>
+	 * @param prepareStatementDataMap  Map 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @return List
 	 */
 	public static List<Map<String, Object>> getDataList( String tableName, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap)  {
 
@@ -69,8 +69,8 @@ public class JdbcNamingMap {
 	 * @param conn Connection
 	 * @param tableName String table name
 	 * @param whereValue String where query
-	 * @param prepareStatementDataMap  Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
-	 * @return List<Map<String, Object>>
+	 * @param prepareStatementDataMap  Map 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @return List
 	 */
 	public static  List<Map<String, Object>> getDataList(Connection conn, String tableName, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) {
 		final List<Map<String, Object>> dataList = new ArrayList<>();
@@ -107,7 +107,7 @@ public class JdbcNamingMap {
 
 	/**
 	 * data list insert
-	 * @param dataList List<Map<String, Object>>
+	 * @param dataList List
 	 * @return int insert count
 	 */
 	public static int insert(List<Map<String, Object>> dataList){
@@ -128,7 +128,7 @@ public class JdbcNamingMap {
 	/**
 	 * data list insert
 	 * @param conn Connection
-	 * @param dataList List<Map<String, Object>>
+	 * @param dataList List
 	 * @return int upsert count
 	 */
 	public static int upsert(Connection conn,  List<Map<String, Object>> dataList) {
@@ -140,7 +140,7 @@ public class JdbcNamingMap {
 	/**
 	 * data list insert
 	 * @param conn Connection
-	 * @param dataList List<Map<String, Object>>
+	 * @param dataList List
 	 * @return int insert count
 	 */
 	public static int insert(Connection conn, List<Map<String, Object>> dataList){
@@ -153,7 +153,7 @@ public class JdbcNamingMap {
 	/**
 	 * data list insert
 	 * @param conn Connection
-	 * @param dataList List<Map<String, Object>>
+	 * @param dataList List
 	 * @param insertQueryValue String
 	 * @param isClearParameters boolean
 	 * @return int insert count
@@ -349,7 +349,7 @@ public class JdbcNamingMap {
 	 * @param conn Connection
 	 * @param tableName String
 	 * @param whereValue String
-	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param prepareStatementDataMap Map 조건 데이터  date time 같이 database query 가 다른 경우
 	 * @param handler JdbcMapDataHandler
 	 */
 	public static void receiveData(Connection conn, String tableName, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap

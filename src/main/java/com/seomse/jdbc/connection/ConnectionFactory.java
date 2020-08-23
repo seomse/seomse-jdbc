@@ -26,29 +26,34 @@ import java.sql.SQLException;
 public class ConnectionFactory {
 
 
+
 	/**
 	 * Connection 생성
-	 * @param databaseTypeOrDriverClass oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
-	 * @param url url ex)jdbc:oracle:thin:@127.0.0.1:1521:orcl
-	 * @param user user Id
-	 * @param password user password
+	 * @param databaseTypeOrDriverClass String oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
+	 * @param url String url ex)jdbc:oracle:thin:@127.0.0.1:1521:orcl
+	 * @param user String user Id
+	 * @param password String user password
 	 * @return Connection
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
+	 * @throws IllegalAccessException IllegalAccessException
 	 */
 	public static Connection newConnection(String databaseTypeOrDriverClass, String url, String user, String password) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException{
 		Driver driver = newDriver(databaseTypeOrDriverClass);
 		return newConnection(driver, url, user, password);
-//	      DriverManager.registerDriver(driver);	
-//		return  DriverManager.getConnection(url, user, password);		
+
 	}
 
 
 	/**
 	 * Connection 생성
-	 * @param driver driver
-	 * @param url  url ex)jdbc:oracle:thin:@127.0.0.1:1521:orcl
-	 * @param user user Id
-	 * @param password  user password
+	 * @param driver Driver
+	 * @param url String url ex)jdbc:oracle:thin:@127.0.0.1:1521:orcl
+	 * @param user String user Id
+	 * @param password String user password
 	 * @return Connection
+	 * @throws SQLException SQLException
 	 */
 	public static Connection newConnection(Driver driver, String url, String user, String password) throws SQLException {
 		java.util.Properties info = new java.util.Properties();
@@ -63,24 +68,32 @@ public class ConnectionFactory {
 
 	}
 	
+
 	/**
-	 *Connection 생성
-	 * @param databaseTypeOrDriverClass oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
-	 * @param urlText urlText
+	 * Connection 생성
+	 * @param databaseTypeOrDriverClass  String oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
+	 * @param urlText String url ex)jdbc:oracle:thin:@127.0.0.1:1521:orcl
 	 * @return Connection
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
 	public  static Connection  newConnection(String databaseTypeOrDriverClass, String urlText) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		Driver driver = newDriver(databaseTypeOrDriverClass);
 		return driver.connect(urlText, new java.util.Properties());
-//		DriverManager.registerDriver(driver);	
-//		return DriverManager.getConnection(urlText);
+
 	}
+
 
 	/**
 	 * sqlite Connection 생성
-	 * @param sqliteDbFilePath sqlite 파일 경로
-	 * @return Connection sqlite Connection
-
+	 * @param sqliteDbFilePath String sqlite file path
+	 * @return  Connection sqlite Connection
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
 	public synchronized static Connection  newConnectionSqlite(String sqliteDbFilePath) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException{
 		return newConnection("SQLITE","jdbc:sqlite:"+ sqliteDbFilePath );
@@ -88,10 +101,14 @@ public class ConnectionFactory {
 	
 	
 
+
 	/**
 	 * Driver 생성
-	 * @param databaseTypeOrDriverClass oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
+	 * @param databaseTypeOrDriverClass String databaseTypeOrDriverClass oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
 	 * @return Driver
+	 * @throws InstantiationException InstantiationException
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
 	public static Driver newDriver(String databaseTypeOrDriverClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 		Driver driver ;

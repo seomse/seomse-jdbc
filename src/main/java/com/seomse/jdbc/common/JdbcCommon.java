@@ -44,9 +44,9 @@ public class JdbcCommon {
      * PreparedStatement ResultSet setting
      * @param conn Connection
      * @param sql String
-     * @param prepareStatementDataMap Map<Integer, PrepareStatementData>
+     * @param prepareStatementDataMap Map
      * @return StmtResultSet
-     * @throws SQLException
+     * @throws SQLException SQLException
      */
     public static StmtResultSet makeStmtResultSet(Connection conn, String sql,  Map<Integer, PrepareStatementData> prepareStatementDataMap) throws SQLException {
 
@@ -69,10 +69,10 @@ public class JdbcCommon {
      * PreparedStatement ResultSet setting
      * @param conn Connection
      * @param sql String
-     * @param prepareStatementDataMap  Map<Integer, PrepareStatementData>
+     * @param prepareStatementDataMap  Map
      * @param fetchSize int
      * @return StmtResultSet
-     * @throws SQLException
+     * @throws SQLException SQLException
      */
     public static StmtResultSet makeStmtResultSet(Connection conn, String sql,  Map<Integer, PrepareStatementData> prepareStatementDataMap, int fetchSize) throws SQLException {
         StmtResultSet stmtResultSet = makeStmtResultSet(conn,sql,prepareStatementDataMap);
@@ -91,8 +91,8 @@ public class JdbcCommon {
     /**
      * prepareStatementDataMap 을 이용한 stmt 설정
      * @param pstmt PreparedStatement
-     * @param prepareStatementDataMap  Map<Integer, PrepareStatementData>
-     * @throws SQLException
+     * @param prepareStatementDataMap  Map
+     * @throws SQLException SQLException
      */
     public static void setStmt(PreparedStatement pstmt, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws SQLException {
         Set<Integer> indexSet = prepareStatementDataMap.keySet();
@@ -119,8 +119,8 @@ public class JdbcCommon {
      * @param fields Field []
      * @param pstmt PreparedStatement
      * @param <T> T jdbc object
-     * @throws IllegalAccessException
-     * @throws SQLException
+     * @throws IllegalAccessException IllegalAccessException
+     * @throws SQLException SQLException
      */
     public static <T> void addBatch(T obj, Field [] fields, PreparedStatement pstmt ) throws IllegalAccessException, SQLException {
         for(int i=0 ; i<fields.length ; i++){
@@ -146,8 +146,8 @@ public class JdbcCommon {
      * @param pstmt PreparedStatement
      * @param i int index
      * @param <T> T jdbc object
-     * @throws SQLException
-     * @throws IllegalAccessException
+     * @throws SQLException SQLException
+     * @throws IllegalAccessException IllegalAccessException
      */
     public static <T> void setNullPstmt(T obj, Field field, PreparedStatement pstmt, int i) throws SQLException, IllegalAccessException {
         Sequence sequence = field.getAnnotation(Sequence.class);
@@ -179,8 +179,8 @@ public class JdbcCommon {
      * @param pstmt PreparedStatement
      * @param i int index
      * @param <T> T jdbc object
-     * @throws SQLException
-     * @throws IllegalAccessException
+     * @throws SQLException SQLException
+     * @throws IllegalAccessException IllegalAccessException
      */
     public static <T> void setPstmt(T obj, Object object,Field field, PreparedStatement pstmt, int i) throws SQLException, IllegalAccessException {
 
@@ -227,7 +227,7 @@ public class JdbcCommon {
     /**
      * insert
      * @param conn conn
-     * @param objClassList List<T>
+     * @param objClassList List
      * @param fields  Field []
      * @param insertSql String
      * @param isClearParameters boolean
@@ -305,8 +305,8 @@ public class JdbcCommon {
      * @param isNullUpdate boolean null value update flag
      * @param <T> Table annotation object class
      * @return int index
-     * @throws SQLException
-     * @throws IllegalAccessException
+     * @throws SQLException SQLException
+     * @throws IllegalAccessException IllegalAccessException
      */
     public static <T> int setPrimaryKeyField( PreparedStatement pstmt, Field [] fields, T obj, boolean isNullUpdate) throws SQLException, IllegalAccessException {
 

@@ -44,14 +44,14 @@ public class JdbcNaming {
 	private static final Logger logger = LoggerFactory.getLogger(JdbcNaming.class);
 
 	/**
-	 * List<T> 얻기
+	 * List 얻기
 	 * @param conn Connection
-	 * @param objClass  Class<T>
+	 * @param objClass Class
 	 * @param <T> Table annotation object
-	 * @return List<T>
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return List
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass ) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn, objClass, null, null, null, -1, null);
@@ -59,58 +59,58 @@ public class JdbcNaming {
 	}
 
 	/**
-	 * List<T> 얻기
+	 * List 얻기
 	 * @param conn Connection
-	 * @param objClass  Class<T>
+	 * @param objClass Class
 	 * @param whereValue String where query
 	 * @param <T> Table annotation object class
-	 * @return List<T>
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return List
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String whereValue) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn,  objClass, null, whereValue, null, -1, null);
 	}
 
 	/**
-	 * List<T> 얻기
+	 * List 얻기
 	 * @param conn Connection
-	 * @param objClass  Class<T>
+	 * @param objClass Class
 	 * @param whereValue String where query
 	 * @param orderByValue String order by query
 	 * @param <T> Table annotation object class
-	 * @return List<T>
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return List
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String whereValue, String orderByValue) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn,  objClass, null, whereValue, orderByValue, -1, null);
 	}
 
 	/**
-	 * List<T> 얻기
+	 * List 얻기
 	 * @param conn Connection
-	 * @param objClass  Class<T>
+	 * @param objClass Class
 	 * @param whereValue String where query
 	 * @param orderByValue String order by query
 	 * @param size int lust cut size
 	 * @param <T> Table annotation object class
-	 * @return List<T>
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return List
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String whereValue, String orderByValue, int size) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn,  objClass, null, whereValue, orderByValue, size, null);
 	}
 
 	/**
-	 * List<T> 얻기
-	 * @param objClass  Class<T>
+	 * List 얻기
+	 * @param objClass Class
 	 * @param <T> Table annotation object class
-	 * @return List<T>
+	 * @return List
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass ){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -121,11 +121,11 @@ public class JdbcNaming {
 	}
 
 	/**
-	 * List<T> 얻기
-	 * @param objClass  Class<T>
+	 * List 얻기
+	 * @param objClass Class
 	 * @param whereValue String where query
 	 * @param <T> Table annotation object class
-	 * @return List<T>
+	 * @return List
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -136,12 +136,12 @@ public class JdbcNaming {
 	}
 
 	/**
-	 * List<T> 얻기
-	 * @param objClass  Class<T>
+	 * List 얻기
+	 * @param objClass Class
 	 * @param whereValue String where query
 	 * @param size int lust cut size
 	 * @param <T> Table annotation object class
-	 * @return List<T>
+	 * @return List
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, int size){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -153,12 +153,12 @@ public class JdbcNaming {
 	
 
 	/**
-	 * List<T> 얻기
-	 * @param objClass  Class<T>
+	 * List 얻기
+	 * @param objClass Class
 	 * @param whereValue String where query
 	 * @param orderByValue  String order by query
 	 * @param <T> Table annotation object class
-	 * @return List<T>
+	 * @return List
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -170,13 +170,13 @@ public class JdbcNaming {
 
 
 	/**
-	 * List<T> 얻기
-	 * @param objClass  Class<T>
+	 * List 얻기
+	 * @param objClass  Class
 	 * @param whereValue String where query
 	 * @param orderByValue  String order by query
 	 * @param size int lust cut size
 	 * @param <T> Table annotation object class
-	 * @return List<T>
+	 * @return List
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue, int size){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -188,12 +188,12 @@ public class JdbcNaming {
 
 
 	/**
-	 * List<T> 얻기
-	 * @param objClass Class<T>
+	 * List 얻기
+	 * @param objClass Class
 	 * @param whereValue String where query
-	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param prepareStatementDataMap Map 조건 데이터  date time 같이 database query 가 다른 경우
 	 * @param <T> Table annotation object class
-	 * @return List<T>
+	 * @return List
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -204,13 +204,13 @@ public class JdbcNaming {
 	}
 
 	/**
-	 * List<T> 얻기
-	 * @param objClass Class<T>
+	 * List 얻기
+	 * @param objClass Class
 	 * @param sql String direct query
 	 * @param whereValue String where query
-	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param prepareStatementDataMap Map 조건 데이터  date time 같이 database query 가 다른 경우
 	 * @param <T> Table annotation object class
-	 * @return List<T>
+	 * @return List
 	 */
 	public static <T> List<T> getObjList(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -222,11 +222,11 @@ public class JdbcNaming {
 	
 
 	/**
-	 * List<T> 얻기
-	 * @param objClass Class<T>
+	 * List 얻기
+	 * @param objClass Class
 	 * @param sql String direct query
 	 * @param <T> Table annotation object class
-	 * @return List<T>
+	 * @return List
 	 */
 	public static <T> List<T> getSqlObjList(Class<T> objClass , String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -239,17 +239,17 @@ public class JdbcNaming {
 	
 
 	/**
-	 * List<T> 얻기
+	 * List 얻기
 	 * @param conn Connection
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param sql String direct query
 	 * @param whereValue String where query
-	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param prepareStatementDataMap Map 조건 데이터  date time 같이 database query 가 다른 경우
 	 * @param <T> Table annotation object class
-	 * @return List<T>
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return List
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObjList(conn, objClass, sql, whereValue , null, -1 , prepareStatementDataMap);
@@ -257,19 +257,19 @@ public class JdbcNaming {
 	
 
 	/**
-	 * List<T> 얻기
+	 * List 얻기
 	 * @param conn Connection
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param sql String direct query
 	 * @param whereValue String where query
 	 * @param orderByValue  String order by query
 	 * @param size int lust cut size
-	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param prepareStatementDataMap Map 조건 데이터  date time 같이 database query 가 다른 경우
 	 * @param <T> Table annotation object class
-	 * @return List<T>
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return List
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> List<T> getObjList(Connection conn, Class<T> objClass , String sql, String whereValue, String orderByValue, int size, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
 		
@@ -340,7 +340,7 @@ public class JdbcNaming {
 
 	/**
 	 * sql 얻기
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param table Table annotation
 	 * @param fields Field []
 	 * @param whereValue String where query
@@ -385,12 +385,12 @@ public class JdbcNaming {
 	/**
 	 * Table annotation object get
 	 * @param conn Connection
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return T Table annotation object class
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> T getObj(Connection conn, Class<T> objClass ) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObj(conn,  objClass, null, null, null, null);
@@ -400,13 +400,13 @@ public class JdbcNaming {
 	/**
 	 * Table annotation object get
 	 * @param conn Connection
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param whereValue String where query
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return T Table annotation object class
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> T getObj(Connection conn, Class<T> objClass , String whereValue) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObj(conn,  objClass, null, whereValue, null, null);
@@ -414,9 +414,9 @@ public class JdbcNaming {
 
 	/**
 	 * Table annotation object get
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
+	 * @return T Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass ){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -428,10 +428,10 @@ public class JdbcNaming {
 
 	/**
 	 * Table annotation object get
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param whereValue String where query
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
+	 * @return T Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass , String whereValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -443,11 +443,11 @@ public class JdbcNaming {
 
 	/**
 	 * Table annotation object get
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param whereValue String where query
 	 * @param orderByValue String order by query
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
+	 * @return T Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass , String whereValue, String orderByValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -460,11 +460,11 @@ public class JdbcNaming {
 
 	/**
 	 * Table annotation object get
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param whereValue String where query
-	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param prepareStatementDataMap Map 조건 데이터  date time 같이 database query 가 다른 경우
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
+	 * @return T Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -477,12 +477,12 @@ public class JdbcNaming {
 
 	/**
 	 * Table annotation object get
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param sql String direct query
 	 * @param whereValue String where query
-	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param prepareStatementDataMap Map 조건 데이터  date time 같이 database query 가 다른 경우
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
+	 * @return T Table annotation object class
 	 */
 	public static <T> T getObj(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -494,10 +494,10 @@ public class JdbcNaming {
 
 	/**
 	 * Table annotation object get
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param sql String direct query
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
+	 * @return T Table annotation object class
 	 */
 	public static <T> T getSqlObj(Class<T> objClass , String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -510,15 +510,15 @@ public class JdbcNaming {
 	/**
 	 * Table annotation object get
 	 * @param conn Connection
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param sql String direct query
 	 * @param whereValue String where query
-	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param prepareStatementDataMap Map 조건 데이터  date time 같이 database query 가 다른 경우
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return T Table annotation object class
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> T getObj(Connection conn, Class<T> objClass, String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
 		return getObj(conn, objClass, sql, whereValue, null, prepareStatementDataMap);
@@ -527,16 +527,16 @@ public class JdbcNaming {
 	/**
 	 * Table annotation object get
 	 * @param conn Connection
-	 * @param objClass Class<T>
+	 * @param objClass Class
 	 * @param sql String direct query
 	 * @param whereValue String where query
 	 * @param orderByValue String order by query
-	 * @param prepareStatementDataMap Map<Integer, PrepareStatementData> 조건 데이터  date time 같이 database query 가 다른 경우
+	 * @param prepareStatementDataMap Map 조건 데이터  date time 같이 database query 가 다른 경우
 	 * @param <T> Table annotation object class
-	 * @return <T> Table annotation object class
-	 * @throws IllegalAccessException
-	 * @throws SQLException
-	 * @throws InstantiationException
+	 * @return T Table annotation object class
+	 * @throws IllegalAccessException IllegalAccessException
+	 * @throws SQLException SQLException
+	 * @throws InstantiationException InstantiationException
 	 */
 	public static <T> T getObj(Connection conn, Class<T> objClass, String sql, String whereValue, String orderByValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws IllegalAccessException, SQLException, InstantiationException {
 
@@ -577,7 +577,7 @@ public class JdbcNaming {
 
 	/**
 	 * upsert
-	 * @param objClassList List<T>
+	 * @param objClassList List
 	 * @param <T> Table annotation object class
 	 * @return int fail -1
 	 */
@@ -598,7 +598,7 @@ public class JdbcNaming {
 
 	/**
 	 * upsert
-	 * @param objClassList List<T>
+	 * @param objClassList List
 	 * @param isClearParameters boolean
 	 * @param <T> Table annotation object class
 	 * @return int fail -1
@@ -618,7 +618,7 @@ public class JdbcNaming {
 	/**
 	 * upsert
 	 * @param conn Connection
-	 * @param objClassList List<T>
+	 * @param objClassList List
 	 * @param isClearParameters boolean
 	 * @param <T> Table annotation object class
 	 * @return int fail -1
@@ -631,7 +631,7 @@ public class JdbcNaming {
 
 	/**
 	 * insert
-	 * @param objClassList List<T>
+	 * @param objClassList List
 	 * @param <T> Table annotation object class
 	 * @return int fail -1
 	 */
@@ -651,7 +651,7 @@ public class JdbcNaming {
 
 	/**
 	 * insert
-	 * @param objClassList List<T>
+	 * @param objClassList List
 	 * @param isClearParameters boolean
 	 * @param <T> Table annotation object class
 	 * @return int fail -1
@@ -676,7 +676,7 @@ public class JdbcNaming {
 	/**
 	 * insert
 	 * @param conn Connection
-	 * @param objClassList List<T>
+	 * @param objClassList List
 	 * @param isClearParameters boolean
 	 * @param <T> Table annotation object class
 	 * @return int fail -1
@@ -688,7 +688,7 @@ public class JdbcNaming {
 	/**
 	 * insert
 	 * @param conn Connection
-	 * @param objClassList List<T>
+	 * @param objClassList List
 	 * @param insertQueryValue string insert query
 	 * @param isClearParameters boolean
 	 * @param <T> Table annotation object class
@@ -706,7 +706,7 @@ public class JdbcNaming {
 
 	/**
 	 * insert query get
-	 * @param objClass Class<?>
+	 * @param objClass Class
 	 * @param fields Field []
 	 * @param insertQueryValue string INSERT, UPSERT
 	 * @return String insert query
@@ -880,7 +880,7 @@ public class JdbcNaming {
 	 * @param obj T
 	 * @param isNullUpdate  boolean null value update flag
 	 * @param <T> Table annotation object class
-	 * @return
+	 * @return int fail -1
 	 */
 	public static <T> int update(T obj , boolean isNullUpdate ) {
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -903,7 +903,7 @@ public class JdbcNaming {
 	 * @param obj T
 	 * @param isNullUpdate boolean null value update flag
 	 * @param <T> Table annotation object class
-	 * @return
+	 * @return int fail -1
 	 */
 	public static <T> int update(Connection conn,T obj , boolean isNullUpdate ){
 			
@@ -1165,7 +1165,7 @@ public class JdbcNaming {
 	 * @param obj T
 	 * @param <T> Table annotation object class
 	 * @return String where query
-	 * @throws IllegalAccessException
+	 * @throws IllegalAccessException IllegalAccessException
 	 */
 	public static <T> String getCheckWhere(T obj) throws IllegalAccessException {
 		Class<?> objClass = obj.getClass();

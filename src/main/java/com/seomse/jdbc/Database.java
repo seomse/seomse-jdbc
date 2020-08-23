@@ -135,7 +135,7 @@ public class Database {
 	 * @param conn Connection
 	 * @param sql String sql
 	 * @return long unix time
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static long getDateTime(Connection conn, String sql) throws SQLException {
 		Statement stmt = null;
@@ -183,7 +183,7 @@ public class Database {
 	 * @param conn Connection
 	 * @param tableName String
 	 * @return String []
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static String [] getColumnNameArray(Connection conn, String tableName) throws SQLException {
 		Statement stmt = null;
@@ -214,7 +214,7 @@ public class Database {
 	/**
 	 * 기본키 컬럼정보 얻기
 	 * @param tableName String
-	 * @return Map<String, Integer> PrimaryKeyColumnsForTable
+	 * @return Map PrimaryKeyColumnsForTable
 	 */
 	public static Map<String, Integer> getPrimaryKeyColumnsForTable( String tableName) {
 		try(Connection conn =  ApplicationConnectionPool.getInstance().getCommitConnection()) {
@@ -229,7 +229,8 @@ public class Database {
 	 * 기본키 컬럼정보 얻기
 	 * @param conn Connection
 	 * @param tableName String
-	 * @return  Map<String, Integer> PrimaryKeyColumnsForTable
+	 * @return  Map PrimaryKeyColumnsForTable
+	 * @throws SQLException SQLException
 	 */
 	 public static Map<String, Integer> getPrimaryKeyColumnsForTable(Connection conn, String tableName) throws SQLException {
 		 ResultSet pkColumns= null;
@@ -258,7 +259,7 @@ public class Database {
 	/**
 	 * 기본값 얻기 
 	 * @param tableName String
-	 * @return Map<String, String> 컬럼별 기본 값
+	 * @return Map 컬럼별 기본 값
 	 */
 	 public static Map<String, String> getDefaultValue(String tableName){
 		 //혹시 받는쪽에서 데이터변환코딩을 할 수 있으므로 디폴트값이 없어도 빈객체를 생성해서 돌려준다.

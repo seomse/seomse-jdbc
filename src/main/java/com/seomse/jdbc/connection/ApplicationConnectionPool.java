@@ -234,7 +234,7 @@ public class ApplicationConnectionPool {
     /**
      * connection 얻기
      * @return Connection connection pool
-     * @throws SQLException
+     * @throws SQLException SQLException
      */
     public Connection getConnection() throws SQLException {
 
@@ -274,7 +274,7 @@ public class ApplicationConnectionPool {
     /**
      * 최신 결과가 반영된 commit connection 얻기
      * @return Connection
-     * @throws SQLException
+     * @throws SQLException SQLException
      */
     public Connection getCommitConnection() throws SQLException {
         Connection connection = getConnection();

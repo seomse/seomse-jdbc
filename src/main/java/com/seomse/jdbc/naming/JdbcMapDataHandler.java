@@ -26,7 +26,7 @@ public interface JdbcMapDataHandler {
 
     /**
      * jdbc map data receive
-     * @param data Map<String, Object> jdbc map data
+     * @param data Map jdbc map data
      */
     void receive(Map<String, Object> data);
 }

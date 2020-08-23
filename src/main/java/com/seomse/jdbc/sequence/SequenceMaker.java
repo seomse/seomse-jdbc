@@ -20,9 +20,11 @@ package com.seomse.jdbc.sequence;
  * @author macle
  */
 public interface SequenceMaker {
+
 	/**
 	 * 시퀀스값 얻기
-	 * @return Stromg 시퀀스값 (next)
+	 * @param sequenceName String
+	 * @return String
 	 */
 	String nextVal(String sequenceName);
 }

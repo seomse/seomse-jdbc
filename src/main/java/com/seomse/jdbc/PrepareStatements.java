@@ -28,7 +28,7 @@ public class PrepareStatements {
     /**
      * time 을 활용한 조건 생성
      * @param time long unix time
-     * @return Map<Integer, PrepareStatementData>
+     * @return Map
      */
     public static Map<Integer, PrepareStatementData> newTimeMap(long time){
 

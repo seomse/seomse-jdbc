@@ -82,7 +82,7 @@ public class JdbcQuery {
 	 * @param conn Connection
 	 * @param sql sql String sql
 	 * @return Long unix time
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static Long getResultDateTime(Connection conn, String sql) throws SQLException {
 		Long resultTime = null;
@@ -153,7 +153,7 @@ public class JdbcQuery {
 	 * @param conn Connection
 	 * @param sql String sql
 	 * @return Integer
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static Integer getResultInteger(Connection conn, String sql) throws SQLException {
 		String result = getResultOne(conn, sql);
@@ -204,7 +204,7 @@ public class JdbcQuery {
 	 * @param conn Connection
 	 * @param sql String sql
 	 * @return Double
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static Double getResultDouble(Connection conn, String sql) throws SQLException {
 		Double resultDouble = null;
@@ -275,7 +275,7 @@ public class JdbcQuery {
 	 * @param conn Connection
 	 * @param sql String sql
 	 * @return Long
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static Long getResultLong(Connection conn, String sql) throws SQLException {
 		Long resultLong = null;
@@ -343,7 +343,7 @@ public class JdbcQuery {
 	 * @param conn Connection
 	 * @param sql String sql
 	 * @return String
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static String getResultOne(Connection conn, String sql) throws SQLException {
 		String resultValue = null;
@@ -375,7 +375,7 @@ public class JdbcQuery {
 	/**
 	 * 단일 컬럼의 결과를 list로 얻기
  	 * @param sql String sql
-	 * @return List<String>
+	 * @return List
 	 */
 	public static List<String> getStringList(String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -389,8 +389,8 @@ public class JdbcQuery {
 	 * 단일 컬럼의 결과를 list로 얻기
 	 * @param conn Connection
 	 * @param sql  String sql
-	 * @return List<String>
-	 * @throws SQLException
+	 * @return List
+	 * @throws SQLException SQLException
 	 */
 	public static List<String> getStringList(Connection conn, String sql) throws SQLException {
 		List<String> resultList = new ArrayList<>();
@@ -416,9 +416,9 @@ public class JdbcQuery {
 	}
 
 	/**
-	 * 테이블의 모든 데이터를 Map<String, String> == row 화 하여 list로 얻기
+	 * 테이블의 모든 데이터를 Map == row 화 하여 list로 얻기
 	 * @param tableName String table name
-	 * @return List<Map<String, String>> Map<String, String> == row
+	 * @return List  Map == row
 	 */
 	public static List<Map<String, String>> getAllMapStringList(String tableName){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -430,11 +430,11 @@ public class JdbcQuery {
 
 
 	/**
-	 * 테이블의 모든 데이터를 Map<String, String> == row 화 하여 list로 얻기
+	 * 테이블의 모든 데이터를 Map == row 화 하여 list로 얻기
 	 * @param conn Connection
 	 * @param tableName String table name
-	 * @return List<Map<String, String>> Map<String, String> == row
-	 * @throws SQLException
+	 * @return List Map == row
+	 * @throws SQLException SQLException
 	 */
 	public static List<Map<String, String>> getAllMapStringList(Connection conn, String tableName) throws SQLException {
 		String sql = "SELECT * FROM " + tableName;	
@@ -442,9 +442,9 @@ public class JdbcQuery {
 	}
 
 	/**
-	 * sql을 이용하여 결과를 Map<String, String> == row 화 하여 list로 얻기
+	 * sql을 이용하여 결과를 Map == row 화 하여 list로 얻기
 	 * @param sql String sql 
-	 * @return List<Map<String, String>> Map<String, String> == row
+	 * @return List Map == row
 	 */ 
 	public static List<Map<String, String>> getMapStringList(String sql){
 
@@ -456,11 +456,11 @@ public class JdbcQuery {
 	}
 
 	/**
-	 * sql을 이용하여 결과를 Map<String, String> == row 화 하여 list로 얻기
+	 * sql을 이용하여 결과를 Map == row 화 하여 list로 얻기
 	 * @param conn Connection
 	 * @param sql  String sql 
-	 * @return List<Map<String, String>> Map<String, String> == row
-	 * @throws SQLException
+	 * @return List Map == row
+	 * @throws SQLException SQLException
 	 */
 	public static List<Map<String, String>> getMapStringList(Connection conn, String sql) throws SQLException {
 		
@@ -493,9 +493,9 @@ public class JdbcQuery {
 	}
 
 	/**
-	 * 단일 row 를 Map<String, String> 화 하여 얻기
+	 * 단일 row 를 Map 화 하여 얻기
 	 * @param sql String sql
-	 * @return Map<String, String>
+	 * @return Map
 	 */
 	public static Map<String, String> getMapString( String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
@@ -507,11 +507,11 @@ public class JdbcQuery {
 	
 
 	/**
-	 * 단일 row 를 Map<String, String> 화 하여 얻기
+	 * 단일 row 를 Map 화 하여 얻기
 	 * @param conn Connection
 	 * @param sql  String sql
-	 * @return Map<String, String>
-	 * @throws SQLException
+	 * @return Map
+	 * @throws SQLException SQLException
 	 */
 	public static Map<String, String> getMapString(Connection conn, String sql) throws SQLException {
 		Map<String, String> resultMap = new HashMap<>();
@@ -542,7 +542,7 @@ public class JdbcQuery {
 	 * 컬럼 목록 얻기
 	 * @param resultSet ResultSet
 	 * @return String [] ColumnNames
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static String [] getColumnNames(ResultSet resultSet) throws SQLException {
 		ResultSetMetaData metaData = resultSet.getMetaData();
@@ -580,7 +580,7 @@ public class JdbcQuery {
 	 * @param conn Connection
 	 * @param sql String sql
 	 * @return int fail -1
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static int execute(Connection conn, String sql) throws SQLException {
 		PreparedStatement pstmt = null;
@@ -635,7 +635,7 @@ public class JdbcQuery {
 	 * @param conn Connection
 	 * @param sql String sql(procedure)
 	 * @return int success 1, fail -1
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	public static int callProcedure(Connection conn, String sql) throws SQLException {
 		PreparedStatement pstmt = null;
@@ -663,7 +663,7 @@ public class JdbcQuery {
 	 * @param conn Connection
 	 * @param sql String sql row data check
 	 * @return boolean
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	 public static boolean isRowData(Connection conn, String sql) throws SQLException {
 		String result =  getResultOne(conn, sql);
@@ -699,7 +699,7 @@ public class JdbcQuery {
 	 * @param sql String sql row data check
 	 * @param checkCount int max check count
 	 * @param waitTime long check 당 wait time
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
 	 public static void isRowWait(Connection conn, String sql, int checkCount, long waitTime) throws SQLException {
 		 

@@ -37,9 +37,9 @@ public class JdbcField {
      * @param field result
      * @param columnName String
      * @param resultObj Object
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws SQLException
+     * @throws IllegalArgumentException IllegalArgumentException
+     * @throws IllegalAccessException IllegalAccessException
+     * @throws SQLException SQLException
      */
     public static void setFieldObject(ResultSet result, Field field, String columnName, Object resultObj ) throws IllegalArgumentException, IllegalAccessException, SQLException{
         field.setAccessible(true);
