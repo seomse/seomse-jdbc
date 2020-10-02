@@ -34,7 +34,7 @@ public class JdbcField {
     /**
      *  필드를 활용한 Object 세팅
      * @param result ResultSet
-     * @param field result
+     * @param field Field
      * @param columnName String
      * @param resultObj Object
      * @throws IllegalArgumentException IllegalArgumentException

@@ -16,7 +16,6 @@
 package com.seomse.jdbc.sequence;
 /**
  * 시퀀스 생성기
- *
  * @author macle
  */
 public interface SequenceMaker {

@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 시퀀스 생성기 factory
- *
  * @author macle
  */
 public class SequenceMakerFactory {

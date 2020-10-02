@@ -29,17 +29,14 @@ public class NotDbTypeException extends RuntimeException{
 
 	/**
 	 * 생성자
-	 * @param message exception message
+	 * @param message String exception message
 	 */
 	public NotDbTypeException(String message){
 		super(message + " (db type is not defined)");
 		this.message = message + " (db type is not defined)";
-	
 	}
 	@Override
 	public String getMessage(){
-		
-		
 		return message;
 	}
 }

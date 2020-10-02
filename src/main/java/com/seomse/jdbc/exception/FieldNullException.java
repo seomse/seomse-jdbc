@@ -26,17 +26,14 @@ public class FieldNullException extends RuntimeException{
 
 	/**
 	 * 생성자
-	 * @param message exception message
+	 * @param message String exception message
 	 */
 	public FieldNullException(String message){
 		super(message + " is filed not found");
 		this.message = message + " is filed not found";
-	
 	}
 	@Override
 	public String getMessage(){
-		
-		
 		return message;
 	}
 	

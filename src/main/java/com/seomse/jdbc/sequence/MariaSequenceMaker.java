@@ -19,7 +19,6 @@ import com.seomse.jdbc.JdbcQuery;
 
 /**
  * maria 유형의 시퀀스 생성기
- *
  * @author macle
  */
 public class MariaSequenceMaker implements SequenceMaker{

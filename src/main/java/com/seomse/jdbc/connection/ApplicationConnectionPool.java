@@ -198,7 +198,7 @@ public class ApplicationConnectionPool {
 
     /**
      * data source set
-     *  Hikari
+     * Hikari
      */
     public void setDataSource(){
         HikariConfig config = new HikariConfig();
@@ -265,7 +265,7 @@ public class ApplicationConnectionPool {
     /**
      * jdbc 종류 얻기
      * oracle mysql 등
-     * @return string jdbc type oracle mysql 등
+     * @return String jdbc type oracle mysql 등
      */
     public String getJdbcType(){
         return jdbcType;
@@ -359,7 +359,7 @@ public class ApplicationConnectionPool {
 
     /**
      * jdbc type (oracle, maria, etc ...)
-     * @param jdbcType string
+     * @param jdbcType String
      */
     public void setJdbcType(String jdbcType) {
         this.jdbcType = jdbcType;
@@ -367,7 +367,7 @@ public class ApplicationConnectionPool {
 
     /**
      * url set
-     * @param url string
+     * @param url String
      */
     public void setUrl(String url) {
         this.url = url;
@@ -375,7 +375,7 @@ public class ApplicationConnectionPool {
 
     /**
      * user id set
-     * @param userId string
+     * @param userId String
      */
     public void setUserId(String userId) {
         this.userId = userId;
@@ -383,7 +383,7 @@ public class ApplicationConnectionPool {
 
     /**
      * password set
-     * @param password string
+     * @param password String
      */
     public void setPassword(String password) {
         this.password = password;
@@ -392,7 +392,7 @@ public class ApplicationConnectionPool {
     /**
      * 알맞는 db 유형이 아닐때
      * 유명하지 않은 DB일때 직접 전체 경로 설정
-     * @param databaseTypeOrFullPackage string
+     * @param databaseTypeOrFullPackage String
      */
     public void setDatabaseTypeOrFullPackage(String databaseTypeOrFullPackage) {
         this.databaseTypeOrFullPackage = databaseTypeOrFullPackage;

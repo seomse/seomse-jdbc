@@ -74,7 +74,7 @@ public class RowDataInOut {
 
 	/**
 	 * 테이블 파일 홈 경로를 설정 (dir path)
-	 * @param fileHome string FileHome
+	 * @param fileHome String FileHome
 	 */
 	public void setFileHome(String fileHome) {
 		this.fileHome = fileHome;
@@ -84,7 +84,7 @@ public class RowDataInOut {
 	/**
 	 * db 유형 설정
 	 * oracle, maria 등
-	 * @param dbType marla db
+	 * @param dbType String marla db
 	 */
 	public void setDbType(String dbType) {
 		this.dbType = dbType;
@@ -100,7 +100,7 @@ public class RowDataInOut {
 
 	/**
 	 * 테이블 데이터를 파일로 츠츨
-	 * @param tableArray string [] table name array
+	 * @param tableArray String [] table name array
 	 */
 	public void dataOut(String [] tableArray){
 		ApplicationConnectionPool applicationConnectionPool = ApplicationConnectionPool.getInstance();
@@ -115,7 +115,7 @@ public class RowDataInOut {
 	/**
 	 * 테이블 데이터를 파일로 츠츨
 	 * @param conn Connection
-	 * @param tableArray string [] table name array
+	 * @param tableArray String [] table name array
 	 */
 	public void dataOut(Connection conn, String [] tableArray){
 
@@ -173,7 +173,7 @@ public class RowDataInOut {
 
 	/**
 	 * 추출된 파일중 테이블 이름에 해당하는 데이터를 db 에 insert
-	 * @param tableArray  string [] table name array
+	 * @param tableArray String [] table name array
 	 */
 	public void dataIn( String [] tableArray){
 		ApplicationConnectionPool connectionPool = ApplicationConnectionPool.getInstance();
@@ -191,7 +191,7 @@ public class RowDataInOut {
 	 * 파일로 추출된 데이터를 DB에 추가한다.
 	 * mysql 의 경우  Connection setAutoCommit 을 false 로 하는게 좋음
 	 * @param conn Connection
-	 * @param tableArray string [] table name array
+	 * @param tableArray String [] table name array
 	 */
 	public void dataIn(Connection conn, String [] tableArray){
 
@@ -236,7 +236,7 @@ public class RowDataInOut {
 	/**
 	 * list data insert
 	 * @param conn Connection
-	 * @param insertList List<Map<String,Object>> insert data list
+	 * @param insertList List insert data list
 	 */
 	private void dataInsert(Connection conn, List<Map<String,Object>> insertList ){
 		try {
@@ -279,7 +279,7 @@ public class RowDataInOut {
 	 * table sync (truncate 사용)
 	 * @param selectConn Connection select
 	 * @param insertConn Connection insert
-	 * @param tables string [] table name array
+	 * @param tables String [] table name array
 	 */
 	public void tableSync(Connection selectConn, Connection insertConn, String [] tables){
 
@@ -299,7 +299,7 @@ public class RowDataInOut {
 	 * table sync (delete 사용)
 	 * @param selectConn Connection select
 	 * @param insertConn Connection insert
-	 * @param tables string [] table name array
+	 * @param tables String [] table name array
 	 */
 	public void tableSyncToDelete(Connection selectConn, Connection insertConn, String [] tables){
 
@@ -320,7 +320,7 @@ public class RowDataInOut {
 	 * table copy
 	 * @param selectConn Connection select
 	 * @param insertConn Connection insert
-	 * @param tables string [] table name array
+	 * @param tables String [] table name array
 	 */
 	public void tableCopy(Connection selectConn, Connection insertConn, String [] tables){
 
@@ -338,7 +338,7 @@ public class RowDataInOut {
 	 * table copy
 	 * @param selectConn Connection select
 	 * @param insertConn Connection insert
-	 * @param table string table name
+	 * @param table String table name
 	 */
 	public void tableCopy(Connection selectConn, final Connection insertConn, String table){
 		final List<Map<String, Object>> dataList = new ArrayList<>();
@@ -359,7 +359,7 @@ public class RowDataInOut {
 	/**
 	 * data insert
 	 * @param conn Connection
-	 * @param dataList List<Map<String, Object>> insert data list
+	 * @param dataList List insert data list
 	 */
 	private void insert(Connection conn, List<Map<String, Object>> dataList){
         JdbcNamingMap.insert(conn, dataList);

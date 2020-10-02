@@ -28,8 +28,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Column {
     /**
-     *
-     * @return string column name
+     * 컬렴명
+     * @return String column name
      */
     String name() default "";
 }

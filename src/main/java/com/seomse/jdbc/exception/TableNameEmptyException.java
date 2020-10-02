@@ -25,17 +25,14 @@ public class TableNameEmptyException extends RuntimeException{
 	private final String message;
 	/**
 	 * 생성자
-	 * @param message exception message
+	 * @param message String exception message
 	 */
 	public TableNameEmptyException(String message){
 		super(message);
 		this.message = message + " class table Name Empty";
-	
 	}
 	@Override
 	public String getMessage(){
-		
-		
 		return message;
 	}
 

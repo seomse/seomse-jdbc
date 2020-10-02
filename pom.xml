@@ -6,7 +6,7 @@
 
     <groupId>com.seomse.jdbc</groupId>
     <artifactId>seomse-jdbc</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
     <packaging>jar</packaging>
 
     <name>seomse-jdbc</name>
@@ -23,8 +23,8 @@
 
     <developers>
         <developer>
-            <name>seomse</name>
-            <email>comseomse@gmail.com</email>
+            <name>macle86</name>
+            <email>ysys86a@gmail.com</email>
         </developer>
     </developers>
 
@@ -147,7 +147,7 @@
         <dependency>
             <groupId>com.seomse.commons</groupId>
             <artifactId>seomse-commons</artifactId>
-            <version>1.1.1</version>
+            <version>1.1.8</version>
         </dependency>
 
         <dependency>

@@ -450,7 +450,7 @@ public class JdbcObjects {
 
     /**
      * 객체결과 얻기
-     * @param objClass  Class objClass
+     * @param objClass Class objClass
      * @param <T> Table, Column annotation object
      * @return T Table, Column annotation object
      */
@@ -464,7 +464,7 @@ public class JdbcObjects {
 
     /**
      * 객체결과 얻기
-     * @param objClass  Class objClass
+     * @param objClass Class objClass
      * @param whereValue String where query
      * @param <T> Table, Column annotation object
      * @return T Table, Column annotation object
@@ -480,7 +480,7 @@ public class JdbcObjects {
     /**
      *
      * 객체결과 얻기
-     * @param objClass  Class objClass
+     * @param objClass Class objClass
      * @param whereValue String where query
      * @param orderByValue String order by query
      * @param <T> Table, Column annotation object
@@ -497,7 +497,7 @@ public class JdbcObjects {
 
     /**
      * 객체결과 얻기
-     * @param objClass  Class objClass
+     * @param objClass Class objClass
      * @param whereValue String where query
      * @param prepareStatementDataMap  Map 조건 데이터  date time 같이 database query 가 다른 경우
      * @param <T> Table, Column annotation object
@@ -513,7 +513,7 @@ public class JdbcObjects {
 
     /**
      * 객체결과 얻기
-     * @param objClass  Class objClass
+     * @param objClass Class objClass
      * @param sql String sql
      * @param whereValue String where query
      * @param prepareStatementDataMap  Map 조건 데이터  date time 같이 database query 가 다른 경우
@@ -617,7 +617,7 @@ public class JdbcObjects {
     /**
      * upsert
      * @param objClassList List
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int upsert( List<T> objClassList){
@@ -629,7 +629,7 @@ public class JdbcObjects {
      * upsert
      * @param objClassList List
      * @param isClearParameters boolean
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int upsert( List<T> objClassList,   boolean isClearParameters){
@@ -651,7 +651,7 @@ public class JdbcObjects {
      * @param conn Connection
      * @param objClassList List
      * @param isClearParameters boolean
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int upsert(Connection conn, List<T> objClassList,   boolean isClearParameters){
@@ -661,7 +661,7 @@ public class JdbcObjects {
     /**
      * insert
      * @param objClassList List
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insert( List<T> objClassList){
@@ -681,7 +681,7 @@ public class JdbcObjects {
      * insert
      * @param objClassList List
      * @param isClearParameters boolean
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insert( List<T> objClassList, boolean isClearParameters){
@@ -704,7 +704,7 @@ public class JdbcObjects {
      * @param conn Connection
      * @param objClassList List
      * @param isClearParameters boolean
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insert(Connection conn, List<T> objClassList,   boolean isClearParameters){
@@ -717,7 +717,7 @@ public class JdbcObjects {
      * @param objClassList List
      * @param insertQueryValue String upsert, insert
      * @param isClearParameters boolean
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insert(Connection conn, List<T> objClassList, String insertQueryValue,  boolean isClearParameters){
@@ -746,7 +746,7 @@ public class JdbcObjects {
      * 있으면 update, 없으면 insert
      * @param obj T
      * @param isNullUpdate boolean null value update flag
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insertOrUpdate(T obj, boolean isNullUpdate){
@@ -769,7 +769,7 @@ public class JdbcObjects {
      * @param conn Connection
      * @param obj T
      * @param isNullUpdate boolean null value update flag
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insertOrUpdate(Connection conn, T obj , boolean isNullUpdate ){
@@ -794,7 +794,7 @@ public class JdbcObjects {
     /**
      * data check sql get
      * @param obj T
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return String check sql
      * @throws IllegalAccessException IllegalAccessException
      */
@@ -890,7 +890,7 @@ public class JdbcObjects {
     /**
      * insert
      * @param obj T
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insert(T obj){
@@ -913,7 +913,7 @@ public class JdbcObjects {
      * insert
      * @param conn Connection
      * @param obj T
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insert(Connection conn, T obj){
@@ -925,7 +925,7 @@ public class JdbcObjects {
      * @param conn Connection
      * @param obj T
      * @param insertQueryValue String upsert, insert
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insert(Connection conn, T obj, String insertQueryValue){
@@ -983,7 +983,7 @@ public class JdbcObjects {
      * update
      * @param obj T
      * @param isNullUpdate boolean null value update flag
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int update(T obj , boolean isNullUpdate ) {
@@ -1006,7 +1006,7 @@ public class JdbcObjects {
      * @param conn Connection
      * @param obj T
      * @param isNullUpdate boolean null value update flag
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int update(Connection conn,T obj , boolean isNullUpdate ){
@@ -1108,7 +1108,7 @@ public class JdbcObjects {
     /**
      * 데이터가 없을떄만 insert
      * @param obj T
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insertIfNoData(T obj){
@@ -1130,7 +1130,7 @@ public class JdbcObjects {
      * 데이터가 없을떄만 insert
      * @param conn Connection
      * @param obj T
-     * @param <T> Table, Column annotation object
+     * @param <T> Table Column annotation object
      * @return int fail -1
      */
     public static <T> int insertIfNoData(Connection conn,T obj){
@@ -1154,7 +1154,7 @@ public class JdbcObjects {
     /**
      * class 생성 도움 내용 생성
      * @param tableName String
-     * @return String Table, Column annotation String value
+     * @return String Table Column annotation String value
      */
     public static String makeObjectValue( String tableName) {
 
@@ -1170,7 +1170,7 @@ public class JdbcObjects {
      * class 생성 도움 내용 생성
      * @param conn Connection
      * @param tableName String
-     * @return String Table, Column annotation String value
+     * @return String Table Column annotation String value
      */
     public static String makeObjectValue(Connection conn, String tableName){
         Statement stmt = null;

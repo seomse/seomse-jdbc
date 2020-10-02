@@ -91,7 +91,7 @@ public class JdbcCommon {
     /**
      * prepareStatementDataMap 을 이용한 stmt 설정
      * @param pstmt PreparedStatement
-     * @param prepareStatementDataMap  Map
+     * @param prepareStatementDataMap Map
      * @throws SQLException SQLException
      */
     public static void setStmt(PreparedStatement pstmt, Map<Integer, PrepareStatementData> prepareStatementDataMap) throws SQLException {
@@ -226,9 +226,9 @@ public class JdbcCommon {
 
     /**
      * insert
-     * @param conn conn
+     * @param conn Connection
      * @param objClassList List
-     * @param fields  Field []
+     * @param fields Field []
      * @param insertSql String
      * @param isClearParameters boolean
      * @param <T> Table annotation object class
@@ -299,7 +299,7 @@ public class JdbcCommon {
 
     /**
      * setPrimaryKeyField
-     * @param pstmt  PreparedStatement
+     * @param pstmt PreparedStatement
      * @param fields Field []
      * @param obj T
      * @param isNullUpdate boolean null value update flag

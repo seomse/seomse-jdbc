@@ -19,7 +19,6 @@ import com.seomse.jdbc.JdbcQuery;
 
 /**
  * oracle 유형의 데이터베이스
- *
  * @author macle
  */
 public class OracleSequenceMaker implements SequenceMaker{

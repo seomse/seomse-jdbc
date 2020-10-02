@@ -71,7 +71,7 @@ public class ConnectionFactory {
 
 	/**
 	 * Connection 생성
-	 * @param databaseTypeOrDriverClass  String oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
+	 * @param databaseTypeOrDriverClass String oracle, mssql, db2, unisql, mysql, sqlite, driver class fullPackage.class
 	 * @param urlText String url ex)jdbc:oracle:thin:@127.0.0.1:1521:orcl
 	 * @return Connection
 	 * @throws SQLException SQLException

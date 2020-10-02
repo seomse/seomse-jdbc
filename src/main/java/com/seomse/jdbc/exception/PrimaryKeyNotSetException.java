@@ -27,18 +27,13 @@ public class PrimaryKeyNotSetException  extends RuntimeException{
 
 	/**
 	 * 생성자
-	 * @param msg exception message
+	 * @param msg String exception message
 	 */
 	public PrimaryKeyNotSetException(String msg){
 		super(message+ msg);
-	
-	
-	
 	}
 	@Override
 	public String getMessage(){
-		
-		
 		return message;
 	}
 

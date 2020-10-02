@@ -27,7 +27,7 @@ public class JdbcColumnClass {
 	/**
 	 * 생성자
 	 * @param columnName String 컬럼명
-	 * @param classes Class   클래스
+	 * @param classes Class 클래스
 	 */
 	JdbcColumnClass(String columnName, Class<?> classes){
 		this.columnName = columnName;

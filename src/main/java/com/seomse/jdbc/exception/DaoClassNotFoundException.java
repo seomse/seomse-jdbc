@@ -27,19 +27,16 @@ public class DaoClassNotFoundException  extends RuntimeException{
 
 	/**
 	 * 생성자
-	 * @param message exception message
+	 * @param message String exception message
 	 */
 	public DaoClassNotFoundException(String message){
 		super(message);
 		this.message = message;
-	
 	}
 
 
 	@Override
 	public String getMessage(){
-		
-		
 		return message;
 	}
 	
