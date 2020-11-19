@@ -103,6 +103,7 @@ implementation 'com.seomse.jdbc:seomse-jdbc:0.9.5'
 # communication
 ### blog, homepage
 - www.seomse.com
+- github.com/seomse/
 - seomse.tistory.com
 - seomse.github.io
 - seomse.com
@@ -113,5 +114,9 @@ implementation 'com.seomse.jdbc:seomse-jdbc:0.9.5'
 ### 슬랙 slack
 - https://seomse.slack.com/
 
-### email (협업, 외주)
+### email 
  - comseomse@gmail.com
+ 
+ # dev
+ - macle
+    -  github.com/macle86/
