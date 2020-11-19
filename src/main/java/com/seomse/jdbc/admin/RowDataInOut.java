@@ -337,12 +337,12 @@ public class RowDataInOut {
 
 	/**
 	 * table copy
-	 * @param selectConn Connection select
-	 * @param insertConn Connection insert
-	 * @param table String table name
+	 * @param selectConn Connection select not null
+	 * @param insertConn Connection insert not null
+	 * @param table String table name not null
 	 */
 	public void tableCopy(Connection selectConn, final Connection insertConn, String table){
-		tableCopy(insertConn , selectConn, table, null, null);
+		tableCopy(selectConn, insertConn, table, null, null);
 	}
 
 	/**
