@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.seomse.jdbc'
-version '0.9.3-SNAPSHOT'
+version '0.9.4-SNAPSHOT'
 
 
 repositories {
@@ -30,7 +30,7 @@ dependencies {
     implementation 'com.zaxxer:HikariCP:3.4.5'
 
     //seomse
-    implementation 'com.seomse.commons:seomse-commons:1.1.9'
+    implementation 'com.seomse.commons:seomse-commons:1.2.0'
     implementation 'com.seomse.cypto:seomse-cypto:0.1.0'
 
 

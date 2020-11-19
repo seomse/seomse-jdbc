@@ -6,7 +6,7 @@
 
     <groupId>com.seomse.jdbc</groupId>
     <artifactId>seomse-jdbc</artifactId>
-    <version>0.9.3</version>
+    <version>0.9.4</version>
     <packaging>jar</packaging>
 
     <name>seomse-jdbc</name>
@@ -149,7 +149,7 @@
         <dependency>
             <groupId>com.seomse.commons</groupId>
             <artifactId>seomse-commons</artifactId>
-            <version>1.1.9</version>
+            <version>1.2.0</version>
         </dependency>
 
         <dependency>

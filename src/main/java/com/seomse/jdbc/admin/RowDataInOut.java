@@ -22,6 +22,7 @@ import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.commons.utils.FileUtil;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.JdbcQuery;
+import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.naming.JdbcMapDataHandler;
 import com.seomse.jdbc.naming.JdbcNamingMap;
@@ -341,6 +342,18 @@ public class RowDataInOut {
 	 * @param table String table name
 	 */
 	public void tableCopy(Connection selectConn, final Connection insertConn, String table){
+		tableCopy(insertConn , selectConn, table, null, null);
+	}
+
+	/**
+	 * table copy
+	 * @param selectConn Connection select not null
+	 * @param insertConn Connection insert not null
+	 * @param table String table name not null
+	 * @param whereValue String where null enable
+	 * @param prepareStatementDataMap where seq data null enable
+	 */
+	public void tableCopy(Connection selectConn, final Connection insertConn, String table, String whereValue,  Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		final List<Map<String, Object>> dataList = new ArrayList<>();
 
 		JdbcMapDataHandler handler = data -> {
@@ -350,7 +363,7 @@ public class RowDataInOut {
 			}
 		};
 
-		JdbcNamingMap.receiveData(selectConn, table, null, null, handler);
+		JdbcNamingMap.receiveData(selectConn, table, whereValue, prepareStatementDataMap, handler);
 		if(dataList.size() > 0){
             insert(insertConn, dataList);
 		}

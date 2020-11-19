@@ -94,16 +94,17 @@ public class StockItem {
 - 위와 같은 유틸성 method 지원
 
 # gradle
-implementation 'com.seomse.jdbc:seomse-jdbc:0.9.3'
+implementation 'com.seomse.jdbc:seomse-jdbc:0.9.4'
 
 # etc
-https://mvnrepository.com/artifact/com.seomse.jdbc/seomse-jdbc/0.9.3
+https://mvnrepository.com/artifact/com.seomse.jdbc/seomse-jdbc/0.9.4
 
 
 # communication
 ### blog, homepage
-- seomse.tistory.com
 - www.seomse.com
+- seomse.tistory.com
+- seomse.github.io
 - seomse.com
 
 ### 카카오톡 오픈톡
