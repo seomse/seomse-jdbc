@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.seomse.jdbc'
-version '0.9.5'
+version '0.9.6'
 
 
 repositories {
@@ -11,12 +11,6 @@ repositories {
 }
 
 dependencies {
-
-    //log
-    implementation 'ch.qos.logback:logback-core:1.2.3'
-    implementation 'ch.qos.logback:logback-classic:1.2.3'
-    implementation 'ch.qos.logback:logback-access:1.2.3'
-
 
     //json
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -30,7 +24,7 @@ dependencies {
     implementation 'com.zaxxer:HikariCP:3.4.5'
 
     //seomse
-    implementation 'com.seomse.commons:seomse-commons:1.2.0'
+    implementation 'com.seomse.commons:seomse-commons:1.2.2'
     implementation 'com.seomse.cypto:seomse-cypto:0.1.0'
 
 
