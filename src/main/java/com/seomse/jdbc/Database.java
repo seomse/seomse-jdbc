@@ -18,7 +18,9 @@ package com.seomse.jdbc;
 import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.jdbc.common.JdbcClose;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
+import com.seomse.jdbc.exception.JdbcServerTimeException;
 import com.seomse.jdbc.exception.NotDbTypeException;
+import com.seomse.jdbc.exception.SQLRuntimeException;
 import com.seomse.jdbc.sequence.SequenceMaker;
 import com.seomse.jdbc.sequence.SequenceMakerFactory;
 import org.slf4j.Logger;
@@ -154,12 +156,12 @@ public class Database {
 					return timestamp.getTime();
 				}
 			}
-		}catch(Exception e){
+		}catch(SQLException e){
 			throw e;
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
 		}
-		throw new RuntimeException("date time error sql: " + sql);
+		throw new JdbcServerTimeException("date time error sql: " + sql);
 	}
 	
 
@@ -172,8 +174,8 @@ public class Database {
 
 		try(Connection conn =  ApplicationConnectionPool.getInstance().getCommitConnection()) {
 			return getColumnNameArray(conn, tableName);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 	
@@ -203,7 +205,7 @@ public class Database {
 				nameArray[i -1] = metaData.getColumnLabel(i);
 			}
 		
-		}catch(Exception e) {
+		}catch(SQLException e) {
 			throw e;
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
@@ -221,7 +223,7 @@ public class Database {
 			return getPrimaryKeyColumnsForTable(conn, tableName);
 		}catch(SQLException e){
 			logger.error(ExceptionUtil.getStackTrace(e));
-			throw new RuntimeException(e);
+			throw new SQLRuntimeException(e);
 		}
 	}
 
