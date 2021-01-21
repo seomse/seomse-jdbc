@@ -19,6 +19,7 @@ package com.seomse.jdbc;
 import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.jdbc.common.JdbcClose;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
+import com.seomse.jdbc.exception.SQLRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,8 +70,8 @@ public class JdbcQuery {
 
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getResultDateTime(conn, sql);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 
 	}
@@ -102,7 +103,7 @@ public class JdbcQuery {
 					resultTime = timeStamp.getTime();			
 				}
 			}
-		}catch(Exception e){
+		}catch(SQLException e){
 			throw e;
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
@@ -142,9 +143,8 @@ public class JdbcQuery {
 			}
 
 			return Integer.parseInt(result);
-		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
-			return null;
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -179,9 +179,9 @@ public class JdbcQuery {
 			}
 
 			return result;
-		}catch(Exception e){
+		}catch(SQLException e){
 			logger.error(ExceptionUtil.getStackTrace(e));
-			return null;
+			return defaultValue;
 		}
 	}
 
@@ -194,8 +194,8 @@ public class JdbcQuery {
 	public static Double getResultDouble(String sql) {
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getResultDouble(conn, sql);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
