@@ -18,22 +18,22 @@ package com.seomse.jdbc.admin;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.seomse.commons.exception.IORuntimeException;
 import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.commons.utils.FileUtil;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.JdbcQuery;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
+import com.seomse.jdbc.exception.SQLRuntimeException;
 import com.seomse.jdbc.naming.JdbcMapDataHandler;
 import com.seomse.jdbc.naming.JdbcNamingMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -107,8 +107,8 @@ public class RowDataInOut {
 		ApplicationConnectionPool applicationConnectionPool = ApplicationConnectionPool.getInstance();
 		try (Connection conn = applicationConnectionPool.getCommitConnection()) {
 			dataOut(conn, tableArray);
-		} catch (Exception e) {
-			logger.error(ExceptionUtil.getStackTrace(e));
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -122,46 +122,45 @@ public class RowDataInOut {
 
 		Gson gson = new Gson();
 
-		try {
-			if (tableArray == null) {
-				List<String> tableList = JdbcQuery.getStringList(Database.getTableListSql(dbType));
-				tableArray = tableList.toArray(new String[0]);
-			}
-
-			final StringBuilder outBuilder = new StringBuilder();
-
-			for (String tableName : tableArray) {
-				dataCount = 0;
-				logger.info("out table: " + tableName);
-                final String fileName = fileHome + tableName;
-                //파일생성
-                FileUtil.fileOutput("", charSet, fileName, false);
-
-				//noinspection Convert2Lambda
-				JdbcMapDataHandler handler = new JdbcMapDataHandler() {
-                    @Override
-                    public void receive(Map<String, Object> data) {
-						dataCount++;
-						outBuilder.append(gson.toJson(data)).append("\n");
-						if(dataCount >= maxDataCount){
-							dataCount = 0;
-							FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
-							outBuilder.setLength(0);
-						}
-
-                    }
-                };
-
-                JdbcNamingMap.receiveData(conn, tableName, null, null, handler);
-				if(dataCount >0){
-					FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
-					outBuilder.setLength(0);
-				}
-
-			}
-		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
+		if (tableArray == null) {
+			List<String> tableList = JdbcQuery.getStringList(Database.getTableListSql(dbType));
+			tableArray = tableList.toArray(new String[0]);
 		}
+
+		final StringBuilder outBuilder = new StringBuilder();
+
+		for (String tableName : tableArray) {
+			dataCount = 0;
+			logger.info("out table: " + tableName);
+            final String fileName = fileHome + tableName;
+            //파일생성
+            FileUtil.fileOutput("", charSet, fileName, false);
+
+			//noinspection Convert2Lambda
+			JdbcMapDataHandler handler = new JdbcMapDataHandler() {
+                @Override
+                public void receive(Map<String, Object> data) {
+					dataCount++;
+					outBuilder.append(gson.toJson(data)).append("\n");
+					if(dataCount >= maxDataCount){
+						dataCount = 0;
+						FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
+						outBuilder.setLength(0);
+					}
+
+                }
+            };
+
+            JdbcNamingMap.receiveData(conn, tableName, null, null, handler);
+			if(dataCount >0){
+				FileUtil.fileOutput(outBuilder.toString(), charSet, fileName, true);
+				outBuilder.setLength(0);
+			}
+
+		}
+
+
+
 		logger.info("table out complete");
 	}
 
@@ -183,8 +182,8 @@ public class RowDataInOut {
 			if(!connectionPool.isAutoCommit()){
 				conn.commit();
 			}
-		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -222,8 +221,8 @@ public class RowDataInOut {
 						dataInsert(conn, insertList);
 					}
 				}
-			}catch(Exception e){
-				logger.error(ExceptionUtil.getStackTrace(e));
+			}catch(IOException e){
+				throw new IORuntimeException(e);
 			}
 
 			if(insertList.size() > 0){
@@ -247,8 +246,8 @@ public class RowDataInOut {
 			if (!conn.getAutoCommit()) {
 				conn.commit();
 			}
-		}catch(Exception e){
-			logger.error(ExceptionUtil.getStackTrace(e));
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 		insertList.clear();
 	}
@@ -379,8 +378,8 @@ public class RowDataInOut {
         try{
             if(!conn.getAutoCommit())
                 conn.commit();
-        }catch(Exception e){
-            logger.error(ExceptionUtil.getStackTrace(e));
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
         dataList.clear();
     }
