@@ -17,8 +17,10 @@ package com.seomse.jdbc.connection;
 
 
 import com.seomse.commons.config.Config;
+import com.seomse.commons.exception.ReflectiveOperationRuntimeException;
 import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.cypto.LoginCrypto;
+import com.seomse.jdbc.exception.SQLRuntimeException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -303,10 +305,11 @@ public class ApplicationConnectionPool {
             Connection connection = ConnectionFactory.newConnection(databaseTypeOrFullPackage, url, userId, password);
             connection.setAutoCommit(isAutoCommit);
             return connection;
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        } catch (ReflectiveOperationException e) {
+            throw new ReflectiveOperationRuntimeException(e);
         }
-
     }
 
     /**

@@ -15,12 +15,14 @@
  */
 package com.seomse.jdbc.common;
 
+import com.seomse.commons.exception.ReflectiveOperationRuntimeException;
 import com.seomse.jdbc.Database;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.annotation.DateTime;
 import com.seomse.jdbc.annotation.FlagBoolean;
 import com.seomse.jdbc.annotation.PrimaryKey;
 import com.seomse.jdbc.annotation.Sequence;
+import com.seomse.jdbc.exception.SQLRuntimeException;
 import com.seomse.jdbc.naming.JdbcDataType;
 
 import java.lang.reflect.Field;
@@ -254,9 +256,11 @@ public class JdbcCommon {
                 pstmt.executeBatch();
             }
             successCount = objClassList.size();
-        }catch(Exception e){
-            throw new RuntimeException(e);
-        }finally{
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
+        } finally{
             //noinspection CatchMayIgnoreException
             try{if(pstmt != null)pstmt.close(); }catch(Exception e){}
         }
@@ -287,8 +291,10 @@ public class JdbcCommon {
 
             pstmt.executeBatch();
             successCount = 1;
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }finally{
             //noinspection CatchMayIgnoreException
             try{if(pstmt!=null)pstmt.close();  }catch(Exception e){}
