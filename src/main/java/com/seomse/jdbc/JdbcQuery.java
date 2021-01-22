@@ -250,7 +250,7 @@ public class JdbcQuery {
 			}
 
 			return result;
-		}catch(Exception e){
+		}catch(SQLException e){
 			logger.error(ExceptionUtil.getStackTrace(e));
 			return defaultValue;
 		}
@@ -265,8 +265,8 @@ public class JdbcQuery {
 	public static Long getResultLong(String sql) {
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getResultLong(conn, sql);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -295,7 +295,7 @@ public class JdbcQuery {
 					resultLong = result.getLong(columnName);			
 				}
 			}
-		}catch(Exception e){
+		}catch(SQLException e){
 			throw e;
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
@@ -319,7 +319,7 @@ public class JdbcQuery {
 			}
 
 			return result;
-		}catch (Exception e){
+		}catch (SQLException e){
 			logger.error(ExceptionUtil.getStackTrace(e));
 			return defaultValue;
 		}
@@ -333,8 +333,8 @@ public class JdbcQuery {
 	public static String getResultOne(String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getResultOne(conn, sql);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -363,7 +363,7 @@ public class JdbcQuery {
 					resultValue = result.getString(columnName);			
 				}
 			}
-		}catch(Exception e){
+		}catch(SQLException e){
 			throw e;
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
@@ -380,8 +380,8 @@ public class JdbcQuery {
 	public static List<String> getStringList(String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getStringList(conn, sql);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 	
@@ -405,7 +405,7 @@ public class JdbcQuery {
 			while(result.next()){
 				resultList.add(result.getString(columnName));
 			}
-		}catch(Exception e){
+		}catch(SQLException e){
 			resultList.clear();
 			throw e;
 		}finally{
@@ -423,8 +423,8 @@ public class JdbcQuery {
 	public static List<Map<String, String>> getAllMapStringList(String tableName){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getAllMapStringList(conn, tableName);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -450,8 +450,8 @@ public class JdbcQuery {
 
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getMapStringList(conn, sql);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -482,7 +482,7 @@ public class JdbcQuery {
 				}			
 				resultMapList.add(resultMap);
 			}
-		}catch(Exception e){
+		}catch(SQLException e){
 			resultMapList.clear();
 			throw e;
 		}finally{
@@ -500,8 +500,8 @@ public class JdbcQuery {
 	public static Map<String, String> getMapString( String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getMapString(conn, sql);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 	
@@ -529,7 +529,7 @@ public class JdbcQuery {
 			}else{
 				resultMap = null;
 			}
-		}catch(Exception e){
+		}catch(SQLException e){
 			throw e;
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
@@ -569,7 +569,7 @@ public class JdbcQuery {
 				conn.commit();
 			}
 			return result;
-		}catch(Exception e){
+		}catch(SQLException e){
 			logger.error(ExceptionUtil.getStackTrace(e));
 			return -1;
 		}
@@ -593,7 +593,7 @@ public class JdbcQuery {
 			
 			pstmt = null;
 		
-		}catch(Exception e){
+		}catch(SQLException e){
 			throw e;
 		}finally{
 
@@ -623,7 +623,7 @@ public class JdbcQuery {
 			}
 			return result;
 
-		}catch(Exception e){
+		}catch(SQLException e){
 			logger.error(ExceptionUtil.getStackTrace(e));
 			return -1;
 
@@ -647,7 +647,7 @@ public class JdbcQuery {
 			pstmt.close();
 			pstmt = null;
 			count = 1;
-		}catch(Exception e){
+		}catch(SQLException e){
 			throw e;
 		}finally{
 			if(pstmt!= null){
@@ -688,7 +688,7 @@ public class JdbcQuery {
 	 public static void isRowWait(String sql) {
 		 try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			isRowWait(conn, sql, 3, 350);
-		}catch(Exception e){
+		}catch(SQLException e){
 	 		logger.error(ExceptionUtil.getStackTrace(e));
 		}
 	 }
