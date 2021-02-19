@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.seomse.jdbc'
-version '0.9.6'
+version '0.9.7'
 
 
 repositories {
@@ -19,13 +19,20 @@ dependencies {
     //maria db
 //    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.3'
     //oracle
-//    implementation 'com.oracle.ojdbc:ojdbc8:19.3.0.0'
+    implementation 'com.oracle.ojdbc:ojdbc8:19.3.0.0'
     //connection pool
     implementation 'com.zaxxer:HikariCP:3.4.5'
 
     //seomse
-    implementation 'com.seomse.commons:seomse-commons:1.2.2'
+    implementation 'com.seomse.commons:seomse-commons:1.2.5'
     implementation 'com.seomse.cypto:seomse-cypto:0.1.0'
+
+
+    //dev commons
+//    implementation project(path: ':commons')
+    implementation 'ch.qos.logback:logback-core:1.2.3'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'ch.qos.logback:logback-access:1.2.3'
 
 
 }

@@ -20,6 +20,7 @@ import com.seomse.commons.config.Config;
 import com.seomse.commons.exception.ReflectiveOperationRuntimeException;
 import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.cypto.LoginCrypto;
+import com.seomse.jdbc.Database;
 import com.seomse.jdbc.exception.SQLRuntimeException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -97,6 +98,11 @@ public class ApplicationConnectionPool {
      */
     public void setConfigConnectionInfo(){
         jdbcType = Config.getConfig("application.jdbc.type");
+
+        if(jdbcType != null){
+            Database.getSequenceManager().setDefaultMaker(jdbcType);
+        }
+
         String driverClass = Config.getConfig("application.jdbc.driver.class");
 
         databaseTypeOrFullPackage = driverClass;

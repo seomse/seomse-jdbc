@@ -1,2 +1,4 @@
 rootProject.name = 'seomse-jdbc'
 
+//include ':commons'
+//project(':commons').projectDir = new File(settingsDir,'../seomse-commons')

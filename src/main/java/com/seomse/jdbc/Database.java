@@ -21,8 +21,7 @@ import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.exception.JdbcServerTimeException;
 import com.seomse.jdbc.exception.NotDbTypeException;
 import com.seomse.jdbc.exception.SQLRuntimeException;
-import com.seomse.jdbc.sequence.SequenceMaker;
-import com.seomse.jdbc.sequence.SequenceMakerFactory;
+import com.seomse.jdbc.sequence.SequenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,16 +37,35 @@ import java.util.Map;
 public class Database {
 
 	private static final Logger logger = LoggerFactory.getLogger(Database.class);
+	private static final SequenceManager sequenceManager = new SequenceManager();
 
-	private static final SequenceMaker sequenceMaker = SequenceMakerFactory.make(ApplicationConnectionPool.getInstance().getJdbcType());
 
 	/**
-	 *
+	 * 시퀀스 관리자
+	 * 기본 DB에서 관리하는 시퀀스 관리자
+	 * @return 시퀀스 관리자 얻기
+	 */
+	public static SequenceManager getSequenceManager() {
+		return sequenceManager;
+	}
+
+	/**
+	 * 시퀀스 값 얻기
 	 * @param sequenceName String sequence name
 	 * @return String sequence value
 	 */
 	public static String nextVal(String sequenceName){
-		return sequenceMaker.nextVal(sequenceName);
+		return sequenceManager.nextVal(sequenceName);
+	}
+
+	/**
+	 * 시퀀스 값 얻기
+	 * @param sequenceName String sequence name
+	 * @param jdbcType db 유형
+	 * @return String sequence value
+	 */
+	public static String nextVal(String sequenceName, String jdbcType){
+		return sequenceManager.nextVal(sequenceName, jdbcType);
 	}
 
 	/**
