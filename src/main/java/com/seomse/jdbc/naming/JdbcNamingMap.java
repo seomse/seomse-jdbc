@@ -15,7 +15,7 @@
  */
 package com.seomse.jdbc.naming;
 
-import com.seomse.jdbc.JdbcQuery;
+import com.seomse.jdbc.Database;
 import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.common.JdbcClose;
 import com.seomse.jdbc.common.JdbcCommon;
@@ -75,10 +75,6 @@ public class JdbcNamingMap {
 	public static  List<Map<String, Object>> getDataList(Connection conn, String tableName, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap) {
 		final List<Map<String, Object>> dataList = new ArrayList<>();
 
-		Statement stmt = null;
-		ResultSet result = null;
-
-		String sql = getAllColumnSql(tableName, whereValue);
 		JdbcMapDataHandler dataHandler = dataList::add;
 
 		receiveData(conn,tableName,whereValue,prepareStatementDataMap,dataHandler);
@@ -233,14 +229,14 @@ public class JdbcNamingMap {
 		for(i=0 ; i<nameClassArray.length ; i++){
 			fieldBuilder.append(", ").append(nameClassArray[i].getColumnName());
 		}
-		sqlBuilder.append(fieldBuilder.toString().substring(1));
+		sqlBuilder.append(fieldBuilder.substring(1));
 		sqlBuilder.append(") VALUES (");
 
 		fieldBuilder.setLength(0);
 		for(i=0 ; i<nameClassArray.length ; i++){
 			fieldBuilder.append(", ?");
 		}
-		sqlBuilder.append(fieldBuilder.toString().substring(1));
+		sqlBuilder.append(fieldBuilder.substring(1));
 		sqlBuilder.append(" )");
 
 		PreparedStatement pstmt = null;
@@ -279,7 +275,7 @@ public class JdbcNamingMap {
 						if(nameClassArray[i].getClasses() == String.class){
 							pstmt.setString(i+1, (String)object);
 						}else if(nameClassArray[i].getClasses() == Timestamp.class){
-							Long value ;
+							long value ;
 
 							if(object.getClass() == Integer.class){
 								value = (long) (int) (Integer)object;
@@ -375,7 +371,7 @@ public class JdbcNamingMap {
 				stmt = conn.createStatement();
 				result = stmt.executeQuery(sql);
 			}
-			String [] columnNames = JdbcQuery.getColumnNames(result);
+			String [] columnNames = Database.getColumnNames(result);
 
 			while(result.next()){
 				Map<String, Object> data = new HashMap<>();

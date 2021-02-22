@@ -15,6 +15,7 @@
  */
 package com.seomse.jdbc.objects;
 
+import com.seomse.commons.exception.ReflectiveOperationRuntimeException;
 import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.commons.utils.packages.classes.field.FieldUtil;
 import com.seomse.jdbc.Database;
@@ -27,6 +28,7 @@ import com.seomse.jdbc.common.*;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.exception.FieldNullException;
 import com.seomse.jdbc.exception.PrimaryKeyNotSetException;
+import com.seomse.jdbc.exception.SQLRuntimeException;
 import com.seomse.jdbc.exception.TableNameEmptyException;
 import com.seomse.jdbc.naming.JdbcDataType;
 import com.seomse.jdbc.naming.JdbcNamingDataType;
@@ -122,8 +124,10 @@ public class JdbcObjects {
     public static <T> List<T> getObjList(Class<T> objClass ){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return  getObjList(conn, objClass, null, null, null, -1, null);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -137,8 +141,10 @@ public class JdbcObjects {
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObjList(conn, objClass, null, whereValue, null, -1, null);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -153,8 +159,10 @@ public class JdbcObjects {
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue, int size){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObjList(conn,  objClass, null, whereValue, null, size, null);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -169,8 +177,10 @@ public class JdbcObjects {
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObjList(conn,  objClass, null, whereValue, orderByValue, -1, null);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -186,8 +196,10 @@ public class JdbcObjects {
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue, int size){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObjList(conn,  objClass, null, whereValue, orderByValue, size, null);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -202,8 +214,10 @@ public class JdbcObjects {
     public static <T> List<T> getObjList(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObjList(conn,  objClass, null, whereValue, null, -1, prepareStatementDataMap);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -219,8 +233,10 @@ public class JdbcObjects {
     public static <T> List<T> getObjList(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObjList(conn,  objClass, sql, whereValue, null, -1, prepareStatementDataMap);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -235,8 +251,10 @@ public class JdbcObjects {
     public static <T> List<T> getSqlObjList(Class<T> objClass , String sql){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObjList(conn,  objClass, sql, null, null, -1, null);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -362,9 +380,9 @@ public class JdbcObjects {
      * @param result ResultSet
      * @param columnFieldMap Map
      * @param resultObj Object
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws SQLException
+     * @throws IllegalArgumentException ReflectiveOperation
+     * @throws IllegalAccessException ReflectiveOperation
+     * @throws SQLException SQLException
      */
     private static void setFieldsValue(ResultSet result, Map<String, Field> columnFieldMap, Object resultObj ) throws IllegalArgumentException, IllegalAccessException, SQLException{
 
@@ -405,7 +423,7 @@ public class JdbcObjects {
                 fieldBuilder.append(", ").append(columnName);
             }
             sqlBuilder.append("SELECT ");
-            sqlBuilder.append(fieldBuilder.toString().substring(1));
+            sqlBuilder.append(fieldBuilder.substring(1));
             sqlBuilder.append(" FROM ").append(table.name());
         }else{
             sqlBuilder.append(tableSql);
@@ -457,8 +475,10 @@ public class JdbcObjects {
     public static <T> T getObj(Class<T> objClass ){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObj(conn, objClass, null, null, null, null);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -472,8 +492,10 @@ public class JdbcObjects {
     public static <T> T getObj(Class<T> objClass , String whereValue){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObj(conn, objClass, null, whereValue, null, null);
-        }catch (Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -489,8 +511,10 @@ public class JdbcObjects {
     public static <T> T getObj(Class<T> objClass , String whereValue, String orderByValue){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObj(conn, objClass, null, whereValue, orderByValue, null);
-        }catch (Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -506,8 +530,10 @@ public class JdbcObjects {
     public static <T> T getObj(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObj(conn, objClass, null, whereValue, null, prepareStatementDataMap);
-        }catch (Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -523,8 +549,10 @@ public class JdbcObjects {
     public static <T> T getObj(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObj(conn, objClass, sql, whereValue, null, prepareStatementDataMap);
-        }catch (Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -539,8 +567,10 @@ public class JdbcObjects {
     public static <T> T getSqlObj(Class<T> objClass , String sql){
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return getObj(conn,  objClass, sql, null, null, null);
-        }catch (Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
     }
 
@@ -640,9 +670,8 @@ public class JdbcObjects {
                 conn.commit();
             }
             return result;
-        }catch(Exception e){
-            throw new RuntimeException(e);
-
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
     }
 
@@ -672,8 +701,8 @@ public class JdbcObjects {
                 conn.commit();
             }
             return result;
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
     }
 
@@ -693,8 +722,8 @@ public class JdbcObjects {
             }
             return result;
 
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
     }
 
@@ -758,8 +787,8 @@ public class JdbcObjects {
                 conn.commit();
             }
             return result;
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
 
     }
@@ -782,9 +811,10 @@ public class JdbcObjects {
             }else{
                 successCount = update(conn, obj, isNullUpdate);
             }
-        }
-        catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
 
         return successCount;
@@ -882,8 +912,8 @@ public class JdbcObjects {
                 conn.commit();
             }
             return result;
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
     }
 
@@ -903,9 +933,8 @@ public class JdbcObjects {
             }
             return result;
 
-        }catch(Exception e){
-
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
     }
 
@@ -965,7 +994,7 @@ public class JdbcObjects {
         for(int i=0 ; i<columnNames.length ; i++){
             fieldBuilder.append(", ").append(columnNames[i]);
         }
-        sqlBuilder.append(fieldBuilder.toString().substring(1));
+        sqlBuilder.append(fieldBuilder.substring(1));
         sqlBuilder.append(") VALUES (");
 
 
@@ -973,7 +1002,7 @@ public class JdbcObjects {
         for(int i=0 ; i<columnNames.length ; i++){
             fieldBuilder.append(", ?");
         }
-        sqlBuilder.append(fieldBuilder.toString().substring(1));
+        sqlBuilder.append(fieldBuilder.substring(1));
         sqlBuilder.append(" )");
 
         return sqlBuilder.toString();
@@ -995,8 +1024,8 @@ public class JdbcObjects {
             }
             return result;
 
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
     }
 
@@ -1062,7 +1091,7 @@ public class JdbcObjects {
 
 
 
-        sqlBuilder.append(fieldBuilder.toString().substring(1));
+        sqlBuilder.append(fieldBuilder.substring(1));
         sqlBuilder.append(" WHERE ");
 
         fieldBuilder.setLength(0);
@@ -1094,8 +1123,10 @@ public class JdbcObjects {
 
             pstmt.executeBatch();
             successCount = 1;
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }finally{
             //noinspection CatchMayIgnoreException
             try{if(pstmt != null) pstmt.close();}catch(Exception e){}
@@ -1121,8 +1152,8 @@ public class JdbcObjects {
                 conn.commit();
             }
             return result;
-        }catch (Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
     }
 
@@ -1143,9 +1174,10 @@ public class JdbcObjects {
             if(checkObj == null){
                 successCount =insert(conn, obj);
             }
-        }
-        catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
 
         return successCount;
@@ -1160,8 +1192,8 @@ public class JdbcObjects {
 
         try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
             return makeObjectValue(conn, tableName);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }
     }
 
@@ -1184,10 +1216,10 @@ public class JdbcObjects {
 
             stmt = conn.createStatement();
             //noinspection SqlDialectInspection,SqlNoDataSourceInspection
-            result = stmt.executeQuery("SELECT * FROM " + tableName);
+            result = stmt.executeQuery("SELECT * FROM " + tableName );
             ResultSetMetaData metaData = result.getMetaData();
-            int count = metaData.getColumnCount(); //number of column
 
+            int count = metaData.getColumnCount(); //number of column
             for (int i = 1; i <= count; i++){
 
                 sb.append("\n\n");
@@ -1223,9 +1255,10 @@ public class JdbcObjects {
                 sb.append("@Column(name = \"").append(columnName).append("\")");
             }
 
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLRuntimeException(e);
         }finally{
+
             JdbcClose.statementResultSet(stmt, result);
         }
         return sb.toString();
@@ -1276,8 +1309,8 @@ public class JdbcObjects {
                 }
 
             }
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(ReflectiveOperationException e){
+            throw new ReflectiveOperationRuntimeException(e);
         }
 
         return isUpdate;

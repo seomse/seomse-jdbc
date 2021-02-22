@@ -473,7 +473,7 @@ public class JdbcQuery {
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
 
-			String [] columnNames = getColumnNames(result);
+			String [] columnNames = Database.getColumnNames(result);
 
 			while(result.next()){
 				Map<String, String> resultMap = new HashMap<>();
@@ -521,7 +521,7 @@ public class JdbcQuery {
 		try{
 			stmt = conn.createStatement();
 			result = stmt.executeQuery(sql);
-			String [] columnNames = getColumnNames(result);
+			String [] columnNames = Database.getColumnNames(result);
 			if(result.next()){		
 				for (String columnName : columnNames){
 					resultMap.put(columnName, result.getString(columnName));
@@ -538,21 +538,7 @@ public class JdbcQuery {
 		return resultMap;
 	}
 
-	/**
-	 * 컬럼 목록 얻기
-	 * @param resultSet ResultSet
-	 * @return String [] ColumnNames
-	 * @throws SQLException SQLException
-	 */
-	public static String [] getColumnNames(ResultSet resultSet) throws SQLException {
-		ResultSetMetaData metaData = resultSet.getMetaData();
-		int count = metaData.getColumnCount(); //number of column
-		String[] columnNames = new String[count];
-		for (int i = 1; i <= count; i++){
-			columnNames[i-1] = metaData.getColumnLabel(i);
-		}
-		return columnNames;
-	}
+
 
 
 	/**

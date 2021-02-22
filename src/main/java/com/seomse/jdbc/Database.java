@@ -253,11 +253,8 @@ public class Database {
 	 * @throws SQLException SQLException
 	 */
 	 public static Map<String, Integer> getPrimaryKeyColumnsForTable(Connection conn, String tableName) throws SQLException {
-		 ResultSet pkColumns= null;
-		 Map<String, Integer> pkMap = new HashMap<>();
-		 //noinspection CaughtExceptionImmediatelyRethrown
-		 try{
-			 pkColumns= conn.getMetaData().getPrimaryKeys(null,null,tableName);
+		Map<String, Integer> pkMap = new HashMap<>();
+		 try( ResultSet pkColumns =  conn.getMetaData().getPrimaryKeys(null,null,tableName)){
 
 			 while(pkColumns.next()) {
 			    String pkColumnName = pkColumns.getString("COLUMN_NAME");
@@ -266,11 +263,6 @@ public class Database {
 			    pkMap.put(pkColumnName, pkPosition);
 			 }
 
-		 }catch(SQLException e){
-			throw e;
-		 }finally{
-			 //noinspection CatchMayIgnoreException
-			 try{if(pkColumns!=null)pkColumns.close(); }catch(Exception e){}
 		 }
 		return pkMap;
 
@@ -328,24 +320,55 @@ public class Database {
 
 	/**
 	 * 연결 유지 쿼리
-	 * @return String sql
+	 * @return String connection keep sql
 	 */
 	public static String getConnectionKeepQuery(){
-		String sql  ;
-			
+
 		String dbType = ApplicationConnectionPool.getInstance().getJdbcType();
 		dbType = dbType.toLowerCase();
-			
+
+		return getConnectionKeepQuery(dbType) ;
+	}
+
+	/**
+	 * 연결 유지 쿼리
+	 * @param dbType oracle, mysql, maria ....
+	 * @return connection keep sql
+	 */
+	public static String getConnectionKeepQuery(String dbType){
 		if(dbType.startsWith("maria") || dbType.startsWith("mysql") ||  dbType.startsWith("mssql") ){
-			sql = "SELECT 1";
+			return "SELECT 1";
 		}else{
-			sql = "SELECT 1 FROM DUAL";
+			return "SELECT 1 FROM DUAL";
 				
 		}
-		
-		return sql;
-	 }
-	 
+	}
+
+	/**
+	 * 컬럼 목록 얻기
+	 * @param resultSet ResultSet
+	 * @return String [] ColumnNames
+	 * @throws SQLException SQLException
+	 */
+	public static String [] getColumnNames(ResultSet resultSet) throws SQLException {
+		ResultSetMetaData metaData = resultSet.getMetaData();
+		int count = metaData.getColumnCount(); //number of column
+		String[] columnNames = new String[count];
+		for (int i = 1; i <= count; i++){
+			columnNames[i-1] = metaData.getColumnLabel(i);
+		}
+		return columnNames;
+	}
+//	public static String [] getColumnNames(Connection conn, String tableName) throws SQLException {
+//		ResultSetMetaData metaData = resultSet.getMetaData();
+//		int count = metaData.getColumnCount(); //number of column
+//		String[] columnNames = new String[count];
+//		for (int i = 1; i <= count; i++){
+//			columnNames[i-1] = metaData.getColumnLabel(i);
+//		}
+//		return columnNames;
+//		return null;
+//	}
 
 
 }

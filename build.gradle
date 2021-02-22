@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.seomse.jdbc'
-version '0.9.7'
+version '0.9.8'
 
 
 repositories {
@@ -17,7 +17,7 @@ dependencies {
 
     //jdbc
     //maria db
-//    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.3'
+    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.3'
     //oracle
     implementation 'com.oracle.ojdbc:ojdbc8:19.3.0.0'
     //connection pool

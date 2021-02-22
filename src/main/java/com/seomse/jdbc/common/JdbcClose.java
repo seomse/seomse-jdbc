@@ -31,14 +31,14 @@ public class JdbcClose {
      */
     public static void statementResultSet(Statement statement, ResultSet resultSet ){
 
-        if(statement != null){
-            //noinspection CatchMayIgnoreException
-            try{statement.close();}catch(Exception e){}
-        }
-
         if(resultSet != null){
             //noinspection CatchMayIgnoreException
             try{resultSet.close();}catch(Exception e){}
+        }
+
+        if(statement != null){
+            //noinspection CatchMayIgnoreException
+            try{statement.close();}catch(Exception e){}
         }
 
     }
