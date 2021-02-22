@@ -15,6 +15,7 @@
  */
 package com.seomse.jdbc.naming;
 
+import com.seomse.commons.exception.ReflectiveOperationRuntimeException;
 import com.seomse.commons.utils.ExceptionUtil;
 import com.seomse.commons.utils.packages.classes.field.FieldUtil;
 import com.seomse.jdbc.Database;
@@ -25,6 +26,7 @@ import com.seomse.jdbc.common.*;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.exception.FieldNullException;
 import com.seomse.jdbc.exception.PrimaryKeyNotSetException;
+import com.seomse.jdbc.exception.SQLRuntimeException;
 import com.seomse.jdbc.exception.TableNameEmptyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,8 +117,10 @@ public class JdbcNaming {
 	public static <T> List<T> getObjList(Class<T> objClass ){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObjList(conn, objClass, null, null, null, -1, null);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -130,8 +134,10 @@ public class JdbcNaming {
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObjList(conn, objClass, null, whereValue, null, -1, null);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -146,8 +152,10 @@ public class JdbcNaming {
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, int size){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObjList(conn,  objClass, null, whereValue, null, size, null);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 	
@@ -163,8 +171,10 @@ public class JdbcNaming {
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObjList(conn,  objClass, null, whereValue, orderByValue, -1, null);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -181,8 +191,10 @@ public class JdbcNaming {
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, String orderByValue, int size){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObjList(conn,  objClass, null, whereValue, orderByValue, size, null);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -198,8 +210,10 @@ public class JdbcNaming {
 	public static <T> List<T> getObjList(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObjList(conn,  objClass, null, whereValue, null, -1, prepareStatementDataMap);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -215,8 +229,10 @@ public class JdbcNaming {
 	public static <T> List<T> getObjList(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObjList(conn,  objClass, sql, whereValue, null, -1, prepareStatementDataMap);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 	
@@ -231,8 +247,10 @@ public class JdbcNaming {
 	public static <T> List<T> getSqlObjList(Class<T> objClass , String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObjList(conn,  objClass, sql, null, null, -1, null);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 	
@@ -370,7 +388,7 @@ public class JdbcNaming {
 
 			}
 			sqlBuilder.append("SELECT ");
-			sqlBuilder.append(fieldBuilder.toString().substring(1));
+			sqlBuilder.append(fieldBuilder.substring(1));
 			sqlBuilder.append(" FROM ").append(table.name());
 		}else{
 			sqlBuilder.append(tableSql);
@@ -421,8 +439,10 @@ public class JdbcNaming {
 	public static <T> T getObj(Class<T> objClass ){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObj(conn, objClass, null, null, null, null);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -436,8 +456,10 @@ public class JdbcNaming {
 	public static <T> T getObj(Class<T> objClass , String whereValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObj(conn, objClass, null, whereValue, null, null);
-		}catch (Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -452,8 +474,10 @@ public class JdbcNaming {
 	public static <T> T getObj(Class<T> objClass , String whereValue, String orderByValue){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObj(conn, objClass, null, whereValue, orderByValue, null);
-		}catch (Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -469,8 +493,10 @@ public class JdbcNaming {
 	public static <T> T getObj(Class<T> objClass , String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObj(conn, objClass, null, whereValue, null, prepareStatementDataMap);
-		}catch (Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 	
@@ -487,8 +513,10 @@ public class JdbcNaming {
 	public static <T> T getObj(Class<T> objClass , String sql, String whereValue, Map<Integer, PrepareStatementData> prepareStatementDataMap){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObj(conn, objClass, sql, whereValue, null, prepareStatementDataMap);
-		}catch (Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -502,8 +530,10 @@ public class JdbcNaming {
 	public static <T> T getSqlObj(Class<T> objClass , String sql){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return getObj(conn,  objClass, sql, null, null, null);
-		}catch (Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 	}
 
@@ -590,8 +620,8 @@ public class JdbcNaming {
 			}
 
 			return result;
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 	
@@ -609,9 +639,8 @@ public class JdbcNaming {
 			int result =  insert(conn, objClassList, "UPSERT", isClearParameters);
 			if(!connectionPool.isAutoCommit()) conn.commit();
 			return result;
-		}catch(Exception e){
-			throw new RuntimeException(e);
-
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -643,8 +672,8 @@ public class JdbcNaming {
 				conn.commit();
 			}
 			return result;
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 	
@@ -666,8 +695,8 @@ public class JdbcNaming {
 			}
 			return result;
 
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 	
@@ -727,7 +756,7 @@ public class JdbcNaming {
 		for(int i=0 ; i<fields.length ; i++){
 			fieldBuilder.append(", ").append(fields[i].getName());
 		}
-		sqlBuilder.append(fieldBuilder.toString().substring(1));
+		sqlBuilder.append(fieldBuilder.substring(1));
 		sqlBuilder.append(") VALUES (");
 
 
@@ -735,7 +764,7 @@ public class JdbcNaming {
 		for(int i=0 ; i<fields.length ; i++){
 			fieldBuilder.append(", ?");
 		}
-		sqlBuilder.append(fieldBuilder.toString().substring(1));
+		sqlBuilder.append(fieldBuilder.substring(1));
 		sqlBuilder.append(" )");
 
 		return sqlBuilder.toString();
@@ -759,10 +788,9 @@ public class JdbcNaming {
 				conn.commit();
 			}
 			return result;
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
-
 	}
 
 	/**
@@ -785,9 +813,10 @@ public class JdbcNaming {
 			}else{
 				successCount = update(conn, obj, isNullUpdate); 
 			}
-		}
-		catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 				
 		return successCount;
@@ -820,8 +849,8 @@ public class JdbcNaming {
 				conn.commit();
 			}
 			return result;
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -840,9 +869,8 @@ public class JdbcNaming {
 			}
 			return result;
 
-		}catch(Exception e){
-
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -891,8 +919,8 @@ public class JdbcNaming {
 			}
 			return result;
 
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -946,7 +974,7 @@ public class JdbcNaming {
 			throw new PrimaryKeyNotSetException(objClass.getName());
 		}
 
-		sqlBuilder.append(fieldBuilder.toString().substring(1));		
+		sqlBuilder.append(fieldBuilder.substring(1));
 		sqlBuilder.append(" WHERE ");
 		
 		fieldBuilder.setLength(0);
@@ -966,7 +994,8 @@ public class JdbcNaming {
 			pstmt = conn.prepareStatement(sqlBuilder.toString());
 			int index = JdbcCommon.setPrimaryKeyField(pstmt,fields,obj,isNullUpdate);
 
-
+			//순서 정보가 명확해야 한다는 느낌을 주기위한 반복문 fori 사용
+			//noinspection ForLoopReplaceableByForEach
 			for(int i= 0 ; i < pkColumnList.size() ; i++){
 				Field field = pkColumnList.get(i);
 
@@ -980,8 +1009,10 @@ public class JdbcNaming {
 
 			pstmt.executeBatch();
 			successCount = 1;
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}finally{
 			//noinspection CatchMayIgnoreException
 			try{if(pstmt != null) pstmt.close();}catch(Exception e){}
@@ -1005,18 +1036,9 @@ public class JdbcNaming {
 
 		try{
 			Map<String, Integer> pkMap = Database.getPrimaryKeyColumnsForTable(conn, tableName);
-
 			Map<String,String> defaultValueMap = Database.getDefaultValue(tableName);
-			stmt = conn.createStatement();
-			//noinspection SqlDialectInspection,SqlNoDataSourceInspection
-			result = stmt.executeQuery("SELECT * FROM " + tableName);
-			ResultSetMetaData metaData = result.getMetaData();
-			int count = metaData.getColumnCount(); //number of column
-
-			for (int i = 1; i <= count; i++){
-
-				String columnName = metaData.getColumnLabel(i);
-
+			String [] columnNames = Database.getColumnNames(conn, tableName);
+			for (String columnName : columnNames){
 				Integer pkSeq = pkMap.get(columnName);
 				if(pkSeq != null){
 					fieldBuilder.append("@PrimaryKey(seq = ").append(pkSeq).append(")\n");
@@ -1096,8 +1118,8 @@ public class JdbcNaming {
 
 			}
 
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}finally{
 			JdbcClose.statementResultSet(stmt, result);
 		}
@@ -1113,8 +1135,8 @@ public class JdbcNaming {
 	public static String makeObjectValue( String tableName){
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 			return makeObjectValue(conn, tableName);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -1133,8 +1155,8 @@ public class JdbcNaming {
 				conn.commit();
 			}
 			return result;
-		}catch (Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -1155,9 +1177,10 @@ public class JdbcNaming {
 			if(checkObj == null){
 				successCount =insert(conn, obj);
 			}
-		}
-		catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}catch(ReflectiveOperationException e){
+			throw new ReflectiveOperationRuntimeException(e);
 		}
 
 		return successCount;

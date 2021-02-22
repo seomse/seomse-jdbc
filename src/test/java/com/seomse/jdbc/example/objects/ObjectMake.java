@@ -15,6 +15,7 @@
  */
 package com.seomse.jdbc.example.objects;
 
+import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.objects.JdbcObjects;
 
 /**
@@ -23,6 +24,8 @@ import com.seomse.jdbc.objects.JdbcObjects;
 public class ObjectMake {
 
     public static void main(String[] args) {
+        //noinspection ResultOfMethodCallIgnored
+        ApplicationConnectionPool.getInstance();
 
         String tableName = "T_STOCK_ITEM";
         System.out.println(JdbcObjects.makeObjectValue(tableName));

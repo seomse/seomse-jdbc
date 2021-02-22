@@ -20,6 +20,7 @@ import com.seomse.jdbc.PrepareStatementData;
 import com.seomse.jdbc.common.JdbcClose;
 import com.seomse.jdbc.common.JdbcCommon;
 import com.seomse.jdbc.connection.ApplicationConnectionPool;
+import com.seomse.jdbc.exception.SQLRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,8 +60,8 @@ public class JdbcNamingMap {
 		try(Connection conn = ApplicationConnectionPool.getInstance().getCommitConnection()){
 
 			return getDataList(conn, tableName, whereValue, prepareStatementDataMap);
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -116,8 +117,8 @@ public class JdbcNamingMap {
 				conn.commit();
 			}
 			return result;
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}
 	}
 
@@ -331,7 +332,7 @@ public class JdbcNamingMap {
 				pstmt.executeBatch();
 			}
 		}catch(SQLException e){
-			throw new RuntimeException(e);
+			throw new SQLRuntimeException(e);
 		}finally{
 			//noinspection CatchMayIgnoreException
 			try{if(pstmt != null)pstmt.close(); }catch(Exception e){}
@@ -425,8 +426,8 @@ public class JdbcNamingMap {
 				}
 				handler.receive(data);
 			}
-		}catch(Exception e){
-			throw new RuntimeException(e);
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
 		}finally{
 			JdbcClose.statementResultSet(stmt,result);
 

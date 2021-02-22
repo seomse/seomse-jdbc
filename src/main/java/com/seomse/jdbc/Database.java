@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -258,7 +259,7 @@ public class Database {
 
 			 while(pkColumns.next()) {
 			    String pkColumnName = pkColumns.getString("COLUMN_NAME");
-			    Integer pkPosition = pkColumns.getInt("KEY_SEQ");
+			    int pkPosition = pkColumns.getInt("KEY_SEQ");
 
 			    pkMap.put(pkColumnName, pkPosition);
 			 }
@@ -359,16 +360,28 @@ public class Database {
 		}
 		return columnNames;
 	}
-//	public static String [] getColumnNames(Connection conn, String tableName) throws SQLException {
-//		ResultSetMetaData metaData = resultSet.getMetaData();
-//		int count = metaData.getColumnCount(); //number of column
-//		String[] columnNames = new String[count];
-//		for (int i = 1; i <= count; i++){
-//			columnNames[i-1] = metaData.getColumnLabel(i);
-//		}
-//		return columnNames;
-//		return null;
-//	}
+
+	/**
+	 * 컬럼 목록 얻기
+	 * @param conn Connection
+	 * @param tableName table name
+	 * @return String [] ColumnNames
+	 * @throws SQLException SQLException
+	 */
+	public static String [] getColumnNames(Connection conn, String tableName) throws SQLException {
+
+		try( ResultSet columnResultSet =  conn.getMetaData().getColumns(null,null,tableName, null)) {
+
+			List<String> columns = new ArrayList<>();
+
+			while(columnResultSet.next()) {
+				columns.add( columnResultSet.getString("COLUMN_NAME"));
+			}
+
+			return columns.toArray(new String [0]);
+		}
+
+	}
 
 
 }

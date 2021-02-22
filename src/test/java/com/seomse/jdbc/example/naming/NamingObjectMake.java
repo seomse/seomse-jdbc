@@ -15,6 +15,7 @@
  */
 package com.seomse.jdbc.example.naming;
 
+import com.seomse.jdbc.connection.ApplicationConnectionPool;
 import com.seomse.jdbc.naming.JdbcNaming;
 
 /**
@@ -23,7 +24,13 @@ import com.seomse.jdbc.naming.JdbcNaming;
 public class NamingObjectMake {
 
 	public static void main(String [] args){
+
+
+		//noinspection ResultOfMethodCallIgnored
+		ApplicationConnectionPool.getInstance();
+
 		String tableName = "T_STOCK_ITEM";
+
 		System.out.println("@Table(name=\"" +  tableName+ "\")\n");
 		System.out.println(JdbcNaming.makeObjectValue(tableName));
 

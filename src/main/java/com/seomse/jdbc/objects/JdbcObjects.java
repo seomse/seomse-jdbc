@@ -1205,8 +1205,6 @@ public class JdbcObjects {
      * @return String Table Column annotation String value
      */
     public static String makeObjectValue(Connection conn, String tableName){
-        Statement stmt = null;
-        ResultSet result = null;
         StringBuilder sb = new StringBuilder();
         sb.append("@Table(name=\"").append(tableName).append("\")");
 
@@ -1214,16 +1212,11 @@ public class JdbcObjects {
         try{
             Map<String, Integer> pkMap = Database.getPrimaryKeyColumnsForTable(conn, tableName);
 
-            stmt = conn.createStatement();
-            //noinspection SqlDialectInspection,SqlNoDataSourceInspection
-            result = stmt.executeQuery("SELECT * FROM " + tableName );
-            ResultSetMetaData metaData = result.getMetaData();
+            String [] columnNames = Database.getColumnNames(conn, tableName);
 
-            int count = metaData.getColumnCount(); //number of column
-            for (int i = 1; i <= count; i++){
+            for (String columnName : columnNames){
 
                 sb.append("\n\n");
-                String columnName = metaData.getColumnLabel(i);
 
                 Integer pkSeq = pkMap.get(columnName);
                 if(pkSeq != null){
@@ -1257,9 +1250,6 @@ public class JdbcObjects {
 
         }catch(SQLException e){
             throw new SQLRuntimeException(e);
-        }finally{
-
-            JdbcClose.statementResultSet(stmt, result);
         }
         return sb.toString();
     }
